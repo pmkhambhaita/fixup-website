@@ -10,7 +10,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js"></script>
     <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet">
@@ -34,18 +33,8 @@
         }
 
         /* --- SMOOTH SCROLL --- */
-        html.lenis {
-            width: auto;
-            min-height: 100%;
-        }
-
-        html.lenis,
-        html.lenis body {
-            height: auto;
-        }
-
-        .lenis.lenis-smooth {
-            scroll-behavior: auto !important;
+        html {
+            scroll-behavior: smooth;
         }
 
         ::selection {
@@ -67,6 +56,25 @@
             border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 24px;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Weather Tag */
+        .weather-tag {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 900;
+            opacity: 0;
+            transition: opacity 0.5s;
         }
 
         /* --- 3D CANVAS --- */
@@ -119,14 +127,12 @@
 
         /* --- CAROUSEL (SPIRAL) --- */
         .carousel-container {
-            height: 500vh;
-            /* Increased for longer scroll duration */
             position: relative;
+            /* Height handled by GSAP Pinning */
         }
 
         .carousel-viewport {
-            position: sticky;
-            top: 0;
+            width: 100%;
             height: 100vh;
             display: flex;
             align-items: center;
@@ -206,6 +212,12 @@
 
     <!-- Cursor -->
     <div id="cursor"></div>
+
+    <!-- Weather Tag -->
+    <div class="weather-tag" id="weatherDisplay">
+        <iconify-icon icon="carbon:location"></iconify-icon>
+        <span id="weatherText">Locating...</span>
+    </div>
 
     <!-- 3D Background -->
     <canvas id="webgl"></canvas>
@@ -566,19 +578,55 @@
     </footer>
 
     <script>
-        // --- 1. CONFIG & DATA ---
-        // Enhanced Stadium Definitions
+        // --- 5. DATA & CONFIG ---
         const stadiums = {
-            'wembley': { name: "Wembley", colorPrimary: "#ffffff", colorSecondary: "#d63031", type: "oval", arch: true, seats: 50000 },
-            'etihad': { name: "Etihad Stadium", colorPrimary: "#6CABDD", colorSecondary: "#1e3a8a", type: "bowl", seats: 45000 },
-            'emirates': { name: "Emirates Stadium", colorPrimary: "#EF0107", colorSecondary: "#ffffff", type: "bowl-curved", seats: 48000 },
-            'old_trafford': { name: "Old Trafford", colorPrimary: "#DA291C", colorSecondary: "#000000", type: "rect-steep", seats: 55000 },
-            'anfield': { name: "Anfield", colorPrimary: "#C8102E", colorSecondary: "#F6EB61", type: "rect-kop", seats: 45000 },
+            wembley: {
+                name: "Wembley Stadium",
+                city: "London",
+                color: { r: 1, g: 0.2, b: 0.2 },
+                arch: true,
+                coords: { lat: 51.5560, lon: -0.2795 },
+                type: "oval",
+                seats: 50000
+            },
+            etihad: {
+                name: "Etihad Stadium",
+                city: "Manchester",
+                color: { r: 0.4, g: 0.8, b: 1 },
+                coords: { lat: 53.4831, lon: -2.2004 },
+                type: "bowl",
+                seats: 45000
+            },
+            emirates: {
+                name: "Emirates Stadium",
+                city: "London",
+                color: { r: 0.9, g: 0.1, b: 0.1 },
+                coords: { lat: 51.5549, lon: -0.1084 },
+                type: "bowl-curved",
+                seats: 48000
+            },
+            oldtrafford: {
+                name: "Old Trafford",
+                city: "Manchester",
+                color: { r: 0.9, g: 0.9, b: 0.9 },
+                coords: { lat: 53.4631, lon: -2.2913 },
+                type: "rect-steep",
+                seats: 55000
+            },
+            anfield: {
+                name: "Anfield",
+                city: "Liverpool",
+                color: { r: 0.8, g: 0.1, b: 0.1 },
+                coords: { lat: 53.4308, lon: -2.9608 },
+                type: "rect-kop",
+                seats: 45000
+            }
         };
 
         const stadiumKeys = Object.keys(stadiums);
         const currentKey = stadiumKeys[Math.floor(Math.random() * stadiumKeys.length)];
-        const currentStadium = stadiums[currentKey];
+        let currentStadium = stadiums[currentKey];
+        let weatherData = { condition: 'Clear', temp: 15, code: 0 }; // Default
 
         document.getElementById('stadium-label').textContent = currentStadium.name;
         document.querySelector('.stadium-name-loader').textContent = currentStadium.name.toUpperCase();
@@ -594,11 +642,6 @@
             el.addEventListener('mouseleave', () => cursor.classList.remove('hovered'));
         });
 
-        // --- 3. LENIS ---
-        const lenis = new Lenis({ duration: 1.2, smooth: true });
-        function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
-        requestAnimationFrame(raf);
-
         // --- 4. THREE.JS ENGINE ---
         const canvas = document.querySelector('#webgl');
         const scene = new THREE.Scene();
@@ -612,282 +655,434 @@
         // GROUPS
         const stadiumGroup = new THREE.Group();
         const helixGroup = new THREE.Group();
+        const weatherGroup = new THREE.Group(); // New group for weather particles
         scene.add(stadiumGroup);
         scene.add(helixGroup);
+        scene.add(weatherGroup); // Add weather group to scene
         helixGroup.visible = false;
 
-        // --- PARTICLE GENERATION: HIGH FIDELITY STADIUM ---
-        const geometry = new THREE.BufferGeometry();
-        const positions = [];
-        const colors = [];
-        const sizes = [];
+        // --- 6. WEATHER SYSTEM ---
+        let cloudsPoints, rainPoints;
 
-        const addP = (x, y, z, c, s = 1) => {
-            // Jitter for realism
-            positions.push(x + (Math.random() - 0.5), y + (Math.random() - 0.5), z + (Math.random() - 0.5));
-            colors.push(c.r, c.g, c.b);
-            sizes.push(s);
-        }
+        async function fetchWeather(lat, lon) {
+            try {
+                const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=weather_code,temperature_2m`;
+                const res = await fetch(url);
+                const data = await res.json();
 
-        const colPrim = new THREE.Color(currentStadium.colorPrimary);
-        const colSec = new THREE.Color(currentStadium.colorSecondary);
-        const colConcrete = new THREE.Color('#333');
-        const colPitchDark = new THREE.Color('#064e3b');
-        const colPitchLight = new THREE.Color('#10b981');
-        const colWhite = new THREE.Color('#ffffff');
-        const colGrey = new THREE.Color('#444444');
-        const colDarkGrey = new THREE.Color('#222222');
+                const code = data.current.weather_code;
+                const temp = data.current.temperature_2m;
 
-        // A. PITCH (Higher density 30k)
-        const pw = 48, pl = 72;
-        for (let i = 0; i < 30000; i++) {
-            const x = (Math.random() - 0.5) * pw * 2;
-            const z = (Math.random() - 0.5) * pl * 2;
+                // Map WMO codes
+                let type = 'Clear'; // 0
+                if (code >= 1 && code <= 3) type = 'Cloudy';
+                if (code >= 51 && code <= 67) type = 'Rain';
+                if (code >= 71 && code <= 77) type = 'Snow';
+                if (code >= 80 && code <= 82) type = 'Rain';
+                if (code >= 85 && code <= 86) type = 'Snow';
+                if (code >= 95) type = 'Storm';
 
-            if (currentStadium.type.includes('oval') && (x * x / (pw * pw) + z * z / (pl * pl) > 1.2)) continue;
-
-            const stripe = Math.floor((z + pl) / 10) % 2 === 0;
-            const c = stripe ? colPitchDark : colPitchLight;
-            c.offsetHSL(0, 0, (Math.random() - 0.5) * 0.08);
-
-            addP(x, 0, z, c, 0.5);
-
-            // Crisp White Lines
-            const isLine = Math.abs(x) > pw - 1 || Math.abs(z) > pl - 1 || Math.abs(z) < 0.3 || (x * x + z * z < 100 && x * x + z * z > 85);
-            if (isLine) addP(x, 0.1, z, colWhite, 0.8);
-        }
-
-        // B. STANDS & ARCHITECTURE
-        const tiers = 85;
-        const seatsPerTier = 1000;
-
-        for (let t = 0; t < tiers; t++) {
-            let y, spread;
-
-            // Wembley Specific Tiering (Realistic 3 Tiers)
-            if (currentStadium.name === 'Wembley') {
-                // Tier 1 (Lower)
-                if (t < 35) {
-                    y = t * 1.5;
-                    spread = t * 1.5;
-                }
-                // Tier 2 (Club Wembley - recessed and smaller)
-                else if (t >= 35 && t < 45) {
-                    y = t * 1.5 + 5;
-                    spread = t * 1.8 + 5;
-                }
-                // Tier 3 (Upper - high and steep)
-                else {
-                    y = t * 1.8 + 15;
-                    spread = t * 2.2 + 8;
-                }
-            } else {
-                if (t < 30) { y = t * 1.5; spread = t * 1.8; }
-                else { y = (t * 1.8) + 10; spread = t * 2.2; }
-            }
-
-            for (let i = 0; i < seatsPerTier; i++) {
-                const angle = (i / seatsPerTier) * Math.PI * 2;
-                let x, z, valid = true;
-
-                if (currentStadium.type === 'rect-steep') {
-                    const w = pw + 12 + spread;
-                    const l = pl + 12 + spread;
-                    x = Math.pow(Math.abs(Math.cos(angle)), 0.3) * w * Math.sign(Math.cos(angle));
-                    z = Math.pow(Math.abs(Math.sin(angle)), 0.3) * l * Math.sign(Math.sin(angle));
-                    if (Math.abs(Math.sin(angle * 2)) > 0.9 && t > 20) valid = false;
-                } else if (currentStadium.type === 'rect-kop') {
-                    const w = pw + 10 + spread;
-                    const l = pl + 10 + spread;
-                    x = Math.cos(angle) * w;
-                    z = Math.sin(angle) * l;
-                    if (Math.abs(Math.cos(angle)) > 0.5) x *= 1.2;
-                    if (Math.abs(Math.sin(angle)) > 0.5) z *= 1.2;
-                    if (z > pl + 20 && t > 40) y += (z - (pl + 20)) * 0.5;
-                } else if (currentStadium.type === 'bowl-curved') {
-                    const w = pw + 15 + spread;
-                    const l = pl + 15 + spread;
-                    x = Math.cos(angle) * w;
-                    z = Math.sin(angle) * l;
-                    y = t * 1.2 + Math.sin(angle * 2) * 5;
-                } else {
-                    // Oval (Wembley)
-                    const w = pw + 15 + spread;
-                    const l = pl + 15 + spread * 1.1; // Slightly longer oval
-                    x = Math.cos(angle) * w;
-                    z = Math.sin(angle) * l;
-                }
-
-                if (!valid) continue;
-
-                let c = colPrim;
-                if (Math.random() > 0.8) c = colSec;
-                if (i % 50 === 0 || t % 40 === 0) c = colConcrete;
-
-                addP(x, y + Math.random() * 0.5, z, c, 1.2);
+                return { type, temp, code };
+            } catch (e) {
+                console.error("Weather fetch failed", e);
+                return { type: 'Clear', temp: 15, code: 0 };
             }
         }
 
-        // C. ROOF 
-        const roofHeight = currentStadium.name === 'Wembley' ? 180 : 160;
-        const roofW = pw + 140;
-        const roofL = pl + 160;
+        function buildWeather(type) {
+            // clear old
+            while (weatherGroup.children.length > 0) {
+                const obj = weatherGroup.children[0];
+                obj.geometry.dispose();
+                obj.material.dispose();
+                weatherGroup.remove(obj);
+            }
 
-        for (let i = 0; i < 4000; i++) {
-            const angle = (i / 4000) * Math.PI * 2;
-            const x = Math.cos(angle) * roofW;
-            const z = Math.sin(angle) * roofL;
+            // 1. CLOUDS (Clustered & Dense)
+            // Goal: "Small cloud-shaped chunks"
+            const isClear = type === 'Clear';
 
-            // Ring
-            addP(x, roofHeight, z, colWhite, 2);
+            // Config
+            const clusterCount = isClear ? 8 : 25;
+            const particlesPerCluster = isClear ? 300 : 800; // Total ~20k when cloudy
+            const clusterRadius = 300; // Size of a single cloud clump
 
-            // Trusses
-            if (i % 80 === 0) {
-                for (let k = 0; k < 25; k++) {
-                    const ty = roofHeight - (k * (roofHeight / 25));
-                    const tx = x * (0.85 + k * 0.006);
-                    const tz = z * (0.85 + k * 0.006);
-                    addP(tx, ty, tz, colConcrete, 0.8);
+            const cloudGeo = new THREE.BufferGeometry();
+            const cloudPos = [];
+            const cloudSizes = [];
+
+            for (let c = 0; c < clusterCount; c++) {
+                // Random center for this cloud clump
+                const cx = (Math.random() - 0.5) * 3500;
+                const cz = (Math.random() - 0.5) * 3500;
+                const cy = 150 + Math.random() * 300; // Altitude
+
+                for (let p = 0; p < particlesPerCluster; p++) {
+                    // Gaussian-like distribution around center
+                    // (Math.random() + Math.random() + Math.random() - 1.5) produces a bell curve approx
+                    const dx = (Math.random() - 0.5) * clusterRadius;
+                    const dy = (Math.random() - 0.5) * (clusterRadius * 0.4); // Flatter clouds
+                    const dz = (Math.random() - 0.5) * clusterRadius;
+
+                    cloudPos.push(cx + dx, cy + dy, cz + dz);
+
+                    // Specific requested size: "Much smaller particle size"
+                    cloudSizes.push(Math.random() * 4 + 3); // 3 to 7
                 }
             }
-        }
+            cloudGeo.setAttribute('position', new THREE.Float32BufferAttribute(cloudPos, 3));
+            cloudGeo.setAttribute('size', new THREE.Float32BufferAttribute(cloudSizes, 1));
 
-        // D. REALISTIC WEMBLEY ARCH (TRUSS STRUCTURE)
-        if (currentStadium.arch) {
-            const archSpan = pl * 6.5; // Wider span
-            const archHeight = 320; // Massive height
-            const tiltAngle = 0.35; // Leaning back
-
-            // Generate Truss Arch
-            for (let i = 0; i < 6000; i++) {
-                const t = (i / 6000) * Math.PI; // 0 to PI
-
-                // Base curve math
-                const h = Math.sin(t) * archHeight;
-                const z_base = (t / Math.PI - 0.5) * archSpan;
-
-                // Tilt rotation
-                const y_base = h * Math.cos(tiltAngle);
-                const x_base = h * Math.sin(tiltAngle) + 40;
-
-                // Truss dimensions (Cylinder radius varies with height slightly?)
-                const trussRad = 4;
-
-                // 1. Main Tube (Top)
-                addP(x_base, y_base + 160 + trussRad, z_base, colWhite, 2);
-
-                // 2. Bottom Chords (Left/Right)
-                addP(x_base, y_base + 160 - trussRad, z_base + trussRad, colWhite, 1.5);
-                addP(x_base, y_base + 160 - trussRad, z_base - trussRad, colWhite, 1.5);
-
-                // 3. Lattice Work (Zig-Zag)
-                if (i % 20 === 0) {
-                    // Connecting struts
-                    const jitter = Math.random() * 2;
-                    addP(x_base, y_base + 160, z_base + (Math.random() - 0.5) * trussRad * 2, colWhite, 1);
-                }
-
-                // 4. Cables (Support stays)
-                if (i % 150 === 0 && h > 40) {
-                    // Front cables (holding roof)
-                    for (let k = 0; k < 30; k++) {
-                        const ratio = k / 30;
-                        const cableY = (y_base + 160) * (1 - ratio) + (roofHeight * ratio);
-                        const cableX = x_base * (1 - ratio) + (roofW * 0.6) * ratio; // Angle towards roof
-                        const cableZ = z_base;
-                        if (cableY > roofHeight) addP(cableX, cableY, cableZ, colConcrete, 0.4);
-                    }
-
-                    // Back stays (holding arch)
-                    if (h < 100) {
-                        for (let k = 0; k < 20; k++) {
-                            const ratio = k / 20;
-                            const cableX = x_base * (1 - ratio) + (x_base + 50) * ratio;
-                            const cableY = (y_base + 160) * (1 - ratio);
-                            addP(cableX, cableY, z_base, colConcrete, 0.4);
-                        }
-                    }
-                }
-            }
-        }
-
-        // E. CITY BACKGROUND (Hazy Buildings & Landmarks)
-
-        // Landmark Generation (London Bridge for Wembley)
-        if (currentStadium.name === 'Wembley') {
-            const bridgeColor = new THREE.Color('#555555');
-            const bridgeDetail = new THREE.Color('#777777');
-
-            // Bridge Towers location (Background left/right)
-            const towers = [{ x: -400, z: -300 }, { x: -400, z: 100 }];
-
-            towers.forEach(pos => {
-                // Main Tower Body
-                for (let i = 0; i < 800; i++) {
-                    const x = pos.x + (Math.random() - 0.5) * 30;
-                    const z = pos.z + (Math.random() - 0.5) * 30;
-                    const y = Math.random() * 200; // Tower Height
-                    addP(x, y, z, bridgeColor, 1.5);
-
-                    // Detail lines (horizontal bands)
-                    if (y > 100 && y < 110) addP(x, y, z, bridgeDetail, 2);
-                    if (y > 180) addP(x, y, z, colWhite, 1); // Spire light
-                }
-
-                // Suspension Cables
-                for (let i = 0; i < 200; i++) {
-                    const t = i / 200;
-                    const x = pos.x;
-                    // Cable to center
-                    addP(x, 180 - t * 80, pos.z + t * 200 * (pos.z < 0 ? 1 : -1), bridgeDetail, 0.8);
-                }
+            // Dense Material
+            const cloudMat = new THREE.PointsMaterial({
+                size: 1, // Scaled by attribute
+                vertexColors: false,
+                sizeAttenuation: true,
+                transparent: true,
+                opacity: 0.15, // Low opacity for stacking effect
+                blending: THREE.NormalBlending,
+                depthWrite: false,
+                fog: false
             });
+            cloudMat.color = new THREE.Color(type === 'Rain' || type === 'Storm' ? '#888888' : '#ffffff');
 
-            // Walkways connecting towers
-            for (let i = 0; i < 300; i++) {
-                const t = i / 300;
-                const z = -300 + t * 400; // Span between towers (-300 to 100)
-                addP(-400, 140, z, bridgeDetail, 1.2); // Upper walkway
-                addP(-400, 40, z, bridgeColor, 1.5); // Road level
+            cloudsPoints = new THREE.Points(cloudGeo, cloudMat);
+            weatherGroup.add(cloudsPoints);
+
+            // 2. PRECIPITATION
+            if (type === 'Rain' || type === 'Snow' || type === 'Storm') {
+                const precipCount = type === 'Storm' ? 15000 : 8000;
+                const precipGeo = new THREE.BufferGeometry();
+                const precipPos = [];
+
+                for (let i = 0; i < precipCount; i++) {
+                    const x = (Math.random() - 0.5) * 1500;
+                    const z = (Math.random() - 0.5) * 1500;
+                    const y = Math.random() * 600;
+                    precipPos.push(x, y, z);
+                }
+
+                precipGeo.setAttribute('position', new THREE.Float32BufferAttribute(precipPos, 3));
+                const precipMat = cloudMat.clone();
+                precipMat.color = new THREE.Color(type === 'Snow' ? '#ffffff' : '#aaddff');
+                precipMat.size = type === 'Snow' ? 1.5 : 0.8;
+                precipMat.opacity = 0.6;
+
+                // Store type for animation
+                precipGeo.userData = { type: type === 'Snow' ? 'snow' : 'rain' };
+
+                rainPoints = new THREE.Points(precipGeo, precipMat);
+                weatherGroup.add(rainPoints);
+            }
+
+            // UI Update
+            const ui = document.getElementById('weatherDisplay');
+            const text = document.getElementById('weatherText');
+            if (ui && text) {
+                ui.style.opacity = 1;
+
+                let icon = 'carbon:sun';
+                if (type === 'Cloudy') icon = 'carbon:cloud';
+                if (type === 'Rain') icon = 'carbon:rain';
+                if (type === 'Snow') icon = 'carbon:snow';
+                if (type === 'Storm') icon = 'carbon:lightning';
+
+                text.innerHTML = `LOC: ${currentStadium.city.toUpperCase()} | <iconify-icon icon="${icon}" style="vertical-align: middle;"></iconify-icon> ${Math.round(weatherData.temp)}°C ${type.toUpperCase()}`;
             }
         }
 
+        // --- PARTICLE GENERATION: HIGH FIDELITY STADIUM ---
+        // --- PARTICLE GENERATION: HIGH FIDELITY STADIUM ---
+        const stadiumGeo = new THREE.BufferGeometry();
 
-        // Generic Cityscape (Dense & Tall)
-        for (let b = 0; b < 200; b++) { // Increased from 60 to 200
-            const angle = Math.random() * Math.PI * 2;
-            const dist = 500 + Math.random() * 800;
-            const bx = Math.cos(angle) * dist;
-            const bz = Math.sin(angle) * dist;
-
-            const bw = 20 + Math.random() * 50;
-            const bd = 20 + Math.random() * 50;
-            const bh = 50 + Math.random() * 300; // Taller buildings
-
-            const particlesInBlock = Math.floor(bh * 0.8); // Optimization: slightly less dense per building
-            for (let p = 0; p < particlesInBlock; p++) {
-                const px = bx + (Math.random() - 0.5) * bw;
-                const pz = bz + (Math.random() - 0.5) * bd;
-                const py = Math.random() * bh;
-
-                let c = new THREE.Color('#1a1a1a');
-                if (Math.random() > 0.99) c = new THREE.Color('#555'); // Less lights
-
-                addP(px, py, pz, c, 1.8);
-            }
-        }
-
-        geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
-        geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
-        geometry.setAttribute('size', new THREE.Float32BufferAttribute(sizes, 1));
-
+        // GLOBAL MATERIAL
         const material = new THREE.PointsMaterial({
             size: 0.5, vertexColors: true, sizeAttenuation: true,
             transparent: true, opacity: 0.9, blending: THREE.AdditiveBlending, depthWrite: false
         });
-        const stadiumPoints = new THREE.Points(geometry, material);
-        stadiumGroup.add(stadiumPoints);
 
+        const updateStadium = async () => {
+            // Fetch Weather First
+            if (currentStadium.coords) {
+                weatherData = await fetchWeather(currentStadium.coords.lat, currentStadium.coords.lon);
+                buildWeather(weatherData.type);
+            }
+
+            const positions = [];
+            const colors = [];
+            const sizes = [];
+
+            const addP = (x, y, z, c, s = 1) => {
+                // Jitter for realism
+                positions.push(x + (Math.random() - 0.5), y + (Math.random() - 0.5), z + (Math.random() - 0.5));
+                colors.push(c.r, c.g, c.b);
+                sizes.push(s);
+            }
+
+            const colPrim = new THREE.Color(currentStadium.colorPrimary);
+            const colSec = new THREE.Color(currentStadium.colorSecondary);
+            const colConcrete = new THREE.Color('#333');
+            const colPitchDark = new THREE.Color('#064e3b');
+            const colPitchLight = new THREE.Color('#10b981');
+            const colWhite = new THREE.Color('#ffffff');
+            const colGrey = new THREE.Color('#444444');
+            const colDarkGrey = new THREE.Color('#222222');
+
+            // A. PITCH (Higher density 30k)
+            const pw = 48, pl = 72;
+            for (let i = 0; i < 30000; i++) {
+                const x = (Math.random() - 0.5) * pw * 2;
+                const z = (Math.random() - 0.5) * pl * 2;
+
+                if (currentStadium.type.includes('oval') && (x * x / (pw * pw) + z * z / (pl * pl) > 1.2)) continue;
+
+                const stripe = Math.floor((z + pl) / 10) % 2 === 0;
+                const c = stripe ? colPitchDark : colPitchLight;
+                c.offsetHSL(0, 0, (Math.random() - 0.5) * 0.08);
+
+                addP(x, 0, z, c, 0.5);
+
+                // Crisp White Lines
+                const isLine = Math.abs(x) > pw - 1 || Math.abs(z) > pl - 1 || Math.abs(z) < 0.3 || (x * x + z * z < 100 && x * x + z * z > 85);
+                if (isLine) addP(x, 0.1, z, colWhite, 0.8);
+            }
+
+            // B. STANDS & ARCHITECTURE
+            const tiers = 85;
+            const seatsPerTier = 1000;
+
+            for (let t = 0; t < tiers; t++) {
+                let y, spread;
+
+                // Wembley Specific Tiering (Realistic 3 Tiers)
+                if (currentStadium.name === 'Wembley') {
+                    // Tier 1 (Lower)
+                    if (t < 35) {
+                        y = t * 1.5;
+                        spread = t * 1.5;
+                    }
+                    // Tier 2 (Club Wembley - recessed and smaller)
+                    else if (t >= 35 && t < 45) {
+                        y = t * 1.5 + 5;
+                        spread = t * 1.8 + 5;
+                    }
+                    // Tier 3 (Upper - high and steep)
+                    else {
+                        y = t * 1.8 + 15;
+                        spread = t * 2.2 + 8;
+                    }
+                } else {
+                    if (t < 30) { y = t * 1.5; spread = t * 1.8; }
+                    else { y = (t * 1.8) + 10; spread = t * 2.2; }
+                }
+
+                for (let i = 0; i < seatsPerTier; i++) {
+                    const angle = (i / seatsPerTier) * Math.PI * 2;
+                    let x, z, valid = true;
+
+                    if (currentStadium.type === 'rect-steep') {
+                        const w = pw + 12 + spread;
+                        const l = pl + 12 + spread;
+                        x = Math.pow(Math.abs(Math.cos(angle)), 0.3) * w * Math.sign(Math.cos(angle));
+                        z = Math.pow(Math.abs(Math.sin(angle)), 0.3) * l * Math.sign(Math.sin(angle));
+                        if (Math.abs(Math.sin(angle * 2)) > 0.9 && t > 20) valid = false;
+                    } else if (currentStadium.type === 'rect-kop') {
+                        const w = pw + 10 + spread;
+                        const l = pl + 10 + spread;
+                        x = Math.cos(angle) * w;
+                        z = Math.sin(angle) * l;
+                        if (Math.abs(Math.cos(angle)) > 0.5) x *= 1.2;
+                        if (Math.abs(Math.sin(angle)) > 0.5) z *= 1.2;
+                        if (z > pl + 20 && t > 40) y += (z - (pl + 20)) * 0.5;
+                    } else if (currentStadium.type === 'bowl-curved') {
+                        const w = pw + 15 + spread;
+                        const l = pl + 15 + spread;
+                        x = Math.cos(angle) * w;
+                        z = Math.sin(angle) * l;
+                        y = t * 1.2 + Math.sin(angle * 2) * 5;
+                    } else {
+                        // Oval (Wembley)
+                        const w = pw + 15 + spread;
+                        const l = pl + 15 + spread * 1.1; // Slightly longer oval
+                        x = Math.cos(angle) * w;
+                        z = Math.sin(angle) * l;
+                    }
+
+                    if (!valid) continue;
+
+                    let c = colPrim;
+                    if (Math.random() > 0.8) c = colSec;
+                    if (i % 50 === 0 || t % 40 === 0) c = colConcrete;
+
+                    addP(x, y + Math.random() * 0.5, z, c, 1.2);
+                }
+            }
+
+            // C. ROOF 
+            const roofHeight = currentStadium.name === 'Wembley' ? 180 : 160;
+            const roofW = pw + 140;
+            const roofL = pl + 160;
+
+            for (let i = 0; i < 4000; i++) {
+                const angle = (i / 4000) * Math.PI * 2;
+                const x = Math.cos(angle) * roofW;
+                const z = Math.sin(angle) * roofL;
+
+                // Ring
+                addP(x, roofHeight, z, colWhite, 2);
+
+                // Trusses
+                if (i % 80 === 0) {
+                    for (let k = 0; k < 25; k++) {
+                        const ty = roofHeight - (k * (roofHeight / 25));
+                        const tx = x * (0.85 + k * 0.006);
+                        const tz = z * (0.85 + k * 0.006);
+                        addP(tx, ty, tz, colConcrete, 0.8);
+                    }
+                }
+            }
+
+            // D. REALISTIC WEMBLEY ARCH (TRUSS STRUCTURE)
+            if (currentStadium.arch) {
+                const archSpan = pl * 6.5; // Wider span
+                const archHeight = 320; // Massive height
+                const tiltAngle = 0.35; // Leaning back
+
+                // Generate Truss Arch (High Fidelity & Tapered)
+                const archPoints = 8000;
+                for (let i = 0; i < archPoints; i++) {
+                    const t = (i / archPoints) * Math.PI; // 0 to PI
+
+                    // Base curve math
+                    const h = Math.sin(t) * archHeight;
+                    const z_base = (t / Math.PI - 0.5) * archSpan;
+
+                    // Tilt rotation
+                    const y_base = h * Math.cos(tiltAngle);
+                    const x_base = h * Math.sin(tiltAngle) + 40;
+
+                    // Tapering Logic: Arch is thicker at base (h=0) and thinner at top (h=max)
+                    // Base radius ~6, Top radius ~2.5
+                    const taperFactor = 1 - (h / archHeight) * 0.6;
+                    const trussRad = 6 * taperFactor;
+
+                    // 1. Main Tube (Top) - High Density
+                    if (i % 1 === 0) addP(x_base, y_base + 160 + trussRad, z_base, colWhite, 2);
+
+                    // 2. Bottom Chords (Left/Right)
+                    if (i % 1 === 0) {
+                        addP(x_base, y_base + 160 - trussRad, z_base + trussRad, colWhite, 1.5);
+                        addP(x_base, y_base + 160 - trussRad, z_base - trussRad, colWhite, 1.5);
+                    }
+
+                    // 3. Lattice Work (Zig-Zag / Cross Bracing)
+                    // Much denser connection
+                    if (i % 10 === 0) {
+                        // Random strut connections between top and bottom chords
+                        addP(x_base, y_base + 160 + (Math.random() - 0.5) * trussRad, z_base + (Math.random() - 0.5) * trussRad * 2, colWhite, 1);
+                    }
+
+                    // 4. Cables (Support stays) - Sophisticated array
+                    if (i % 120 === 0 && h > 40) {
+                        // Front cables (holding roof)
+                        for (let k = 0; k < 40; k++) {
+                            const ratio = k / 40;
+                            const cableY = (y_base + 160) * (1 - ratio) + (roofHeight * ratio);
+                            const cableX = x_base * (1 - ratio) + (roofW * 0.6) * ratio; // Angle to roof ring opacity
+                            const cableZ = z_base; // Straight down Z-wise
+                            if (cableY > roofHeight) addP(cableX, cableY, cableZ, colConcrete, 0.4);
+                        }
+
+                        // Back stays (holding arch)
+                        if (h < 120) {
+                            for (let k = 0; k < 25; k++) {
+                                const ratio = k / 25;
+                                const cableX = x_base * (1 - ratio) + (x_base + 80) * ratio; // Anchor further back
+                                const cableY = (y_base + 160) * (1 - ratio);
+                                addP(cableX, cableY, z_base, colConcrete, 0.4);
+                            }
+                        }
+                    }
+                }
+            }
+
+            // E. CITY BACKGROUND (Hazy Buildings & Landmarks)
+
+            // Landmark Generation (London Bridge for Wembley)
+            if (currentStadium.name === 'Wembley') {
+                const bridgeColor = new THREE.Color('#555555');
+                const bridgeDetail = new THREE.Color('#777777');
+
+                // Bridge Towers location (Background left/right)
+                const towers = [{ x: -400, z: -300 }, { x: -400, z: 100 }];
+
+                towers.forEach(pos => {
+                    // Main Tower Body
+                    for (let i = 0; i < 800; i++) {
+                        const x = pos.x + (Math.random() - 0.5) * 30;
+                        const z = pos.z + (Math.random() - 0.5) * 30;
+                        const y = Math.random() * 200; // Tower Height
+                        addP(x, y, z, bridgeColor, 1.5);
+
+                        // Detail lines (horizontal bands)
+                        if (y > 100 && y < 110) addP(x, y, z, bridgeDetail, 2);
+                        if (y > 180) addP(x, y, z, colWhite, 1); // Spire light
+                    }
+
+                    // Suspension Cables
+                    for (let i = 0; i < 200; i++) {
+                        const t = i / 200;
+                        const x = pos.x;
+                        // Cable to center
+                        addP(x, 180 - t * 80, pos.z + t * 200 * (pos.z < 0 ? 1 : -1), bridgeDetail, 0.8);
+                    }
+                });
+
+                // Walkways connecting towers
+                for (let i = 0; i < 300; i++) {
+                    const t = i / 300;
+                    const z = -300 + t * 400; // Span between towers (-300 to 100)
+                    addP(-400, 140, z, bridgeDetail, 1.2); // Upper walkway
+                    addP(-400, 40, z, bridgeColor, 1.5); // Road level
+                }
+            }
+
+
+            // Generic Cityscape (Dense & Tall - Maximized)
+            for (let b = 0; b < 350; b++) { // Increased to 350
+                const angle = Math.random() * Math.PI * 2;
+                const dist = 400 + Math.random() * 900; // Closer start (400)
+                const bx = Math.cos(angle) * dist;
+                const bz = Math.sin(angle) * dist;
+
+                const bw = 20 + Math.random() * 50;
+                const bd = 20 + Math.random() * 50;
+                const bh = 50 + Math.random() * 300; // Taller buildings
+
+                const particlesInBlock = Math.floor(bh * 0.8); // Optimization: slightly less dense per building
+                for (let p = 0; p < particlesInBlock; p++) {
+                    const px = bx + (Math.random() - 0.5) * bw;
+                    const pz = bz + (Math.random() - 0.5) * bd;
+                    const py = Math.random() * bh;
+
+                    let c = new THREE.Color('#1a1a1a');
+                    if (Math.random() > 0.99) c = new THREE.Color('#555'); // Less lights
+
+                    addP(px, py, pz, c, 1.8);
+                }
+            }
+
+            stadiumGeo.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+            stadiumGeo.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+            stadiumGeo.setAttribute('size', new THREE.Float32BufferAttribute(sizes, 1));
+
+            // Use global material
+            const stadiumPoints = new THREE.Points(stadiumGeo, material.clone());
+            stadiumGroup.add(stadiumPoints);
+        } // End updateStadium
+
+        // Initial Call
+        updateStadium();
 
         // --- PARTICLE GENERATION: DNA HELIX ---
         const helixGeo = new THREE.BufferGeometry();
@@ -919,8 +1114,8 @@
 
 
         // --- ANIMATION LOOP ---
-        // Mid-range Balanced View
-        camera.position.set(500, 200, 300);
+        // Zoomed Out - Seeing top of Arch (Slightly Closer)
+        camera.position.set(520, 320, 420);
 
         let mouseX = 0, mouseY = 0;
         window.addEventListener('mousemove', (e) => {
@@ -939,8 +1134,8 @@
             helixGroup.rotation.y -= 0.002;
 
             // Camera Interaction
-            const targetX = 500 + mouseX * 150;
-            const targetY = 200 + mouseY * 80;
+            const targetX = 520 + mouseX * 200;
+            const targetY = 320 + mouseY * 100;
 
             camera.position.x += (targetX - camera.position.x) * 0.02;
             camera.position.y += (targetY - camera.position.y) * 0.02;
@@ -951,6 +1146,37 @@
                 helixPoints.material.color.lerp(targetHelixColor, 0.05);
                 helixGroup.position.y += 0.5;
                 if (helixGroup.position.y > 200) helixGroup.position.y = 0;
+            }
+
+            // Weather Animation
+            if (cloudsPoints) {
+                const positions = cloudsPoints.geometry.attributes.position.array;
+                for (let i = 0; i < positions.length; i += 3) {
+                    positions[i] += 0.2; // drift X
+                    if (positions[i] > 1000) positions[i] = -1000;
+                }
+                cloudsPoints.geometry.attributes.position.needsUpdate = true;
+            }
+
+            if (rainPoints) {
+                const positions = rainPoints.geometry.attributes.position.array;
+                const type = rainPoints.geometry.userData.type;
+                const speed = type === 'snow' ? 1.5 : 8.0;
+
+                for (let i = 1; i < positions.length; i += 3) {
+                    positions[i] -= speed; // fall Y
+                    if (positions[i] < 0) {
+                        positions[i] = 600; // respawn at top
+                        // Randomize X/Z slightly on respawn for variety
+                        positions[i - 1] = (Math.random() - 0.5) * 1500;
+                        positions[i + 1] = (Math.random() - 0.5) * 1500;
+                    }
+
+                    if (type === 'snow') {
+                        positions[i - 1] += Math.sin(Date.now() * 0.001 + i) * 0.1; // wiggle X
+                    }
+                }
+                rainPoints.geometry.attributes.position.needsUpdate = true;
             }
 
             renderer.render(scene, camera);
@@ -998,48 +1224,67 @@
             }
         });
 
-        // 3. Carousel Logic (Improved for longer visibility)
+        // 3. Carousel Logic (Pinned Timeline)
         const carouselCards = document.querySelectorAll('.carousel-card');
         const world = document.getElementById('carouselWorld');
-        const cardSpacing = 500; // Increased spacing
+        const cardSpacing = 500;
         const rotationStep = 50;
 
+        // Initial setup
         carouselCards.forEach((card, i) => {
             gsap.set(card, {
                 y: i * cardSpacing,
                 rotationY: i * rotationStep,
                 z: 400,
-                transformOrigin: "center center -400px"
-            });
-
-            // Widen the start/end window significantly to allow overlap
-            ScrollTrigger.create({
-                trigger: ".carousel-container",
-                start: () => `top+=${i * (window.innerHeight * 0.6)} top`, // Start earlier
-                end: () => `top+=${(i + 2.5) * (window.innerHeight * 0.6)} top`, // End much later
-                onEnter: () => {
-                    gsap.to(card, { opacity: 1, scale: 1, filter: "blur(0px)", duration: 0.5 });
-                    targetHelixColor.set(card.getAttribute('data-color'));
-                },
-                onLeave: () => gsap.to(card, { opacity: 0, scale: 0.8, filter: "blur(8px)", duration: 0.5 }),
-                onEnterBack: () => {
-                    gsap.to(card, { opacity: 1, scale: 1, filter: "blur(0px)", duration: 0.5 });
-                    targetHelixColor.set(card.getAttribute('data-color'));
-                },
-                onLeaveBack: () => gsap.to(card, { opacity: 0, scale: 0.8, filter: "blur(8px)", duration: 0.5 })
+                transformOrigin: "center center -400px",
+                opacity: 0,
+                scale: 0.8,
+                filter: "blur(8px)"
             });
         });
 
-        gsap.to(world, {
+        // Main Pinned Timeline
+        const carouselTl = gsap.timeline({
+            scrollTrigger: {
+                trigger: ".carousel-container",
+                start: "top top", // Lock when top hits top
+                end: "+=4000", // Scroll distance
+                scrub: 1, // Smooth catchup
+                pin: true,
+                anticipatePin: 1
+            }
+        });
+
+        // A. Move World (Linear)
+        carouselTl.to(world, {
             y: - (carouselCards.length * cardSpacing) + 200,
             rotationY: - (carouselCards.length * rotationStep),
             ease: "none",
-            scrollTrigger: {
-                trigger: ".carousel-container",
-                start: "top top",
-                end: "bottom bottom",
-                scrub: 0.5
-            }
+            duration: 10 // Normalized total duration
+        }, 0);
+
+        // B. Animate Cards (Staggered insertion)
+        // Ensure the timing matches the world movement so cards appear as they rotate to front
+        const fragment = 10 / carouselCards.length; // Approximate duration per card slice
+
+        carouselCards.forEach((card, i) => {
+            // "Enter" zone
+            const startTime = i * fragment - 0.5; // Start slightly before
+
+            // Fade In -> Active -> Fade Out
+            // We use a sub-timeline for each card or insert Tweens
+
+            // 1. Appear
+            carouselTl.to(card, {
+                opacity: 1, scale: 1, filter: "blur(0px)", duration: 1,
+                onStart: () => targetHelixColor.set(card.getAttribute('data-color')),
+                onReverseComplete: () => { if (i > 0) targetHelixColor.set(carouselCards[i - 1].getAttribute('data-color')) }
+            }, Math.max(0, startTime));
+
+            // 2. Disappear (after it passes view)
+            carouselTl.to(card, {
+                opacity: 0, scale: 0.8, filter: "blur(8px)", duration: 1
+            }, Math.max(0, startTime) + 2.5); // Stay visible for ~2.5 duration units
         });
 
     </script>
