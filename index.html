@@ -50,7 +50,8 @@
         }
 
         .glass-panel {
-            background: rgba(20, 20, 20, 0.6);
+            background: rgba(20, 20, 20, 0.3);
+            /* More transparent */
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             border: 1px solid rgba(255, 255, 255, 0.08);
@@ -329,8 +330,10 @@
     </section>
 
     <!-- Problem -->
-    <section id="problem" class="relative py-32 px-4 z-10 bg-black/20">
-        <div class="max-w-[1200px] mx-auto glass-panel p-8 md:p-12 lg:p-16 relative overflow-hidden">
+    <section id="problem"
+        class="relative min-h-screen py-32 px-4 z-10 bg-black/5 backdrop-blur-sm flex items-center justify-center">
+        <div
+            class="max-w-3xl w-full mx-auto glass-panel p-8 md:p-12 lg:p-16 relative overflow-hidden transform transition-all duration-1000">
             <div class="absolute -top-40 -right-40 w-80 h-80 bg-emerald-500/10 rounded-full blur-[100px]"></div>
 
             <div class="flex items-end justify-between mb-16 border-b border-white/5 pb-8 relative z-10">
@@ -894,7 +897,8 @@
                         z = Math.sin(angle) * l;
                         if (Math.abs(Math.cos(angle)) > 0.5) x *= 1.2;
                         if (Math.abs(Math.sin(angle)) > 0.5) z *= 1.2;
-                        if (z > pl + 20 && t > 40) y += (z - (pl + 20)) * 0.5;
+                        // Fix for vertical spikes: Clamp height addition
+                        if (z > pl + 20 && t > 40) y += Math.min(50, (z - (pl + 20)) * 0.5);
                     } else if (currentStadium.type === 'bowl-curved') {
                         const w = pw + 15 + spread;
                         const l = pl + 15 + spread;
@@ -1242,35 +1246,45 @@
 
         camTl.to(camera.position, {
             x: 0,
-            y: 150,
-            z: 350, // Slightly back to see full width
+            y: 100,
+            z: 280, // Closer Framing
             ease: "power1.inOut"
         }, 0);
 
+        // Reveal Animation for Problem Card (Linked to same scroll for seamlessness)
+        // Reveal Animation for Problem Card (Linked to same scroll for seamlessness)
+        camTl.from("#problem .glass-panel", {
+            y: 100,
+            opacity: 0,
+            scale: 0.9,
+            ease: "power1.out",
+            duration: 0.05 // Almost instant upon scroll start
+        }, 0); // Start immediately at 0
+
         // Rotation handled in tick() for hybrid idle/lock
         // Removed explicit GSAP rotation to avoid conflict
-        ScrollTrigger.create({
-            trigger: "#roadmap",
-            start: "top center",
-            end: "bottom center",
-            onEnter: () => {
-                gsap.to(stadiumGroup.scale, { x: 0.1, y: 0.1, z: 0.1, duration: 1.5, ease: "power2.inOut" });
-                gsap.to(stadiumGroup.position, { y: -500, duration: 1.5 });
-                gsap.to(stadiumGroup, { visible: false, delay: 1 });
-
-                helixGroup.visible = true;
-                helixGroup.scale.set(0.5, 0.5, 0.5);
-                gsap.fromTo(helixGroup.scale, { x: 0.5, y: 0, z: 0.5 }, { x: 1, y: 1, z: 1, duration: 1.5 });
-            },
-            onLeaveBack: () => {
-                stadiumGroup.visible = true;
-                gsap.to(stadiumGroup.scale, { x: 1, y: 1, z: 1, duration: 1.5 });
-                gsap.to(stadiumGroup.position, { y: 0, duration: 1.5 });
-
-                gsap.to(helixGroup.scale, { x: 0, y: 0, z: 0, duration: 1 });
-                helixGroup.visible = false;
+        // 2b. Scene Switch (Stadium -> Helix) - Scrubbed for Reversibility
+        const helixTl = gsap.timeline({
+            scrollTrigger: {
+                trigger: "#roadmap",
+                start: "top center",
+                end: "bottom center",
+                scrub: 1,
+                onEnter: () => { helixGroup.visible = true; },
+                onLeaveBack: () => { helixGroup.visible = false; stadiumGroup.visible = true; },
+                onEnterBack: () => { stadiumGroup.visible = true; }
             }
         });
+
+        // Initialize Helix Scale
+        helixGroup.scale.set(0, 0, 0);
+        helixGroup.visible = false;
+
+        // Overlap animations: Stadium leaves, Helix Enters
+        helixTl
+            .to(stadiumGroup.scale, { x: 0, y: 0, z: 0 }, 0)
+            .to(stadiumGroup.position, { y: -500 }, 0)
+            .to(helixGroup.scale, { x: 1, y: 1, z: 1 }, 0);
 
         // 3. Carousel Logic (Pinned Timeline)
         const carouselCards = document.querySelectorAll('.carousel-card');
