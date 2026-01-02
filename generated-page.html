@@ -1,0 +1,873 @@
+<html lang="en" class="lenis lenis-smooth"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FIXUP ARENA | The Future of Competition</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js"></script>
+<script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/@fontsource/geist-sans@5.0.1/300.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/@fontsource/geist-sans@5.0.1/400.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/@fontsource/geist-sans@5.0.1/500.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/@fontsource/geist-sans@5.0.1/600.min.css" rel="stylesheet">
+
+<style>
+    :root { --cursor-size: 20px; }
+    body {
+        background-color: #050505;
+        color: #ffffff;
+        overflow-x: hidden;
+        cursor: none; /* Hide default cursor */
+        font-family: 'Geist Sans', sans-serif;
+        margin: 0;
+    }
+
+    /* --- SMOOTH SCROLL --- */
+    html.lenis { width: auto; min-height: 100%; }
+    html.lenis, html.lenis body { height: auto; }
+    .lenis.lenis-smooth { scroll-behavior: auto !important; }
+    ::selection { background: #10b981; color: #fff; }
+
+    /* --- GLASS MORPHISM --- */
+    .glass-panel {
+        background: rgba(20, 20, 20, 0.6);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 24px;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    }
+
+    /* --- 3D CANVAS --- */
+    #webgl {
+        position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
+        z-index: -1; opacity: 0; pointer-events: none;
+        background: radial-gradient(circle at 50% 50%, #111115 0%, #000000 100%);
+    }
+    
+    /* --- CUSTOM CURSOR --- */
+    #cursor {
+        position: fixed; top: 0; left: 0; width: 12px; height: 12px;
+        border: 1px solid white; background: rgba(255,255,255,0.2);
+        border-radius: 50%; pointer-events: none; z-index: 9999;
+        transform: translate(-50%, -50%);
+        transition: width 0.3s, height 0.3s, background 0.3s;
+        mix-blend-mode: difference;
+    }
+    #cursor.hovered { width: 40px; height: 40px; background: rgba(16, 185, 129, 0.2); border-color: #10b981; }
+
+    /* --- TYPOGRAPHY FX --- */
+    .reveal-text { clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%); }
+    .char { display: inline-block; transform: translateY(110%); will-change: transform; }
+
+    /* --- CAROUSEL (SPIRAL) --- */
+    .carousel-container {
+        height: 350vh; 
+        position: relative;
+    }
+    .carousel-viewport {
+        position: sticky; top: 0; height: 100vh;
+        display: flex; align-items: center; justify-content: center;
+        overflow: hidden; perspective: 1200px;
+    }
+    .carousel-world {
+        position: relative; width: 100%; height: 100%;
+        transform-style: preserve-3d;
+    }
+    .carousel-card {
+        position: absolute; left: 50%; top: 50%;
+        width: 320px; height: 200px;
+        margin-left: -160px; margin-top: -100px;
+        transform-style: preserve-3d;
+        backface-visibility: visible; 
+    }
+    
+    /* --- LOADER --- */
+    .loader-wrap {
+        position: fixed; z-index: 10000; inset: 0; background: #000;
+        display: flex; flex-direction: column; align-items: center; justify-content: center;
+    }
+    .loader-bar { width: 1px; height: 0%; background: #10b981; margin-bottom: 20px;}
+
+    /* --- MARQUEE --- */
+    .marquee-container { 
+        mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent); 
+        -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent); 
+        overflow: hidden;
+        white-space: nowrap;
+    }
+    .marquee-content { 
+        display: inline-flex; 
+        animation: scroll 30s linear infinite; 
+    }
+    .marquee-item {
+        padding-right: 4rem;
+    }
+    @keyframes scroll { 
+        0% { transform: translateX(0); } 
+        100% { transform: translateX(-50%); } 
+    }
+</style>
+<link id="all-fonts-link-font-geist" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&amp;display=swap"><style id="all-fonts-style-font-geist">.font-geist { font-family: 'Geist', sans-serif !important; }</style><link id="all-fonts-link-font-roboto" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&amp;display=swap"><style id="all-fonts-style-font-roboto">.font-roboto { font-family: 'Roboto', sans-serif !important; }</style><link id="all-fonts-link-font-montserrat" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&amp;display=swap"><style id="all-fonts-style-font-montserrat">.font-montserrat { font-family: 'Montserrat', sans-serif !important; }</style><link id="all-fonts-link-font-poppins" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&amp;display=swap"><style id="all-fonts-style-font-poppins">.font-poppins { font-family: 'Poppins', sans-serif !important; }</style><link id="all-fonts-link-font-playfair" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;900&amp;display=swap"><style id="all-fonts-style-font-playfair">.font-playfair { font-family: 'Playfair Display', serif !important; }</style><link id="all-fonts-link-font-instrument-serif" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:wght@400;500;600;700&amp;display=swap"><style id="all-fonts-style-font-instrument-serif">.font-instrument-serif { font-family: 'Instrument Serif', serif !important; }</style><link id="all-fonts-link-font-merriweather" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700;900&amp;display=swap"><style id="all-fonts-style-font-merriweather">.font-merriweather { font-family: 'Merriweather', serif !important; }</style><link id="all-fonts-link-font-bricolage" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@300;400;500;600;700&amp;display=swap"><style id="all-fonts-style-font-bricolage">.font-bricolage { font-family: 'Bricolage Grotesque', sans-serif !important; }</style><link id="all-fonts-link-font-jakarta" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;display=swap"><style id="all-fonts-style-font-jakarta">.font-jakarta { font-family: 'Plus Jakarta Sans', sans-serif !important; }</style><link id="all-fonts-link-font-manrope" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&amp;display=swap"><style id="all-fonts-style-font-manrope">.font-manrope { font-family: 'Manrope', sans-serif !important; }</style><link id="all-fonts-link-font-space-grotesk" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap"><style id="all-fonts-style-font-space-grotesk">.font-space-grotesk { font-family: 'Space Grotesk', sans-serif !important; }</style><link id="all-fonts-link-font-work-sans" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700;800&amp;display=swap"><style id="all-fonts-style-font-work-sans">.font-work-sans { font-family: 'Work Sans', sans-serif !important; }</style><link id="all-fonts-link-font-pt-serif" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=PT+Serif:wght@400;700&amp;display=swap"><style id="all-fonts-style-font-pt-serif">.font-pt-serif { font-family: 'PT Serif', serif !important; }</style><link id="all-fonts-link-font-geist-mono" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@300;400;500;600;700&amp;display=swap"><style id="all-fonts-style-font-geist-mono">.font-geist-mono { font-family: 'Geist Mono', monospace !important; }</style><link id="all-fonts-link-font-space-mono" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&amp;display=swap"><style id="all-fonts-style-font-space-mono">.font-space-mono { font-family: 'Space Mono', monospace !important; }</style><link id="all-fonts-link-font-quicksand" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&amp;display=swap"><style id="all-fonts-style-font-quicksand">.font-quicksand { font-family: 'Quicksand', sans-serif !important; }</style><link id="all-fonts-link-font-nunito" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800&amp;display=swap"><style id="all-fonts-style-font-nunito">.font-nunito { font-family: 'Nunito', sans-serif !important; }</style><link id="all-fonts-link-font-newsreader" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400..800&amp;display=swap"><style id="all-fonts-style-font-newsreader">.font-newsreader { font-family: 'Newsreader', serif !important; }</style><link id="all-fonts-link-font-google-sans-flex" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:wght@400;500;600;700&amp;display=swap"><style id="all-fonts-style-font-google-sans-flex">.font-google-sans-flex { font-family: 'Google Sans Flex', sans-serif !important; }</style><link id="all-fonts-link-font-oswald" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&amp;display=swap"><style id="all-fonts-style-font-oswald">.font-oswald { font-family: 'Oswald', sans-serif !important; }</style><link id="all-fonts-link-font-dm-sans" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&amp;display=swap"><style id="all-fonts-style-font-dm-sans">.font-dm-sans { font-family: 'DM Sans', sans-serif !important; }</style></head>
+<body class="selection:bg-emerald-500/30 selection:text-white">
+
+    <!-- Cursor -->
+    <div id="cursor" style="left: 1084px; top: 307px;"></div>
+
+    <!-- 3D Background -->
+    <canvas id="webgl" width="2860" height="1802" style="width: 1430px; height: 901px; opacity: 1;"></canvas>
+    
+    <!-- Loader -->
+    
+
+    <!-- Nav -->
+    <div class="loader-wrap" style="translate: none; rotate: none; scale: none; transform: translate3d(0px, -100%, 0px);">
+        <div class="loader-bar" style="height: 100%;"></div>
+        <div class="flex gap-2 text-xs font-medium tracking-widest text-white uppercase">
+            <span class="stadium-name-loader">OLD TRAFFORD</span> 
+            <span class="counter">100</span>%
+        </div>
+    </div><nav class="fixed top-0 left-0 w-full z-[100] flex justify-center pt-6 px-4 pointer-events-none">
+        <div class="pointer-events-auto bg-black/80 backdrop-blur-xl border border-white/10 rounded-full px-6 h-16 flex items-center justify-between shadow-2xl min-w-[320px] md:min-w-[500px]">
+            <a href="#founders" class="nav-link text-[11px] font-medium text-zinc-400 hover:text-white transition-colors uppercase tracking-widest hover-trigger">Contact</a>
+            <a href="#" class="nav-link flex flex-col items-center justify-center group px-8 border-x border-white/10 h-full mx-6 hover-trigger">
+                <div class="flex items-center gap-2">
+                    <iconify-icon icon="lucide:trophy" class="text-emerald-400 text-lg group-hover:rotate-12 transition-transform"></iconify-icon>
+                    <span class="text-sm font-bold text-white tracking-tighter">FIXUP ARENA</span>
+                </div>
+            </a>
+            <a href="#register" class="nav-link text-[11px] font-medium text-emerald-400 hover:text-emerald-300 transition-colors uppercase tracking-widest flex items-center gap-1 hover-trigger">
+                Invest <iconify-icon icon="lucide:arrow-up-right"></iconify-icon>
+            </a>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <header class="h-screen relative flex items-center justify-center px-4 overflow-hidden">
+        <div class="z-10 text-center flex flex-col items-center max-w-4xl mx-auto mt-12">
+            
+            <div class="mb-8 overflow-hidden">
+                <div class="hero-tag text-[10px] uppercase flex gap-2 font-medium text-amber-400 tracking-widest bg-amber-950/40 opacity-0 border border-amber-500/30 rounded-full px-4 py-1.5 backdrop-blur-md translate-y-full items-center shadow-lg shadow-amber-900/20" style="translate: none; rotate: none; scale: none; transform: translate(0px, 0px); opacity: 1;">
+                    <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
+                    Project Status: Seeking Investment
+                </div>
+            </div>
+            
+            <h1 class="font-display text-5xl md:text-8xl lg:text-9xl font-semibold leading-[0.9] tracking-tighter text-white text-center mb-8 mix-blend-overlay">
+                <div class="reveal-text"><span class="char" style="translate: none; rotate: none; scale: none; transform: translate(0px, 0px);">The Future of</span></div>
+                <div class="reveal-text"><span class="char text-transparent bg-clip-text bg-gradient-to-b from-white to-zinc-400" style="translate: none; rotate: none; scale: none; transform: translate(0px, 0px);">Competition.</span></div>
+            </h1>
+            
+            <div class="max-w-xl text-center">
+                <p class="hero-desc opacity-0 text-sm md:text-base text-zinc-300 font-light leading-relaxed mix-blend-plus-lighter" style="opacity: 1;">
+                    The world’s first central hub for all sports tournaments. We connect players, teams, and leagues through intelligent automation.
+                </p>
+            </div>
+            
+            <div class="hero-desc opacity-0 mt-10" style="opacity: 1;">
+                 <button class="hover-trigger px-8 py-3 bg-white text-black text-xs font-semibold uppercase tracking-wider rounded-lg hover:bg-zinc-200 transition-all shadow-[0_0_30px_rgba(255,255,255,0.2)] hover:scale-105">
+                    Register Interest
+                </button>
+            </div>
+        </div>
+
+        <div class="absolute bottom-10 right-10 hidden md:block">
+            <div class="flex items-center gap-3 bg-black/60 backdrop-blur border border-white/10 rounded-full px-4 py-2 shadow-xl">
+                <div class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
+                <div class="text-[10px] uppercase font-medium text-zinc-300 tracking-widest">
+                    <span class="text-zinc-500 mr-2">Loc:</span>
+                    <span id="stadium-label" class="text-white">Old Trafford</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Marquee -->
+    <section class="py-6 border-y border-white/5 bg-black/40 backdrop-blur-md marquee-container relative z-20">
+        <div class="marquee-content">
+            <!-- Set 1 -->
+            <div class="marquee-item"><span class="text-lg font-medium text-zinc-500 flex items-center gap-8">GRASSROOTS REVOLUTION <iconify-icon icon="lucide:star" class="text-emerald-500"></iconify-icon></span></div>
+            <div class="marquee-item"><span class="text-lg font-medium text-zinc-300 flex items-center gap-8">LEAGUE MANAGEMENT <iconify-icon icon="lucide:layout-grid" class="text-emerald-500"></iconify-icon></span></div>
+            <div class="marquee-item"><span class="text-lg font-medium text-zinc-500 flex items-center gap-8">ADVANCED STATISTICS <iconify-icon icon="lucide:bar-chart-2" class="text-emerald-500"></iconify-icon></span></div>
+            <div class="marquee-item"><span class="text-lg font-medium text-zinc-300 flex items-center gap-8">GLOBAL RANKINGS <iconify-icon icon="lucide:globe" class="text-emerald-500"></iconify-icon></span></div>
+            <!-- Set 2 (Duplicate for Loop) -->
+            <div class="marquee-item"><span class="text-lg font-medium text-zinc-500 flex items-center gap-8">GRASSROOTS REVOLUTION <iconify-icon icon="lucide:star" class="text-emerald-500"></iconify-icon></span></div>
+            <div class="marquee-item"><span class="text-lg font-medium text-zinc-300 flex items-center gap-8">LEAGUE MANAGEMENT <iconify-icon icon="lucide:layout-grid" class="text-emerald-500"></iconify-icon></span></div>
+            <div class="marquee-item"><span class="text-lg font-medium text-zinc-500 flex items-center gap-8">ADVANCED STATISTICS <iconify-icon icon="lucide:bar-chart-2" class="text-emerald-500"></iconify-icon></span></div>
+            <div class="marquee-item"><span class="text-lg font-medium text-zinc-300 flex items-center gap-8">GLOBAL RANKINGS <iconify-icon icon="lucide:globe" class="text-emerald-500"></iconify-icon></span></div>
+        </div>
+    </section>
+
+    <!-- Problem -->
+    <section id="problem" class="relative py-32 px-4 z-10 bg-black/20">
+        <div class="max-w-[1200px] mx-auto glass-panel p-8 md:p-12 lg:p-16 relative overflow-hidden">
+            <div class="absolute -top-40 -right-40 w-80 h-80 bg-emerald-500/10 rounded-full blur-[100px]"></div>
+
+            <div class="flex items-end justify-between mb-16 border-b border-white/5 pb-8 relative z-10">
+                <h2 class="text-3xl md:text-5xl font-semibold tracking-tight text-white">PROBLEM STATEMENT</h2>
+                <div class="text-right hidden md:block">
+                    <p class="text-zinc-500 text-xs uppercase tracking-widest">Fragmented Scene.<br>Untapped Potential.</p>
+                </div>
+            </div>
+
+            <div class="grid lg:grid-cols-2 gap-12 relative z-10">
+                <div class="space-y-12">
+                    <div class="group">
+                        <div class="flex items-center gap-3 mb-4">
+                            <span class="w-1.5 h-1.5 bg-red-500 rounded-full"></span>
+                            <span class="text-[10px] font-bold text-red-500 uppercase tracking-widest">Current State</span>
+                        </div>
+                        <h3 class="text-2xl font-medium text-white mb-4">Fragmented Ecosystem</h3>
+                        <p class="text-zinc-400 font-light leading-relaxed text-sm md:text-base">
+                            The amateur world is scattered. Dozens of small tournaments operate in silos with no central system, no standardisation, and no digital bridge.
+                        </p>
+                    </div>
+                    <div class="group">
+                        <div class="flex items-center gap-3 mb-4">
+                            <span class="w-1.5 h-1.5 bg-amber-500 rounded-full"></span>
+                            <span class="text-[10px] font-bold text-amber-500 uppercase tracking-widest">Lost Value</span>
+                        </div>
+                        <h3 class="text-2xl font-medium text-white mb-4">No Stage, No Reward</h3>
+                        <p class="text-zinc-400 font-light leading-relaxed text-sm md:text-base">
+                            Even the best grassroots players rarely earn from their craft. They pour hours into training but lack the infrastructure to turn skill into income.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="relative min-h-[400px] bg-black/50 rounded-xl overflow-hidden border border-white/5 flex items-center justify-center">
+                    <div class="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20"></div>
+                    <div class="relative w-full h-full p-8 flex items-center justify-center">
+                        <div class="grid grid-cols-2 gap-4 w-64">
+                            <div class="h-24 border border-zinc-700 rounded-lg flex items-center justify-center bg-zinc-900/50 backdrop-blur"><iconify-icon icon="lucide:x" class="text-red-500/50 text-2xl"></iconify-icon></div>
+                            <div class="h-24 border border-zinc-700 rounded-lg flex items-center justify-center bg-zinc-900/50 backdrop-blur"><iconify-icon icon="lucide:x" class="text-red-500/50 text-2xl"></iconify-icon></div>
+                            <div class="h-24 border border-zinc-700 rounded-lg flex items-center justify-center bg-zinc-900/50 backdrop-blur"><iconify-icon icon="lucide:x" class="text-red-500/50 text-2xl"></iconify-icon></div>
+                            <div class="h-24 border border-zinc-700 rounded-lg flex items-center justify-center bg-zinc-900/50 backdrop-blur"><iconify-icon icon="lucide:x" class="text-red-500/50 text-2xl"></iconify-icon></div>
+                        </div>
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <div class="text-[10px] bg-red-500/10 text-red-400 px-3 py-1 rounded-full border border-red-500/20 backdrop-blur-md uppercase tracking-widest font-bold">Disconnect</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Roadmap (Spiral) -->
+    <section id="roadmap" class="carousel-container z-20">
+        <div class="carousel-viewport bg-black/10">
+            <div class="absolute top-24 left-0 w-full text-center z-20 pointer-events-none">
+                <div class="inline-block bg-black/50 backdrop-blur px-6 py-2 rounded-full border border-white/10">
+                    <h2 class="text-2xl font-semibold text-white tracking-tight">ROADMAP</h2>
+                </div>
+            </div>
+            
+            <div class="carousel-world" id="carouselWorld" style="translate: none; rotate: none; scale: none; transform: translate(0px, -950px) rotateY(-400deg);">
+                <!-- Cards arranged in a downward spiral (Tighter Spacing) -->
+                
+                <div class="carousel-card glass-panel p-6 flex flex-col justify-center border-l-4 border-emerald-500" data-color="#10b981" style="translate: none; rotate: none; scale: none; transform-origin: 50% 50%; transform: translate3d(0px, 0px, 400px) scale(0.8, 0.8); opacity: 0.1;">
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="text-emerald-500 text-[10px] font-bold tracking-widest uppercase">Q2 2026</span>
+                        <iconify-icon icon="lucide:flag" class="text-zinc-500"></iconify-icon>
+                    </div>
+                    <h3 class="text-xl font-medium text-white mb-2">The Setup</h3>
+                    <p class="text-zinc-400 font-light text-xs leading-relaxed">Partnerships secured. AI algorithms finalized.</p>
+                </div>
+
+                <div class="carousel-card glass-panel p-6 flex flex-col justify-center border-l-4 border-blue-500" data-color="#3b82f6" style="translate: none; rotate: none; scale: none; transform-origin: 50% 50%; transform: translate3d(787.846px, 250px, 69.4593px) rotateY(80deg) scale(0.8, 0.8); opacity: 0.1;">
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="text-blue-500 text-[10px] font-bold tracking-widest uppercase">Q3 2026</span>
+                        <iconify-icon icon="lucide:smartphone" class="text-zinc-500"></iconify-icon>
+                    </div>
+                    <h3 class="text-xl font-medium text-white mb-2">App Development</h3>
+                    <p class="text-zinc-400 font-light text-xs leading-relaxed">MVP build. Players create profiles and join waitlists.</p>
+                </div>
+
+                <div class="carousel-card glass-panel p-6 flex flex-col justify-center border-l-4 border-white bg-zinc-900" data-color="#ffffff" style="translate: none; rotate: none; scale: none; transform-origin: 50% 50%; transform: translate3d(273.616px, 500px, -375.877px) rotateY(160deg) scale(0.8, 0.8); opacity: 0.1;">
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="text-white text-[10px] font-bold tracking-widest uppercase">Late 2026</span>
+                        <iconify-icon icon="lucide:rocket" class="text-white"></iconify-icon>
+                    </div>
+                    <h3 class="text-xl font-medium text-white mb-2">UK Launch</h3>
+                    <p class="text-zinc-400 font-light text-xs leading-relaxed">Official launch. £15k prize pool. Live streaming.</p>
+                </div>
+
+                <div class="carousel-card glass-panel p-6 flex flex-col justify-center border-l-4 border-amber-500" data-color="#f59e0b" style="translate: none; rotate: none; scale: none; transform-origin: 50% 50%; transform: translate3d(-692.82px, 750px, -200px) rotateY(240deg) scale(0.8, 0.8); opacity: 0.1;">
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="text-amber-500 text-[10px] font-bold tracking-widest uppercase">Q1 2027</span>
+                        <iconify-icon icon="lucide:map" class="text-zinc-500"></iconify-icon>
+                    </div>
+                    <h3 class="text-xl font-medium text-white mb-2">Expansion</h3>
+                    <p class="text-zinc-400 font-light text-xs leading-relaxed">7-a-side leagues with promotion/relegation systems.</p>
+                </div>
+
+                <div class="carousel-card glass-panel p-6 flex flex-col justify-center border-l-4 border-purple-500" data-color="#a855f7" style="translate: none; rotate: none; scale: none; transform-origin: 50% 50%; transform: translate3d(-514.23px, 1000px, 306.418px) rotateY(320deg) scale(0.8, 0.8); opacity: 0.1;">
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="text-purple-500 text-[10px] font-bold tracking-widest uppercase">Q3 2027</span>
+                        <iconify-icon icon="lucide:globe-2" class="text-zinc-500"></iconify-icon>
+                    </div>
+                    <h3 class="text-xl font-medium text-white mb-2">Global Sport</h3>
+                    <p class="text-zinc-400 font-light text-xs leading-relaxed">Basketball and Tennis integration.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="h-[10vh]"></div>
+
+    <!-- Founders -->
+    <section id="founders" class="py-32 px-4 relative z-10 bg-black">
+        <div class="max-w-[1200px] mx-auto glass-panel p-8 md:p-16 border-t border-white/10">
+            <h2 class="text-3xl font-semibold text-white tracking-tight text-center mb-16" style="">FOUNDERS</h2>
+            
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- Founder 1 -->
+                <div class="p-8 rounded-2xl bg-zinc-900/50 border border-white/5 hover:bg-zinc-800/50 transition-colors group hover-trigger">
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="w-14 h-14 bg-gradient-to-br from-zinc-700 to-black rounded-full flex items-center justify-center border border-white/10 shadow-lg">
+                            <span class="text-white font-bold text-lg">HK</span>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-white group-hover:text-emerald-400 transition-colors">Hassan Kone</h3>
+                            <p class="text-zinc-500 text-[10px] font-bold uppercase tracking-wider">Co-Founder &amp; CMO</p>
+                        </div>
+                    </div>
+                    <ul class="space-y-3">
+                        <li class="flex items-start gap-3 text-sm text-zinc-400 font-light">
+                            <iconify-icon icon="lucide:check-circle-2" class="text-emerald-500 mt-0.5 text-base"></iconify-icon>
+                            Sports Content Creator (500k+ followers)
+                        </li>
+                        <li class="flex items-start gap-3 text-sm text-zinc-400 font-light">
+                            <iconify-icon icon="lucide:check-circle-2" class="text-emerald-500 mt-0.5 text-base"></iconify-icon>
+                            Marketing Lead experience at Accenture
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Founder 2 -->
+                <div class="p-8 rounded-2xl bg-zinc-900/50 border border-white/5 hover:bg-zinc-800/50 transition-colors group hover-trigger">
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="w-14 h-14 bg-gradient-to-br from-zinc-700 to-black rounded-full flex items-center justify-center border border-white/10 shadow-lg">
+                            <span class="text-white font-bold text-lg">PK</span>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-white group-hover:text-emerald-400 transition-colors">Praveet Khambhaita</h3>
+                            <p class="text-zinc-500 text-[10px] font-bold uppercase tracking-wider">Co-Founder &amp; CTO</p>
+                        </div>
+                    </div>
+                    <ul class="space-y-3">
+                        <li class="flex items-start gap-3 text-sm text-zinc-400 font-light">
+                            <iconify-icon icon="lucide:check-circle-2" class="text-emerald-500 mt-0.5 text-base"></iconify-icon>
+                            AI Lead experience at Accenture
+                        </li>
+                        <li class="flex items-start gap-3 text-sm text-zinc-400 font-light">
+                            <iconify-icon icon="lucide:check-circle-2" class="text-emerald-500 mt-0.5 text-base"></iconify-icon>
+                            Building GenAI copilots (30–60% efficiency)
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-black pt-20 pb-12 px-6 border-t border-white/10 relative z-20">
+        <div class="max-w-[1400px] mx-auto">
+            <div class="flex flex-col md:flex-row justify-between items-start gap-12 mb-12">
+                <div>
+                    <div class="flex items-center gap-2 mb-4">
+                        <iconify-icon icon="lucide:trophy" class="text-emerald-500 text-xl"></iconify-icon>
+                        <span class="text-xl font-bold tracking-tight text-white">FIXUP ARENA</span>
+                    </div>
+                    <p class="text-zinc-500 text-sm max-w-xs font-light">
+                        Democratising sports competition through AI-driven league management.
+                    </p>
+                </div>
+                
+                <div>
+                    <h4 class="text-white text-xs font-bold uppercase tracking-widest mb-4">Company</h4>
+                    <ul class="space-y-2 text-sm text-zinc-500">
+                        <li><a href="#" class="hover:text-emerald-400 transition-colors">About</a></li>
+                        <li><a href="#" class="hover:text-emerald-400 transition-colors">Founders</a></li>
+                        
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4">
+                <div class="text-[10px] text-zinc-600 uppercase tracking-wider">
+                    © 2026 FixUp Arena Ltd. All Rights Reserved.
+                </div>
+                <div class="flex gap-4">
+                     <a href="#" class="text-zinc-600 hover:text-white transition-colors"><iconify-icon icon="lucide:twitter"></iconify-icon></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // --- 1. CONFIG & DATA (ACCURATE) ---
+        // 7 Stadiums: Wembley, Etihad, Emirates, Twickenham, Old Trafford, Anfield, Lord's
+        const stadiums = {
+            'wembley': { name: "Wembley", colorPrimary: "#cecece", colorSecondary: "#ef4444", type: "oval", arch: true, cityDensity: "med" },
+            'etihad': { name: "Etihad Stadium", colorPrimary: "#6CABDD", colorSecondary: "#1e3a8a", type: "rect-spiral", cityDensity: "low" },
+            'emirates': { name: "Emirates Stadium", colorPrimary: "#EF0107", colorSecondary: "#ffffff", type: "rect-curved", logo: true, cityDensity: "high" },
+            'twickenham': { name: "Twickenham", colorPrimary: "#164d26", colorSecondary: "#ffffff", type: "rect-heavy", cityDensity: "med" },
+            'old_trafford': { name: "Old Trafford", colorPrimary: "#DA291C", colorSecondary: "#000000", type: "rect-steep", cityDensity: "med" },
+            'anfield': { name: "Anfield", colorPrimary: "#C8102E", colorSecondary: "#F6EB61", type: "rect-kop", cityDensity: "high" },
+            'lords': { name: "Lord's Cricket Ground", colorPrimary: "#A83636", colorSecondary: "#ffffff", type: "oval-asym", pavilion: true, cityDensity: "high" }
+        };
+
+        const stadiumKeys = Object.keys(stadiums);
+        const currentKey = stadiumKeys[Math.floor(Math.random() * stadiumKeys.length)];
+        const currentStadium = stadiums[currentKey];
+        
+        // Update DOM
+        document.getElementById('stadium-label').textContent = currentStadium.name;
+        document.querySelector('.stadium-name-loader').textContent = currentStadium.name.toUpperCase();
+
+        // --- 2. CUSTOM CURSOR LOGIC ---
+        const cursor = document.getElementById('cursor');
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+        });
+        document.querySelectorAll('.hover-trigger, a, button').forEach(el => {
+            el.addEventListener('mouseenter', () => cursor.classList.add('hovered'));
+            el.addEventListener('mouseleave', () => cursor.classList.remove('hovered'));
+        });
+
+        // --- 3. LENIS ---
+        const lenis = new Lenis({ duration: 1.2, smooth: true });
+        function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
+        requestAnimationFrame(raf);
+
+        // --- 4. THREE.JS ENGINE ---
+        const canvas = document.querySelector('#webgl');
+        const scene = new THREE.Scene();
+        scene.fog = new THREE.FogExp2(new THREE.Color('#000000'), 0.003);
+
+        const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 4000);
+        const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: false, powerPreference: "high-performance" });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+        // GROUPS
+        const stadiumGroup = new THREE.Group();
+        const helixGroup = new THREE.Group();
+        const gameGroup = new THREE.Group(); // New group for match sim
+        scene.add(stadiumGroup);
+        scene.add(helixGroup);
+        scene.add(gameGroup);
+        helixGroup.visible = false; // Hidden initially
+
+        // --- PARTICLE GENERATION: STADIUM ---
+        const geometry = new THREE.BufferGeometry();
+        const positions = [];
+        const colors = [];
+        const sizes = [];
+        
+        const addP = (x,y,z,c,s=1) => {
+            positions.push(x,y,z);
+            colors.push(c.r, c.g, c.b);
+            sizes.push(s);
+        }
+
+        const colPrim = new THREE.Color(currentStadium.colorPrimary);
+        const colSec = new THREE.Color(currentStadium.colorSecondary);
+        const colConcrete = new THREE.Color('#333');
+        const colPitch = new THREE.Color('#064e3b');
+
+        // A. PITCH
+        const pw = 40, pl = 60;
+        for(let i=0; i<8000; i++) {
+            const x = (Math.random()-0.5)*pw*2;
+            const z = (Math.random()-0.5)*pl*2;
+            // Oval pitch for Lords/Wembley
+            if(currentStadium.type.includes('oval') && (x*x/(pw*pw) + z*z/(pl*pl) > 1)) continue;
+            addP(x, 0, z, colPitch, 0.8);
+        }
+
+        // B. STANDS GENERATION
+        const tiers = 50; 
+        const seatsPerTier = 500;
+        
+        for(let t=0; t<tiers; t++) {
+            const y = t * 1.2;
+            const spread = t * 1.5;
+            
+            // Loop around stadium
+            for(let i=0; i<seatsPerTier; i++) {
+                const angle = (i/seatsPerTier) * Math.PI * 2;
+                let x, z;
+                
+                // Geometry Logic
+                if(currentStadium.type === 'rect-curved' || currentStadium.type === 'rect-steep') {
+                    // Super Ellipse / Rounded Rect
+                    const w = pw + 10 + spread;
+                    const l = pl + 10 + spread;
+                    x = Math.pow(Math.abs(Math.cos(angle)), 0.5) * w * Math.sign(Math.cos(angle));
+                    z = Math.pow(Math.abs(Math.sin(angle)), 0.5) * l * Math.sign(Math.sin(angle));
+                } else if (currentStadium.type === 'rect-kop' && t > 20 && Math.sin(angle) > 0.5) {
+                    // Anfield Kop: Much higher on one side
+                     const w = pw + 10 + spread;
+                    const l = pl + 10 + spread;
+                    x = Math.cos(angle) * w;
+                    z = Math.sin(angle) * l;
+                    if(Math.random() > 0.5) continue; // Skip some to create density shape
+                } else {
+                    // Ovals
+                    const w = pw + 15 + spread;
+                    const l = pl + 15 + spread * 1.2;
+                    x = Math.cos(angle) * w;
+                    z = Math.sin(angle) * l;
+                }
+
+                // Color Logic (Seats vs Stairs)
+                let c = colPrim;
+                if(Math.random() > 0.9) c = colSec; // Random colored seats
+                if(i % 20 === 0) c = colConcrete; // Aisle
+
+                // Emirates Logo Logic (Crude Pixelation)
+                if(currentStadium.logo && t > 25 && t < 40 && Math.abs(z) > pl+20) {
+                     if(Math.abs(Math.sin(angle*10)) > 0.5) c = new THREE.Color('#fff');
+                }
+
+                addP(x, y + Math.random(), z, c, 1.5);
+            }
+        }
+
+        // C. SPECIFIC FEATURES
+        // Wembley Arch
+        if(currentStadium.arch) {
+            for(let i=0; i<2000; i++) {
+                const pct = i/2000;
+                const x = (pct - 0.5) * 200; // Span
+                const h = 130 * (1 - Math.pow((pct-0.5)*2, 2)); // Parabola
+                const z = -60 + Math.cos(pct * Math.PI)*20; // Tilted back
+                addP(x, h, z, new THREE.Color('#fff'), 2);
+            }
+        }
+
+        // Lord's Pavilion
+        if(currentStadium.pavilion) {
+            // Boxy structure at one end
+            for(let x=-20; x<20; x+=0.8) {
+                for(let y=0; y<30; y+=0.8) {
+                    for(let z=-90; z>-110; z-=0.8) {
+                        if(Math.random()>0.8) addP(x,y,z, new THREE.Color('#e2e8f0'), 2);
+                    }
+                }
+            }
+        }
+
+        // D. CITY / SURROUNDINGS (Procedural)
+        // 300k particles for dense background
+        const citySize = 1200;
+        const buildingCount = 400;
+        
+        for(let b=0; b<buildingCount; b++) {
+            // Polar distribution away from center
+            const dist = 120 + Math.random() * citySize;
+            const theta = Math.random() * Math.PI * 2;
+            const bx = Math.cos(theta) * dist;
+            const bz = Math.sin(theta) * dist;
+            
+            const bw = 10 + Math.random() * 30;
+            const bh = 20 + Math.random() * 150; // Height
+
+            // Generate points for this building
+            const dens = (bw*bh)/4; // Optimization
+            for(let k=0; k<dens; k++) {
+                const px = bx + (Math.random()-0.5)*bw;
+                const py = Math.random()*bh;
+                const pz = bz + (Math.random()-0.5)*bw;
+                
+                let col = new THREE.Color('#1f1f25'); // Dark buildings
+                // Windows
+                if(Math.random() > 0.98) col = new THREE.Color('#fbbf24'); // Yellow light
+                else if(Math.random() > 0.98) col = new THREE.Color('#ef4444'); // Red light
+                
+                addP(px, py, pz, col, 1.5);
+            }
+        }
+
+        geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+        geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+        geometry.setAttribute('size', new THREE.Float32BufferAttribute(sizes, 1));
+
+        const material = new THREE.PointsMaterial({
+            size: 0.5, vertexColors: true, sizeAttenuation: true, 
+            transparent: true, opacity: 0.9, depthWrite: false, blending: THREE.AdditiveBlending
+        });
+        const stadiumPoints = new THREE.Points(geometry, material);
+        stadiumGroup.add(stadiumPoints);
+
+        // --- GAME SIMULATION (DYNAMIC PARTICLES) ---
+        // We create a few "players" that move around on the pitch
+        const playerCount = 22;
+        const playerGeo = new THREE.BufferGeometry();
+        const playerPos = new Float32Array((playerCount + 1) * 3); // +1 for ball
+        const playerCol = new Float32Array((playerCount + 1) * 3);
+        const playerVel = []; // Custom velocity array
+
+        // Init Game Objects
+        const ballIdx = playerCount;
+        for(let i=0; i<=playerCount; i++) {
+            playerPos[i*3] = (Math.random()-0.5)*40; // x
+            playerPos[i*3+1] = 0.5; // y (slightly above pitch)
+            playerPos[i*3+2] = (Math.random()-0.5)*80; // z
+
+            const c = new THREE.Color();
+            if(i === ballIdx) {
+                // Ball (Bright)
+                c.set('#ffffff');
+                playerVel.push({x:0, z:0, targetX: 0, targetZ: 0});
+            } else if (i < playerCount/2) {
+                // Team A
+                c.set('#10b981'); // Emerald
+                playerVel.push({x:0, z:0});
+            } else {
+                // Team B
+                c.set('#a855f7'); // Purple
+                playerVel.push({x:0, z:0});
+            }
+            playerCol[i*3] = c.r;
+            playerCol[i*3+1] = c.g;
+            playerCol[i*3+2] = c.b;
+        }
+
+        playerGeo.setAttribute('position', new THREE.BufferAttribute(playerPos, 3));
+        playerGeo.setAttribute('color', new THREE.BufferAttribute(playerCol, 3));
+
+        const playerMaterial = new THREE.PointsMaterial({
+            size: 1.5, vertexColors: true, sizeAttenuation: true,
+            transparent: true, opacity: 1, blending: THREE.AdditiveBlending
+        });
+        const gamePoints = new THREE.Points(playerGeo, playerMaterial);
+        gameGroup.add(gamePoints);
+
+        // --- PARTICLE GENERATION: DNA HELIX (100k particles) ---
+        const helixGeo = new THREE.BufferGeometry();
+        const hPos = [];
+        const hCol = [];
+        const hSizes = [];
+        const hCount = 100000;
+        const helixHeight = 1600; 
+        const strands = 2;
+        
+        for(let i=0; i<hCount; i++) {
+            const t = Math.random() * helixHeight; // Vertical position
+            const angle = t * 0.05 + (Math.floor(Math.random()*2) * Math.PI); // Twist
+            
+            // DNA Thickness
+            const radius = 60 + (Math.random()-0.5)*15; 
+            
+            // X/Z based on helix
+            const x = Math.cos(angle) * radius;
+            const z = Math.sin(angle) * radius;
+            
+            // Scatter noise nearby
+            const nx = x + (Math.random()-0.5)*20;
+            const nz = z + (Math.random()-0.5)*20;
+            const ny = t - 800; // Center vertically
+
+            hPos.push(nx, ny, nz);
+            
+            // Default white, will change via shader/attribute update or simpler uniform hack
+            hCol.push(1,1,1); 
+            hSizes.push(Math.random()*1.5);
+        }
+        helixGeo.setAttribute('position', new THREE.Float32BufferAttribute(hPos, 3));
+        helixGeo.setAttribute('color', new THREE.Float32BufferAttribute(hCol, 3));
+        helixGeo.setAttribute('size', new THREE.Float32BufferAttribute(hSizes, 1));
+        
+        const helixPoints = new THREE.Points(helixGeo, material.clone());
+        helixGroup.add(helixPoints);
+
+
+        // --- ANIMATION LOOP ---
+        camera.position.set(0, 150, 250);
+        
+        let mouseX = 0, mouseY = 0;
+        window.addEventListener('mousemove', (e) => {
+            mouseX = (e.clientX / window.innerWidth - 0.5);
+            mouseY = (e.clientY / window.innerHeight - 0.5);
+        });
+
+        // Helix Color Morphing Helper
+        const helixColorsAttribute = helixPoints.geometry.attributes.color;
+        let targetHelixColor = new THREE.Color("#ffffff");
+
+        function updateHelixColor() {
+            helixPoints.material.color.lerp(targetHelixColor, 0.05);
+        }
+
+        // Game Simulation Logic
+        let gameTime = 0;
+        function updateGame() {
+            gameTime += 0.01;
+            const posAttr = gamePoints.geometry.attributes.position;
+            const positions = posAttr.array;
+            
+            // 1. Move Ball (Index 22)
+            const bIdx = 22 * 3;
+            // Pick a random target every so often
+            if(Math.random() > 0.98) {
+                 playerVel[22].targetX = (Math.random()-0.5) * 70; // Width of pitch
+                 playerVel[22].targetZ = (Math.random()-0.5) * 110; // Length of pitch
+            }
+            // Lerp ball towards target
+            positions[bIdx] += (playerVel[22].targetX - positions[bIdx]) * 0.05;
+            positions[bIdx+2] += (playerVel[22].targetZ - positions[bIdx+2]) * 0.05;
+
+            const ballX = positions[bIdx];
+            const ballZ = positions[bIdx+2];
+
+            // 2. Move Players (Indices 0-21)
+            for(let i=0; i<22; i++) {
+                const idx = i*3;
+                // Basic Swarm Behavior: Move towards ball, but maintain personal space
+                let dx = ballX - positions[idx];
+                let dz = ballZ - positions[idx+2];
+                const dist = Math.sqrt(dx*dx + dz*dz);
+                
+                // Normalize
+                if(dist > 0) { dx /= dist; dz /= dist; }
+
+                // Speed varies by player
+                const speed = 0.2 + Math.random() * 0.3;
+                
+                // If far from ball, run to it. If close, jitter.
+                if(dist > 5) {
+                    positions[idx] += dx * speed;
+                    positions[idx+2] += dz * speed;
+                } else {
+                    positions[idx] += (Math.random()-0.5);
+                    positions[idx+2] += (Math.random()-0.5);
+                }
+            }
+            posAttr.needsUpdate = true;
+        }
+
+        function tick() {
+            // Stadium Rotation
+            stadiumGroup.rotation.y += 0.001;
+            gameGroup.rotation.y += 0.001; // Sync with stadium
+            
+            // Helix Rotation (Twist upwards)
+            helixGroup.rotation.y -= 0.002;
+            
+            // Parallax
+            camera.position.x += (mouseX * 50 - camera.position.x) * 0.02;
+            camera.position.y += (150 + mouseY * 20 - camera.position.y) * 0.02;
+            camera.lookAt(0, 0, 0);
+
+            // Flow Upwards logic for Helix
+            if(helixGroup.visible) {
+                updateHelixColor();
+                helixGroup.position.y += 0.5;
+                if(helixGroup.position.y > 200) helixGroup.position.y = 0;
+            } else {
+                updateGame();
+            }
+
+            renderer.render(scene, camera);
+            requestAnimationFrame(tick);
+        }
+        tick();
+
+        // --- GSAP SCROLL TRIGGERS ---
+        
+        // 1. Loading
+        const tl = gsap.timeline();
+        tl.to('.loader-bar', { height: '100%', duration: 1, ease: "power4.inOut" })
+          .to('.counter', { textContent: 100, duration: 1, roundProps: "textContent" }, "<")
+          .to('.loader-wrap', { y: '-100%', duration: 0.8, ease: "expo.inOut" })
+          .to('#webgl', { opacity: 1, duration: 1 })
+          .to('.char', { y: 0, duration: 0.8, stagger: 0.02, ease: "power3.out" }, "-=0.5")
+          .to('.hero-desc', { opacity: 1, duration: 1 }, "-=0.5")
+          .to('.hero-tag', { opacity: 1, y: 0, duration: 1 }, "-=0.5");
+
+        // 2. Scene Switch (Stadium -> Helix)
+        ScrollTrigger.create({
+            trigger: "#roadmap",
+            start: "top center",
+            end: "bottom center",
+            onEnter: () => {
+                // Hide Stadium & Game
+                gsap.to(stadiumGroup.scale, { x: 0.1, y: 0.1, z: 0.1, duration: 1.5, ease: "power2.inOut" });
+                gsap.to(stadiumGroup.position, { y: -500, duration: 1.5 });
+                gsap.to(gameGroup.scale, { x: 0.1, y: 0.1, z: 0.1, duration: 1.5, ease: "power2.inOut" }); // Shrink game
+                gsap.to([stadiumGroup, gameGroup], { visible: false, delay: 1 });
+                
+                // Show Helix
+                helixGroup.visible = true;
+                helixGroup.scale.set(0.5, 0.5, 0.5);
+                gsap.fromTo(helixGroup.scale, { x: 0.5, y:0, z:0.5 }, { x: 1, y: 1, z: 1, duration: 1.5 });
+            },
+            onLeaveBack: () => {
+                // Show Stadium & Game
+                stadiumGroup.visible = true;
+                gameGroup.visible = true;
+                gsap.to([stadiumGroup.scale, gameGroup.scale], { x: 1, y: 1, z: 1, duration: 1.5 });
+                gsap.to(stadiumGroup.position, { y: 0, duration: 1.5 });
+                
+                // Hide Helix
+                gsap.to(helixGroup.scale, { x: 0, y: 0, z: 0, duration: 1 });
+                helixGroup.visible = false;
+            }
+        });
+
+        // 3. Carousel Spiral & Color Matching
+        const carouselCards = document.querySelectorAll('.carousel-card');
+        const world = document.getElementById('carouselWorld');
+        
+        // Setup positions
+        const spacing = 250; // Tighter
+        carouselCards.forEach((card, i) => {
+            gsap.set(card, {
+                y: i * spacing,
+                rotationY: i * 80,
+                z: 400,
+                transformOrigin: "center center -400px"
+            });
+
+            // Trigger color change when card is centered
+            ScrollTrigger.create({
+                trigger: ".carousel-container",
+                start: () => `top+=${i * (window.innerHeight * 0.5)} top`,
+                end: () => `top+=${(i + 1) * (window.innerHeight * 0.5)} top`,
+                onEnter: () => {
+                    gsap.to(card, { opacity: 1, scale: 1 });
+                    const color = card.getAttribute('data-color');
+                    targetHelixColor.set(color);
+                },
+                onLeave: () => gsap.to(card, { opacity: 0.1, scale: 0.8 }),
+                onEnterBack: () => {
+                    gsap.to(card, { opacity: 1, scale: 1 });
+                    const color = card.getAttribute('data-color');
+                    targetHelixColor.set(color);
+                },
+                onLeaveBack: () => gsap.to(card, { opacity: 0.1, scale: 0.8 })
+            });
+        });
+
+        gsap.to(world, {
+            y: - (carouselCards.length * spacing) + 300,
+            rotationY: - (carouselCards.length * 80),
+            ease: "none",
+            scrollTrigger: {
+                trigger: ".carousel-container",
+                start: "top top",
+                end: "bottom bottom",
+                scrub: 1
+            }
+        });
+
+    </script>
+
+</body></html>
