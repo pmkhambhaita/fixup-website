@@ -703,8 +703,8 @@
             const isClear = type === 'Clear';
 
             // Config
-            const clusterCount = isClear ? 8 : 25;
-            const particlesPerCluster = isClear ? 300 : 800; // Total ~20k when cloudy
+            const clusterCount = isClear ? 8 : 30; // More clumps
+            const particlesPerCluster = isClear ? 300 : 1200; // Denser (Total ~36k)
             const clusterRadius = 300; // Size of a single cloud clump
 
             const cloudGeo = new THREE.BufferGeometry();
@@ -715,7 +715,8 @@
                 // Random center for this cloud clump
                 const cx = (Math.random() - 0.5) * 3500;
                 const cz = (Math.random() - 0.5) * 3500;
-                const cy = 150 + Math.random() * 300; // Altitude
+                // Lower Altitude: 80 to 330 (Visible right above stadium)
+                const cy = 80 + Math.random() * 250;
 
                 for (let p = 0; p < particlesPerCluster; p++) {
                     // Gaussian-like distribution around center
