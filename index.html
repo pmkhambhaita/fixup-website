@@ -478,14 +478,14 @@
     <div class="h-[10vh]"></div>
 
     <!-- Founders -->
-    <section id="founders" class="py-32 px-4 relative z-10 bg-black">
+    <section id="founders" class="py-32 px-4 relative z-10 bg-black/5 backdrop-blur-sm">
         <div class="max-w-[1200px] mx-auto glass-panel p-8 md:p-16 border-t border-white/10">
             <h2 class="text-3xl font-semibold text-white tracking-tight text-center mb-16" style="">FOUNDERS</h2>
 
             <div class="grid md:grid-cols-2 gap-8">
                 <!-- Founder 1 -->
                 <div
-                    class="p-8 rounded-2xl bg-zinc-900/50 border border-white/5 hover:bg-zinc-800/50 transition-colors group hover-trigger">
+                    class="p-8 rounded-2xl bg-zinc-900/20 border border-white/5 hover:bg-zinc-800/20 transition-colors group hover-trigger">
                     <div class="flex items-center gap-4 mb-6">
                         <div
                             class="w-14 h-14 bg-gradient-to-br from-zinc-700 to-black rounded-full flex items-center justify-center border border-white/10 shadow-lg">
@@ -514,7 +514,7 @@
 
                 <!-- Founder 2 -->
                 <div
-                    class="p-8 rounded-2xl bg-zinc-900/50 border border-white/5 hover:bg-zinc-800/50 transition-colors group hover-trigger">
+                    class="p-8 rounded-2xl bg-zinc-900/20 border border-white/5 hover:bg-zinc-800/20 transition-colors group hover-trigger">
                     <div class="flex items-center gap-4 mb-6">
                         <div
                             class="w-14 h-14 bg-gradient-to-br from-zinc-700 to-black rounded-full flex items-center justify-center border border-white/10 shadow-lg">
@@ -1090,25 +1090,34 @@
         updateStadium();
 
         // --- PARTICLE GENERATION: DNA HELIX ---
+        // 5. HELIX PARTICLES (Refined: High Density & Aligned)
+
         const helixGeo = new THREE.BufferGeometry();
         const hPos = [];
         const hCol = [];
         const hSizes = [];
-        const hCount = 80000;
 
-        for (let i = 0; i < hCount; i++) {
-            const t = Math.random() * 2000;
-            const angle = t * 0.05 + (Math.floor(Math.random() * 2) * Math.PI);
-            const radius = 60 + (Math.random() - 0.5) * 20;
+        const helixHeight = 6000;
+        const hCount = 100000; // 100k Particles (High Density)
+
+        for (let t = 0; t < hCount; t++) {
+            const yRatio = t / hCount;
+            const ny = (yRatio * helixHeight) - 1000; // Map -1000 to 5000
+
+            // Pitch: 500 units (Matches Card Spacing)
+            const strandOffset = t % 2 === 0 ? 0 : Math.PI;
+            const angle = (ny / 500) * Math.PI * 2 + strandOffset;
+
+            // Radius: 250 (Large enough to hold cards, dense enough to look good)
+            const radius = 250 + (Math.random() - 0.5) * 60;
 
             const x = Math.cos(angle) * radius;
             const z = Math.sin(angle) * radius;
-            const ny = t - 1000;
             const scatter = Math.random() > 0.8 ? 50 : 5;
 
             hPos.push(x + (Math.random() - 0.5) * scatter, ny, z + (Math.random() - 0.5) * scatter);
             hCol.push(1, 1, 1);
-            hSizes.push(Math.random() * 1.2);
+            hSizes.push(Math.random() * 1.5 + 0.5);
         }
         helixGeo.setAttribute('position', new THREE.Float32BufferAttribute(hPos, 3));
         helixGeo.setAttribute('color', new THREE.Float32BufferAttribute(hCol, 3));
@@ -1136,8 +1145,8 @@
             // Stadium Rotation - STOPPED for Scroll Control
             // stadiumGroup.rotation.y += 0.0008;
 
-            // Helix Rotation
-            helixGroup.rotation.y -= 0.002;
+            // Helix Rotation - STOPPED (Scroll Driven)
+            // helixGroup.rotation.y -= 0.002;
 
             // Camera Interaction - STOPPED fo Scroll Control
             // camera.lookAt(0, 0, 0);
@@ -1173,8 +1182,8 @@
             // Flow
             if (helixGroup.visible) {
                 helixPoints.material.color.lerp(targetHelixColor, 0.05);
-                helixGroup.position.y += 0.5;
-                if (helixGroup.position.y > 200) helixGroup.position.y = 0;
+                // helixGroup.position.y += 0.5; // STOPPED: User requested no vertical movement
+                // if (helixGroup.position.y > 200) helixGroup.position.y = 0;
             }
 
             // Weather Animation
@@ -1253,13 +1262,18 @@
 
         // Reveal Animation for Problem Card (Linked to same scroll for seamlessness)
         // Reveal Animation for Problem Card (Linked to same scroll for seamlessness)
-        camTl.from("#problem .glass-panel", {
+        // Reveal Animation for Problem Card (Linked to same scroll for seamlessness)
+        camTl.fromTo("#problem .glass-panel", {
             y: 100,
             opacity: 0,
-            scale: 0.9,
+            scale: 0.9
+        }, {
+            y: 0,
+            opacity: 1,
+            scale: 1,
             ease: "power1.out",
-            duration: 0.05 // Almost instant upon scroll start
-        }, 0); // Start immediately at 0
+            duration: 0.1 // Short but reliable duration
+        }, 0);
 
         // Rotation handled in tick() for hybrid idle/lock
         // Removed explicit GSAP rotation to avoid conflict
@@ -1281,9 +1295,11 @@
         helixGroup.visible = false;
 
         // Overlap animations: Stadium leaves, Helix Enters
+        // Overlap animations: Stadium leaves EARLY, Helix scale up
+        // Stadium fades out in the first 30% of scroll (duration 0.3 of 1.0)
         helixTl
-            .to(stadiumGroup.scale, { x: 0, y: 0, z: 0 }, 0)
-            .to(stadiumGroup.position, { y: -500 }, 0)
+            .to(stadiumGroup.scale, { x: 0, y: 0, z: 0, duration: 0.3 }, 0)
+            .to(stadiumGroup.position, { y: -500, duration: 0.5 }, 0)
             .to(helixGroup.scale, { x: 1, y: 1, z: 1 }, 0);
 
         // 3. Carousel Logic (Pinned Timeline)
@@ -1324,6 +1340,37 @@
             ease: "none",
             duration: 10 // Normalized total duration
         }, 0);
+
+        // C. Rotate Helix (Scroll Driven)
+        // Spin the helix as we go down
+        carouselTl.to(helixGroup.rotation, {
+            y: Math.PI * 2, // 1 Full rotation over the scroll duration
+            ease: "none",
+            duration: 10
+        }, 0);
+
+        // 4. Founders Section - Return to Stadium (Pitch Level)
+        const foundersTl = gsap.timeline({
+            scrollTrigger: {
+                trigger: "#founders",
+                start: "top center", // Start transitioning when section hits center
+                end: "center center",
+                scrub: 1,
+                onEnter: () => { stadiumGroup.visible = true; },
+                onLeaveBack: () => { stadiumGroup.visible = false; }
+            }
+        });
+
+        foundersTl
+            .to(helixGroup.scale, { x: 0, y: 0, z: 0 }, 0)
+            .to(stadiumGroup.position, { y: 0 }, 0)
+            .to(stadiumGroup.scale, { x: 1, y: 1, z: 1 }, 0)
+            .to(stadiumGroup, { visible: true }, 0)
+            .to(camera.position, { // Match Problem View
+                x: 0,
+                y: 100,
+                z: 280
+            }, 0);
 
         // B. Animate Cards (Staggered insertion)
         // Ensure the timing matches the world movement so cards appear as they rotate to front
