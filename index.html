@@ -1126,20 +1126,44 @@
 
         // Helix Color Morphing
         let targetHelixColor = new THREE.Color("#ffffff");
+        let idleRotation = 0; // State for gentle spin
 
         function tick() {
-            // Stadium Rotation
-            stadiumGroup.rotation.y += 0.0008;
+            // Stadium Rotation - STOPPED for Scroll Control
+            // stadiumGroup.rotation.y += 0.0008;
 
             // Helix Rotation
             helixGroup.rotation.y -= 0.002;
 
-            // Camera Interaction
-            const targetX = 520 + mouseX * 200;
-            const targetY = 320 + mouseY * 100;
+            // Camera Interaction - STOPPED fo Scroll Control
+            // camera.lookAt(0, 0, 0);
 
-            camera.position.x += (targetX - camera.position.x) * 0.02;
-            camera.position.y += (targetY - camera.position.y) * 0.02;
+            // --- HYBRID ROTATION LOGIC ---
+            // 1. Accumulate Idle
+            idleRotation += 0.0008;
+
+            // 2. Get Scroll Progress
+            let p = 0;
+            if (typeof camTl !== 'undefined') p = camTl.progress();
+
+            // 3. Determine Target (Nearest angle to PI/2 relative to current idle)
+            // We want to lock to 90deg (PI/2)
+            const snap = Math.PI / 2;
+            const currentMod = idleRotation % (Math.PI * 2);
+            let diff = snap - currentMod;
+
+            // Shortest path normalization (-PI to +PI)
+            if (diff > Math.PI) diff -= Math.PI * 2;
+            else if (diff < -Math.PI) diff += Math.PI * 2;
+
+            const targetRotation = idleRotation + diff;
+
+            // 4. Interpolate
+            // Using a power ease for smoother "locking" feel
+            const easeP = p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2; // easeInOutQuad
+            stadiumGroup.rotation.y = idleRotation * (1 - easeP) + targetRotation * easeP;
+
+            // Ensure LookAt
             camera.lookAt(0, 0, 0);
 
             // Flow
@@ -1183,7 +1207,7 @@
             renderer.render(scene, camera);
             requestAnimationFrame(tick);
         }
-        tick();
+
 
         // --- GSAP SCROLL TRIGGERS ---
 
@@ -1201,7 +1225,30 @@
             .to('.hero-desc', { opacity: 1, duration: 1 }, "-=0.5")
             .to('.hero-tag', { opacity: 1, y: 0, duration: 1 }, "-=0.5");
 
-        // 2. Scene Switch (Stadium -> Helix)
+        // 2. Camera Scroll Animation (Hero -> Problem)
+        // Zoom into pitch, swinging camera to align short edge with bottom
+        const camTl = gsap.timeline({
+            scrollTrigger: {
+                trigger: "header", // Start from hero
+                start: "top top",
+                endTrigger: "#problem", // End at problem statement
+                end: "bottom bottom",
+                scrub: 2 // Smooth scrubbing
+            }
+        });
+
+        // Current Pos: 520, 320, 420 (Isomorphic)
+        // Target Pos: 0, 150, 250 (End-to-End, Closer)
+
+        camTl.to(camera.position, {
+            x: 0,
+            y: 150,
+            z: 350, // Slightly back to see full width
+            ease: "power1.inOut"
+        }, 0);
+
+        // Rotation handled in tick() for hybrid idle/lock
+        // Removed explicit GSAP rotation to avoid conflict
         ScrollTrigger.create({
             trigger: "#roadmap",
             start: "top center",
@@ -1287,6 +1334,9 @@
                 opacity: 0, scale: 0.8, filter: "blur(8px)", duration: 1
             }, Math.max(0, startTime) + 2.5); // Stay visible for ~2.5 duration units
         });
+
+        // Start Animation Loop (Must be after all definitions to avoid TDZ)
+        tick();
 
     </script>
 </body>
