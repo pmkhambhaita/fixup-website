@@ -3,12 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FIXUP ARENA | The Future of Competition</title>
+    <title>FIXUP ARENA | Next Tournament</title>
+    <link rel="icon" type="image/svg+xml" href="FixUp Arena Logo.svg">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/@fontsource/geist-sans@5.0.1/300.min.css" rel="stylesheet">
@@ -43,10 +45,6 @@
             -webkit-text-fill-color: transparent;
         }
 
-        .border-brand-gradient {
-            border-image: linear-gradient(90deg, #5de0e6, #004aad) 1;
-        }
-
         /* --- SMOOTH SCROLL --- */
         html {
             scroll-behavior: smooth;
@@ -57,15 +55,15 @@
             color: #fff;
         }
 
-        /* --- GLASS MORPHISM --- */
         html,
         body {
             overflow-y: auto !important;
             height: auto !important;
         }
 
+        /* --- GLASS MORPHISM --- */
         .glass-panel {
-            background: rgba(20, 20, 20, 0.4);
+            background: rgba(20, 20, 20, 0.6);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.08);
@@ -133,7 +131,7 @@
             align-items: center;
             justify-content: center;
             overflow: hidden;
-            perspective: 2000px;
+            perspective: 2500px;
         }
 
         .carousel-world {
@@ -173,75 +171,31 @@
             width: 1px;
             height: 0%;
             background: linear-gradient(to top, #004aad, #5de0e6);
-            margin-bottom: 20px;
+            margin-bottom: 32px;
         }
 
-        /* --- MARQUEE --- */
-        .marquee-container {
-            mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
-            -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
-            overflow: hidden;
-            white-space: nowrap;
+        /* --- UTILS --- */
+        .nav-logo {
+            transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), filter 0.3s;
         }
 
-        .marquee-content {
-            display: inline-flex;
-            animation: scroll 40s linear infinite;
+        .nav-logo:hover {
+            transform: scale(1.1);
+            filter: drop-shadow(0 0 10px rgba(93, 224, 230, 0.5));
         }
 
-        .marquee-item {
-            padding-right: 4rem;
+        details>summary {
+            list-style: none;
         }
 
-        @keyframes scroll {
-            0% {
-                transform: translateX(0);
-            }
-
-            100% {
-                transform: translateX(-50%);
-            }
-        }
-
-        .blue-glow {
-            box-shadow: 0 0 30px rgba(93, 224, 230, 0.15);
-        }
-
-        /* --- CARD HOVER FX --- */
-        .creator-card {
-            transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
-        }
-
-        .creator-card:hover {
-            transform: translateY(-5px) scale(1.02);
-            box-shadow: 0 20px 40px -10px rgba(93, 224, 230, 0.3);
-            border-color: rgba(93, 224, 230, 0.5);
-            z-index: 10;
-        }
-
-        .creator-card::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            border-radius: 1rem;
-            padding: 1px;
-            background: linear-gradient(180deg, rgba(255, 255, 255, 0.1), transparent);
-            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            -webkit-mask-composite: xor;
-            mask-composite: exclude;
-            pointer-events: none;
-        }
-
-        .creator-card:hover::after {
-            background: linear-gradient(180deg, #5de0e6, #004aad);
+        details>summary::-webkit-details-marker {
+            display: none;
         }
     </style>
-
-    <!-- Cursor -->
 </head>
 
-<body>
+<body class="">
+
     <div id="cursor"></div>
 
     <!-- 3D Background -->
@@ -250,407 +204,284 @@
     <!-- Loader -->
     <div class="loader-wrap">
         <div class="loader-bar"></div>
-        <div class="flex gap-2 text-xs font-medium tracking-widest text-white uppercase">
-            <!-- UPDATED: Static Name -->
-            <span class="stadium-name-loader">FIXUP ARENA</span>
-            <span class="counter">0</span>%
+        <div class="flex flex-col items-center gap-6">
+            <!-- Logo Made Significantly Bigger & Crystal Clear -->
+            <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/63d2ed10-b4c7-4a87-8ee0-e402dffbae45_320w.png"
+                alt="FixUp Arena" class="w-64 md:w-96 h-auto object-contain antialiased">
+            <div class="text-xs font-medium tracking-widest text-zinc-500">
+                <span class="counter">0</span>%
+            </div>
         </div>
     </div>
 
     <!-- Nav -->
-    <nav class="fixed top-0 left-0 w-full z-[100] flex justify-center pt-4 px-4 pointer-events-none">
+    <nav class="fixed top-0 left-0 w-full z-[100] flex justify-center pt-4 md:pt-6 px-4 pointer-events-none">
         <div
-            class="pointer-events-auto bg-black/80 backdrop-blur-xl border border-white/10 rounded-full px-8 h-12 flex items-center justify-center shadow-2xl w-fit">
+            class="pointer-events-auto flex bg-black/80 h-14 md:h-20 border-white/10 border rounded-full px-6 md:px-8 shadow-2xl backdrop-blur-xl items-center justify-between min-w-[300px] md:min-w-[600px] gap-4 md:gap-8">
 
-            <!-- Navigation Links (Centered, Logo & Invest removed) -->
-            <div class="flex items-center gap-8">
+            <!-- Left Links (Desktop) -->
+            <div class="flex items-center gap-6 flex-1 justify-end hidden md:flex">
                 <a href="#" onclick="window.scrollTo(0,0); return false;"
-                    class="nav-link text-[10px] font-medium text-zinc-400 hover:text-white transition-colors uppercase tracking-widest hover-trigger">Home</a>
-                <a href="#upcoming"
-                    class="nav-link text-[10px] font-medium text-zinc-400 hover:text-white transition-colors uppercase tracking-widest hover-trigger">Upcoming</a>
+                    class="nav-link text-[10px] font-medium text-zinc-400 hover:text-white transition-colors uppercase tracking-widest hover-trigger">Tournament</a>
+                <a href="#problem"
+                    class="nav-link text-[10px] font-medium text-zinc-400 hover:text-white transition-colors uppercase tracking-widest hover-trigger">Concept</a>
+            </div>
+
+            <!-- Logo -->
+            <a href="#" onclick="window.scrollTo(0,0); return false;"
+                class="flex items-center justify-center nav-logo hover-trigger z-10 shrink-0">
+                <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/40ddb709-c16a-40be-b363-f30c5ca383aa_320w.jpg"
+                    alt="FixUp Arena" class="h-8 md:h-12 w-auto object-contain">
+            </a>
+
+            <!-- Right Links (Desktop) -->
+            <div class="flex items-center gap-6 flex-1 justify-start hidden md:flex">
                 <a href="#roadmap"
                     class="nav-link text-[10px] font-medium text-zinc-400 hover:text-white transition-colors uppercase tracking-widest hover-trigger">Roadmap</a>
                 <a href="#contact"
                     class="nav-link text-[10px] font-medium text-zinc-400 hover:text-white transition-colors uppercase tracking-widest hover-trigger">Contact</a>
             </div>
 
+            <!-- Mobile Menu Icon -->
+            <div class="md:hidden flex-1 flex justify-end">
+                <button class="text-white hover-trigger">
+                    <iconify-icon icon="solar:hamburger-menu-linear" class="text-xl"></iconify-icon>
+                </button>
+            </div>
         </div>
     </nav>
 
-    <!-- Hero -->
-    <header class="h-screen relative flex items-center justify-center px-4 overflow-hidden">
-        <div class="z-10 text-center flex flex-col items-center max-w-5xl mx-auto mt-0">
+    <!-- HERO SECTION -->
+    <header class="relative min-h-screen flex items-center justify-center pt-20 md:pt-28 pb-12 px-6 overflow-hidden">
+        <div class="grid lg:grid-cols-12 gap-8 lg:gap-20 z-10 w-full max-w-7xl items-center">
 
-            <div class="mb-6 flex flex-col items-center animate-fade-in-down opacity-0"
-                style="animation: fadeIn 1s forwards 0.5s;">
-                <h2 class="text-[#5de0e6] font-bold text-sm md:text-base tracking-[0.3em] uppercase mb-2">FixUp Arena
-                </h2>
-            </div>
+            <!-- LEFT COLUMN: Main Content -->
+            <div class="lg:col-span-7 flex flex-col justify-center text-center lg:text-left relative">
 
-            <h1
-                class="font-display text-5xl md:text-8xl lg:text-9xl font-semibold leading-[0.9] tracking-tighter text-white text-center mb-8 mix-blend-overlay">
-                <div class="reveal-text"><span class="char">The Future of</span></div>
-                <div class="reveal-text"><span
-                        class="char text-transparent bg-clip-text bg-gradient-to-b from-white to-zinc-400">Competition.</span>
+                <!-- Watermark -->
+                <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/40ddb709-c16a-40be-b363-f30c5ca383aa_320w.jpg?w=800&amp;q=80"
+                    alt=""
+                    class="absolute top-1/2 left-1/2 lg:left-0 -translate-x-1/2 lg:-translate-x-1/4 -translate-y-1/2 w-[280px] lg:w-[560px] opacity-[0.08] blur-[2px] pointer-events-none -z-10 mix-blend-screen select-none">
+
+                <!-- Prize Badge -->
+                <div class="mb-6 md:mb-8 flex justify-center lg:justify-start opacity-0 animate-fade-in-down"
+                    style="animation: fadeIn 1s forwards 0.5s;">
+                    <div
+                        class="inline-flex items-center gap-2 md:gap-3 px-3 py-1.5 md:px-4 md:py-2 rounded-full bg-[#5de0e6]/10 border border-[#5de0e6] shadow-[0_0_20px_rgba(93,224,230,0.3)] backdrop-blur-md">
+                        <iconify-icon icon="solar:cup-star-bold"
+                            class="text-[#5de0e6] text-base md:text-lg animate-pulse"></iconify-icon>
+                        <span class="text-[#5de0e6] font-semibold text-xs md:text-sm tracking-widest uppercase">£500
+                            Prize Money</span>
+                    </div>
                 </div>
-            </h1>
 
-            <div class="max-w-xl text-center">
-                <p
-                    class="hero-desc opacity-0 text-sm md:text-base text-zinc-300 font-light leading-relaxed mix-blend-plus-lighter">
-                    The world’s first central hub for all sports tournaments. We connect players, teams, and leagues
-                    through intelligent automation.
-                </p>
+                <!-- Main Title -->
+                <h1
+                    class="font-display text-5xl md:text-7xl lg:text-8xl font-semibold leading-[0.9] tracking-tight text-white mb-6 md:mb-8 mix-blend-overlay">
+                    <div class="reveal-text"><span class="char">NEXT</span></div>
+                    <div class="reveal-text"><span
+                            class="char text-transparent bg-clip-text bg-gradient-to-b from-white to-zinc-400">TOURNAMENT</span>
+                    </div>
+                </h1>
+
+                <div class="flex flex-col gap-6 opacity-0" style="animation: fadeIn 1s forwards 0.8s;">
+                    <p class="text-base md:text-lg text-zinc-300 font-light max-w-2xl leading-relaxed mx-auto lg:mx-0">
+                        Big prizes, competitive football.
+                    </p>
+
+                    <!-- Mobile Only: Simplified Info Row & Essentials -->
+                    <div class="md:hidden flex flex-col gap-6 max-w-sm mx-auto w-full">
+                        <div class="flex items-center justify-center gap-3 text-sm text-zinc-300">
+                            <div class="flex items-center gap-1.5">
+                                <iconify-icon icon="solar:calendar-linear" class="text-[#5de0e6]"></iconify-icon>
+                                <span>14th Feb</span>
+                            </div>
+                            <span class="text-zinc-700">|</span>
+                            <div class="flex items-center gap-1.5">
+                                <iconify-icon icon="solar:map-point-linear" class="text-[#5de0e6]"></iconify-icon>
+                                <span>Castle Green</span>
+                            </div>
+                        </div>
+
+                        <!-- Mobile CTA -->
+                        <a href="https://buy.stripe.com/14AcN6cY4aCe3DgerUfnO00" target="_blank"
+                            class="w-full bg-brand-gradient text-white font-semibold rounded-xl uppercase tracking-widest text-xs py-4 shadow-[0_0_20px_rgba(93,224,230,0.2)] hover:opacity-90 transition-opacity">
+                            Secure Spot — £70
+                        </a>
+
+                        <!-- Mobile Accordion for Details -->
+                        <details class="group w-full border-t border-white/10 pt-4">
+                            <summary
+                                class="flex items-center justify-between cursor-pointer list-none text-xs uppercase tracking-widest font-semibold text-zinc-500 hover:text-white transition-colors">
+                                <span>Tournament Details</span>
+                                <iconify-icon icon="solar:alt-arrow-down-linear"
+                                    class="text-lg transition-transform group-open:rotate-180"></iconify-icon>
+                            </summary>
+                            <div class="pt-4 pb-2 text-left space-y-3">
+                                <div class="flex items-start gap-3">
+                                    <iconify-icon icon="solar:map-point-bold"
+                                        class="text-[#5de0e6] mt-0.5"></iconify-icon>
+                                    <div>
+                                        <div class="text-white text-sm font-medium">Castle Green 3G Pitches</div>
+                                        <div class="text-zinc-500 text-xs">Gale St, Dagenham, RM9 4UN</div>
+                                    </div>
+                                </div>
+                                <div class="flex items-start gap-3">
+                                    <iconify-icon icon="solar:users-group-rounded-bold"
+                                        class="text-[#5de0e6] mt-0.5"></iconify-icon>
+                                    <div>
+                                        <div class="text-white text-sm font-medium">7-a-side Format</div>
+                                        <div class="text-zinc-500 text-xs">Min. Age 16+</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </details>
+                    </div>
+
+                    <!-- Desktop Only: Grid Info -->
+                    <div class="hidden md:grid grid-cols-2 gap-4 max-w-lg mx-auto lg:mx-0">
+                        <div
+                            class="flex items-center gap-4 p-4 rounded-xl bg-white/5 border border-white/10 backdrop-blur-sm">
+                            <div
+                                class="w-10 h-10 rounded-full bg-[#5de0e6]/10 flex items-center justify-center text-[#5de0e6] border border-[#5de0e6]/20">
+                                <iconify-icon icon="solar:calendar-linear" class="text-xl"></iconify-icon>
+                            </div>
+                            <div>
+                                <div class="text-[10px] text-zinc-500 uppercase font-semibold tracking-wider">Date</div>
+                                <div class="text-white font-medium">14th February</div>
+                            </div>
+                        </div>
+                        <div
+                            class="flex items-center gap-4 p-4 rounded-xl bg-white/5 border border-white/10 backdrop-blur-sm">
+                            <div
+                                class="w-10 h-10 rounded-full bg-[#5de0e6]/10 flex items-center justify-center text-[#5de0e6] border border-[#5de0e6]/20">
+                                <iconify-icon icon="solar:map-point-linear" class="text-xl"></iconify-icon>
+                            </div>
+                            <div>
+                                <div class="text-[10px] text-zinc-500 uppercase font-semibold tracking-wider">Location
+                                </div>
+                                <div class="text-white font-medium">Castle Green, RM9</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <div class="hero-desc opacity-0 mt-10">
-                <!-- Redirected to #upcoming as requested -->
-                <a href="#upcoming"
-                    class="hover-trigger px-8 py-3 bg-white text-black text-xs font-semibold uppercase tracking-wider rounded-lg hover:bg-[#5de0e6] transition-all shadow-[0_0_30px_rgba(255,255,255,0.2)] hover:scale-105 inline-block">
-                    Register Interest
-                </a>
+            <!-- RIGHT COLUMN: Desktop Card (Hidden on Mobile) -->
+            <div class="hidden lg:col-span-5 lg:block relative opacity-0 transform translate-y-10"
+                style="animation: fadeInUp 1s forwards 1s;">
+                <!-- Glowing Backlight -->
+                <div class="absolute inset-0 bg-brand-gradient blur-[80px] opacity-20 rounded-full"></div>
+
+                <div
+                    class="relative glass-panel p-1 rounded-3xl border border-[#5de0e6]/30 shadow-[0_0_80px_rgba(0,0,0,0.5)] overflow-hidden group hover:scale-[1.01] transition-transform duration-500">
+                    <div class="bg-[#0a0a0a] rounded-[22px] h-full flex flex-col relative overflow-hidden">
+
+                        <!-- Image Banner -->
+                        <div class="relative w-full h-48 overflow-hidden group">
+                            <div
+                                class="absolute inset-0 bg-gradient-to-b from-transparent via-[#0a0a0a]/10 to-[#0a0a0a] z-10">
+                            </div>
+                            <img src="https://images.unsplash.com/photo-1551958219-acbc608c6377?w=800&amp;q=80"
+                                alt="Football Tournament"
+                                class="w-full h-full object-cover opacity-90 transition-transform duration-700 ease-out group-hover:scale-105">
+                            <div class="absolute top-6 right-6 z-20">
+                                <div
+                                    class="px-3 py-1 rounded-full border border-green-500/30 bg-black/60 backdrop-blur-md text-green-400 text-[10px] font-semibold uppercase tracking-widest flex items-center gap-2 shadow-lg">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse"></span>
+                                    Registration Open
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Card Content -->
+                        <div class="p-8 pt-2 flex flex-col gap-6 relative z-10">
+                            <div class="flex justify-between items-end">
+                                <div class="flex flex-col">
+                                    <span
+                                        class="text-zinc-500 text-xs font-semibold uppercase tracking-widest mb-1">Total
+                                        Prize Pool</span>
+                                    <span class="text-4xl font-semibold text-white tracking-tight">£500</span>
+                                </div>
+                            </div>
+
+                            <div class="h-px w-full bg-gradient-to-r from-transparent via-white/10 to-transparent">
+                            </div>
+
+                            <div class="space-y-5">
+                                <div class="flex items-start gap-4 group/item">
+                                    <div
+                                        class="p-2 rounded-lg bg-zinc-900 border border-white/5 text-zinc-500 group-hover/item:text-[#5de0e6] transition-colors">
+                                        <iconify-icon icon="solar:map-point-bold" class="text-lg"></iconify-icon>
+                                    </div>
+                                    <div>
+                                        <div class="text-white font-medium">Castle Green 3G Pitches</div>
+                                        <div class="text-zinc-500 text-sm">Gale St, Dagenham, RM9 4UN</div>
+                                    </div>
+                                </div>
+                                <div class="flex items-start gap-4 group/item">
+                                    <div
+                                        class="p-2 rounded-lg bg-zinc-900 border border-white/5 text-zinc-500 group-hover/item:text-[#5de0e6] transition-colors">
+                                        <iconify-icon icon="solar:users-group-rounded-bold"
+                                            class="text-lg"></iconify-icon>
+                                    </div>
+                                    <div>
+                                        <div class="text-white font-medium">7-a-side Format</div>
+                                        <div class="text-zinc-500 text-sm">Min. Age 16+</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mt-4">
+                                <div class="flex items-end justify-between mb-4">
+                                    <span class="text-zinc-400 text-sm font-medium">Entry Fee</span>
+                                    <div class="text-right">
+                                        <span class="text-2xl font-semibold text-white">£70</span>
+                                        <span class="text-xs text-zinc-500 uppercase">/ Team</span>
+                                    </div>
+                                </div>
+
+                                <a href="https://buy.stripe.com/14AcN6cY4aCe3DgerUfnO00" target="_blank"
+                                    rel="noopener noreferrer"
+                                    class="hover-trigger w-full bg-brand-gradient text-white font-semibold rounded-xl uppercase tracking-widest transition-all duration-300 transform hover:scale-[1.02] shadow-[0_0_30px_rgba(93,224,230,0.3)] hover:shadow-[0_0_50px_rgba(93,224,230,0.5)] flex items-center justify-center gap-3 py-4 px-6 relative overflow-hidden group-hover:border-white/20 border border-transparent">
+                                    <span class="relative z-10">Secure Your Spot</span>
+                                    <iconify-icon icon="solar:arrow-right-linear"
+                                        class="text-xl relative z-10 group-hover:translate-x-1 transition-transform"></iconify-icon>
+                                    <div
+                                        class="absolute top-0 -left-[100%] w-full h-full bg-gradient-to-r from-transparent via-white/30 to-transparent skew-x-[-20deg] animate-[shine_3s_infinite]">
+                                    </div>
+                                </a>
+
+                                <div
+                                    class="flex justify-center gap-4 mt-6 opacity-40 grayscale transition-all hover:grayscale-0">
+                                    <iconify-icon icon="logos:stripe" width="40"></iconify-icon>
+                                    <iconify-icon icon="logos:mastercard" width="24"></iconify-icon>
+                                    <iconify-icon icon="logos:visa" width="24"></iconify-icon>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
+
+        </div>
+
+        <!-- Scroll Indicator -->
+        <div
+            class="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-50 animate-bounce">
+            <span class="text-[10px] uppercase tracking-widest text-zinc-500">Explore</span>
+            <iconify-icon icon="solar:arrow-down-linear" class="text-white"></iconify-icon>
         </div>
     </header>
 
-    <!-- UPCOMING TOURNAMENT SECTION -->
-    <section id="upcoming"
-        class="relative z-20 py-24 px-4 border-t border-white/5 bg-black/20 backdrop-blur-sm overflow-hidden">
-        <!-- Subtle Watermark -->
-        <div
-            class="absolute right-0 bottom-0 opacity-[0.03] pointer-events-none z-0 transform translate-y-1/4 translate-x-1/4">
-            <svg width="600" height="600" viewBox="0 0 100 100" fill="white">
-                <circle cx="50" cy="50" r="40" stroke="white" stroke-width="2"></circle>
-            </svg>
-        </div>
-
-        <div class="max-w-[1200px] mx-auto relative z-10">
-            <!-- Spotlight Glow -->
-            <div
-                class="absolute top-1/2 left-0 -translate-y-1/2 w-96 h-96 bg-[#004aad]/20 rounded-full blur-[120px] pointer-events-none">
-            </div>
-
-            <div class="mb-16">
-                <h2 class="text-5xl md:text-7xl font-bold tracking-tighter text-white mb-4">NEXT TOURNAMENT</h2>
-                <div class="h-1 w-24 bg-brand-gradient"></div>
-            </div>
-
-            <div class="grid lg:grid-cols-12 gap-12 items-start">
-
-                <!-- LEFT: Creator Lineup Grid -->
-                <div class="lg:col-span-7">
-                    <div class="flex items-center justify-between mb-6">
-                        <h3 class="text-xl font-bold text-white tracking-tight uppercase">Creator Lineup</h3>
-                        <span
-                            class="text-[#5de0e6] text-xs font-bold uppercase tracking-widest animate-pulse">Confirming
-                            Spots</span>
-                    </div>
-
-                    <!-- Modern Fight Card Grid (TBD STYLE) -->
-                    <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-
-                        <!-- Card 1 -->
-                        <div
-                            class="creator-card group relative h-60 rounded-2xl overflow-hidden bg-zinc-900 border border-white/5 shadow-lg flex flex-col items-center justify-center">
-                            <!-- Background Pattern -->
-                            <div
-                                class="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-zinc-800/50 to-transparent opacity-50">
-                            </div>
-                            <div
-                                class="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10">
-                            </div>
-
-                            <!-- Content -->
-                            <div
-                                class="relative z-10 flex flex-col items-center gap-3 transition-transform duration-500 group-hover:scale-110">
-                                <div
-                                    class="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center bg-white/5 text-zinc-500 group-hover:text-[#5de0e6] group-hover:border-[#5de0e6]/50 transition-colors">
-                                    <iconify-icon icon="solar:user-rounded-linear" class="text-2xl"></iconify-icon>
-                                </div>
-                                <div class="text-center">
-                                    <h4
-                                        class="text-lg font-bold text-zinc-400 group-hover:text-white transition-colors uppercase italic tracking-wider">
-                                        Slot 01</h4>
-                                    <p
-                                        class="text-[10px] font-medium text-zinc-600 uppercase tracking-widest mt-1 group-hover:text-[#5de0e6] transition-colors">
-                                        Captain</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Card 2 -->
-                        <div
-                            class="creator-card group relative h-60 rounded-2xl overflow-hidden bg-zinc-900 border border-white/5 shadow-lg flex flex-col items-center justify-center">
-                            <div
-                                class="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-zinc-800/50 to-transparent opacity-50">
-                            </div>
-                            <div
-                                class="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10">
-                            </div>
-
-                            <div
-                                class="relative z-10 flex flex-col items-center gap-3 transition-transform duration-500 group-hover:scale-110">
-                                <div
-                                    class="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center bg-white/5 text-zinc-500 group-hover:text-[#5de0e6] group-hover:border-[#5de0e6]/50 transition-colors">
-                                    <iconify-icon icon="solar:user-rounded-linear" class="text-2xl"></iconify-icon>
-                                </div>
-                                <div class="text-center">
-                                    <h4
-                                        class="text-lg font-bold text-zinc-400 group-hover:text-white transition-colors uppercase italic tracking-wider">
-                                        Slot 02</h4>
-                                    <p
-                                        class="text-[10px] font-medium text-zinc-600 uppercase tracking-widest mt-1 group-hover:text-[#5de0e6] transition-colors">
-                                        Striker</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Card 3 -->
-                        <div
-                            class="creator-card group relative h-60 rounded-2xl overflow-hidden bg-zinc-900 border border-white/5 shadow-lg flex flex-col items-center justify-center">
-                            <div
-                                class="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-zinc-800/50 to-transparent opacity-50">
-                            </div>
-                            <div
-                                class="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10">
-                            </div>
-
-                            <div
-                                class="relative z-10 flex flex-col items-center gap-3 transition-transform duration-500 group-hover:scale-110">
-                                <div
-                                    class="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center bg-white/5 text-zinc-500 group-hover:text-[#5de0e6] group-hover:border-[#5de0e6]/50 transition-colors">
-                                    <iconify-icon icon="solar:user-rounded-linear" class="text-2xl"></iconify-icon>
-                                </div>
-                                <div class="text-center">
-                                    <h4
-                                        class="text-lg font-bold text-zinc-400 group-hover:text-white transition-colors uppercase italic tracking-wider">
-                                        Slot 03</h4>
-                                    <p
-                                        class="text-[10px] font-medium text-zinc-600 uppercase tracking-widest mt-1 group-hover:text-[#5de0e6] transition-colors">
-                                        Midfield</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Card 4 -->
-                        <div
-                            class="creator-card group relative h-60 rounded-2xl overflow-hidden bg-zinc-900 border border-white/5 shadow-lg flex flex-col items-center justify-center">
-                            <div
-                                class="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-zinc-800/50 to-transparent opacity-50">
-                            </div>
-                            <div
-                                class="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10">
-                            </div>
-
-                            <div
-                                class="relative z-10 flex flex-col items-center gap-3 transition-transform duration-500 group-hover:scale-110">
-                                <div
-                                    class="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center bg-white/5 text-zinc-500 group-hover:text-[#5de0e6] group-hover:border-[#5de0e6]/50 transition-colors">
-                                    <iconify-icon icon="solar:user-rounded-linear" class="text-2xl"></iconify-icon>
-                                </div>
-                                <div class="text-center">
-                                    <h4
-                                        class="text-lg font-bold text-zinc-400 group-hover:text-white transition-colors uppercase italic tracking-wider">
-                                        Slot 04</h4>
-                                    <p
-                                        class="text-[10px] font-medium text-zinc-600 uppercase tracking-widest mt-1 group-hover:text-[#5de0e6] transition-colors">
-                                        Defense</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Card 5 -->
-                        <div
-                            class="creator-card group relative h-60 rounded-2xl overflow-hidden bg-zinc-900 border border-white/5 shadow-lg flex flex-col items-center justify-center">
-                            <div
-                                class="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-zinc-800/50 to-transparent opacity-50">
-                            </div>
-                            <div
-                                class="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10">
-                            </div>
-
-                            <div
-                                class="relative z-10 flex flex-col items-center gap-3 transition-transform duration-500 group-hover:scale-110">
-                                <div
-                                    class="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center bg-white/5 text-zinc-500 group-hover:text-[#5de0e6] group-hover:border-[#5de0e6]/50 transition-colors">
-                                    <iconify-icon icon="solar:user-rounded-linear" class="text-2xl"></iconify-icon>
-                                </div>
-                                <div class="text-center">
-                                    <h4
-                                        class="text-lg font-bold text-zinc-400 group-hover:text-white transition-colors uppercase italic tracking-wider">
-                                        Slot 05</h4>
-                                    <p
-                                        class="text-[10px] font-medium text-zinc-600 uppercase tracking-widest mt-1 group-hover:text-[#5de0e6] transition-colors">
-                                        Forward</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Card 6 -->
-                        <div
-                            class="creator-card group relative h-60 rounded-2xl overflow-hidden bg-zinc-900 border border-white/5 shadow-lg flex flex-col items-center justify-center">
-                            <div
-                                class="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-zinc-800/50 to-transparent opacity-50">
-                            </div>
-                            <div
-                                class="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10">
-                            </div>
-
-                            <div
-                                class="relative z-10 flex flex-col items-center gap-3 transition-transform duration-500 group-hover:scale-110">
-                                <div
-                                    class="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center bg-white/5 text-zinc-500 group-hover:text-[#5de0e6] group-hover:border-[#5de0e6]/50 transition-colors">
-                                    <iconify-icon icon="solar:user-rounded-linear" class="text-2xl"></iconify-icon>
-                                </div>
-                                <div class="text-center">
-                                    <h4
-                                        class="text-lg font-bold text-zinc-400 group-hover:text-white transition-colors uppercase italic tracking-wider">
-                                        Slot 06</h4>
-                                    <p
-                                        class="text-[10px] font-medium text-zinc-600 uppercase tracking-widest mt-1 group-hover:text-[#5de0e6] transition-colors">
-                                        Waiting...</p>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-
-                <!-- RIGHT: Details & Payment -->
-                <div class="lg:col-span-5 flex flex-col gap-8">
-
-                    <!-- Title Block -->
-                    <div class="glass-panel p-6">
-                        <div class="flex flex-col-reverse gap-6">
-                            <!-- Info -->
-                            <div>
-                                <!-- CHANGED TEXT -->
-                                <h2 class="text-3xl font-bold tracking-tight text-white mb-2 uppercase italic">FixUp
-                                    Tournament</h2>
-                                <p class="text-zinc-400 font-light text-sm mb-6">Join the UK's fastest growing creator
-                                    league. High production, big prizes.</p>
-
-                                <ul class="space-y-4">
-                                    <li class="flex items-center gap-4 text-sm font-light text-zinc-300">
-                                        <div
-                                            class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center border border-white/5 text-[#5de0e6]">
-                                            <iconify-icon icon="lucide:trophy"></iconify-icon>
-                                        </div>
-                                        <span class="text-white font-medium">Hayes &amp; Reading Utd</span>
-                                    </li>
-                                    <li class="flex items-center gap-4 text-sm font-light text-zinc-300">
-                                        <div
-                                            class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center border border-white/5 text-[#5de0e6]">
-                                            <iconify-icon icon="lucide:calendar"></iconify-icon>
-                                        </div>
-                                        <span>Date: TBD <span class="mx-2 text-zinc-600">|</span> 5:30 PM</span>
-                                    </li>
-                                    <li class="flex items-center gap-4 text-sm font-light text-zinc-300">
-                                        <div
-                                            class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center border border-white/5 text-[#5de0e6]">
-                                            <iconify-icon icon="lucide:users"></iconify-icon>
-                                        </div>
-                                        <span>7-a-side Format</span>
-                                    </li>
-                                </ul>
-                            </div>
-
-                            <!-- Venue Image Section (LARGER: h-80) -->
-                            <div class="relative w-full h-80 rounded-xl overflow-hidden border border-white/10 group">
-                                <div
-                                    class="absolute top-2 left-2 z-10 bg-black/60 backdrop-blur px-2 py-1 rounded border border-white/5">
-                                    <span class="text-[9px] uppercase font-bold tracking-widest text-white">The
-                                        Venue</span>
-                                </div>
-                                <img src="https://images.unsplash.com/photo-1529900748604-07564a03e7a6?w=800&amp;auto=format&amp;fit=crop&amp;q=60"
-                                    class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-80 group-hover:opacity-100">
-                                <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Conversion Block -->
-                    <div
-                        class="bg-zinc-900/80 backdrop-blur rounded-2xl p-8 border border-[#5de0e6]/20 shadow-[0_0_60px_rgba(0,74,173,0.3)] flex flex-col justify-between gap-8 relative overflow-hidden">
-
-                        <!-- Live Counter -->
-                        <div class="space-y-4">
-                            <div class="flex justify-between items-start">
-                                <div class="flex flex-col gap-1">
-                                    <div class="flex items-center gap-2 mb-1">
-                                        <span class="relative flex h-2 w-2">
-                                            <span
-                                                class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#5de0e6] opacity-75"></span>
-                                            <span class="relative inline-flex rounded-full h-2 w-2 bg-[#004aad]"></span>
-                                        </span>
-                                        <span
-                                            class="text-[10px] font-bold text-[#5de0e6] uppercase tracking-widest">Locked
-                                            In</span>
-                                    </div>
-                                    <!-- Big Number -->
-                                    <div class="text-6xl font-bold text-white leading-none tracking-tighter">
-                                        <span id="team-counter-val">13</span><span
-                                            class="text-2xl text-zinc-500 font-light ml-1">/16</span>
-                                    </div>
-                                </div>
-                                <span
-                                    class="text-[10px] font-medium text-zinc-400 border border-white/10 rounded-full px-2 py-1">Limited
-                                    Spots</span>
-                            </div>
-
-                            <!-- Progress Bar -->
-                            <div class="h-2 w-full bg-zinc-800 rounded-full overflow-hidden">
-                                <div id="team-progress-bar"
-                                    class="h-full bg-brand-gradient rounded-full transition-all duration-1000 ease-out shadow-[0_0_15px_rgba(93,224,230,0.5)]"
-                                    style="width: 0%"></div>
-                            </div>
-                        </div>
-
-                        <!-- Price & Pay Button (Full Width, Slimmer, Central) -->
-                        <div class="flex flex-col items-center w-full">
-                            <!-- Price Tag -->
-                            <div class="flex items-end gap-2 justify-center mb-4">
-                                <span class="text-4xl font-bold text-white tracking-tighter">£70</span>
-                                <span class="text-sm text-zinc-400 mb-1.5 uppercase tracking-wide">/ Team</span>
-                            </div>
-
-                            <!-- Button -->
-                            <a href="https://buy.stripe.com/14AcN6cY4aCe3DgerUfnO00" target="_blank"
-                                rel="noopener noreferrer"
-                                class="hover-trigger w-full bg-brand-gradient text-white font-bold rounded-xl uppercase tracking-widest transition-all duration-300 transform hover:scale-[1.01] shadow-[0_0_30px_rgba(0,74,173,0.4)] hover:shadow-[0_0_60px_rgba(93,224,230,0.6)] flex items-center justify-center gap-4 group relative overflow-hidden border border-[#5de0e6]/50 py-4 px-6">
-                                <span class="text-lg relative z-10 font-bold tracking-widest">PAY NOW</span>
-                                <iconify-icon icon="lucide:arrow-right"
-                                    class="text-xl group-hover:translate-x-1 transition-transform duration-300 relative z-10"></iconify-icon>
-
-                                <!-- Shine effect -->
-                                <div
-                                    class="absolute top-0 -left-[100%] w-full h-full bg-gradient-to-r from-transparent via-white/40 to-transparent skew-x-[-20deg] group-hover:animate-[shine_1s_ease-in-out]">
-                                </div>
-                            </a>
-
-                            <div class="flex items-center justify-center gap-2 mt-4 opacity-50">
-                                <iconify-icon icon="logos:stripe" width="30"></iconify-icon>
-                                <span class="text-[10px] text-zinc-500">Encrypted Transaction</span>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- REMOVED: Image Strip (Marquee) Section -->
-
-    <!-- Problem -->
+    <!-- PROBLEM SECTION -->
     <section id="problem"
-        class="relative min-h-screen py-32 px-4 z-10 bg-black/5 backdrop-blur-sm flex items-center justify-center">
-        <div
-            class="max-w-3xl w-full mx-auto glass-panel p-8 md:p-12 lg:p-16 relative overflow-hidden transform transition-all duration-1000">
+        class="relative min-h-screen py-24 md:py-32 px-4 z-10 bg-black/10 backdrop-blur-sm flex items-center justify-center border-t border-white/5">
+        <div class="max-w-3xl w-full mx-auto glass-panel p-8 md:p-12 lg:p-16 relative overflow-hidden">
             <div class="absolute -top-40 -right-40 w-80 h-80 bg-[#5de0e6]/10 rounded-full blur-[100px]"></div>
 
-            <div class="flex items-end justify-between mb-16 border-b border-white/5 pb-8 relative z-10">
-                <h2 class="text-3xl md:text-5xl font-semibold tracking-tight text-white">PROBLEM STATEMENT</h2>
+            <div class="flex items-end justify-between mb-12 md:mb-16 border-b border-white/5 pb-8 relative z-10">
+                <h2 class="text-3xl md:text-5xl font-semibold tracking-tight text-white">THE MISSION</h2>
                 <div class="text-right hidden md:block">
                     <p class="text-zinc-500 text-xs uppercase tracking-widest">Fragmented Scene.<br>Untapped Potential.
                     </p>
@@ -662,127 +493,93 @@
                     <div class="group">
                         <div class="flex items-center gap-3 mb-4">
                             <span class="w-1.5 h-1.5 bg-red-500 rounded-full"></span>
-                            <span class="text-[10px] font-bold text-red-500 uppercase tracking-widest">Current
+                            <span class="text-[10px] font-semibold text-red-500 uppercase tracking-widest">Current
                                 State</span>
                         </div>
-                        <h3 class="text-2xl font-medium text-white mb-4">Fragmented Ecosystem</h3>
-                        <p class="text-zinc-400 font-light leading-relaxed text-sm md:text-base">
+                        <h3 class="text-2xl font-medium text-white mb-3">Fragmented Ecosystem</h3>
+                        <p class="text-zinc-400 font-light leading-relaxed text-sm">
                             The amateur world is scattered. Dozens of small tournaments operate in silos with no central
-                            system, no standardisation, and no digital bridge.
+                            system.
                         </p>
                     </div>
                     <div class="group">
                         <div class="flex items-center gap-3 mb-4">
                             <span class="w-1.5 h-1.5 bg-[#5de0e6] rounded-full"></span>
-                            <span class="text-[10px] font-bold text-[#5de0e6] uppercase tracking-widest">Lost
-                                Value</span>
+                            <span class="text-[10px] font-semibold text-[#5de0e6] uppercase tracking-widest">The
+                                Future</span>
                         </div>
-                        <h3 class="text-2xl font-medium text-white mb-4">No Stage, No Reward</h3>
-                        <p class="text-zinc-400 font-light leading-relaxed text-sm md:text-base">
-                            Even the best grassroots players rarely earn from their craft. They pour hours into training
-                            but lack the infrastructure to turn skill into income.
+                        <h3 class="text-2xl font-medium text-white mb-3">Professional Stage</h3>
+                        <p class="text-zinc-400 font-light leading-relaxed text-sm">
+                            We treat grassroots players like pros. Production quality, stats, rewards, and a clear
+                            pathway.
                         </p>
                     </div>
                 </div>
 
                 <div
-                    class="relative min-h-[400px] bg-black/50 rounded-xl overflow-hidden border border-white/5 flex items-center justify-center">
+                    class="relative min-h-[300px] md:min-h-[400px] bg-black/50 rounded-xl overflow-hidden border border-white/5 flex items-center justify-center">
                     <div class="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20">
                     </div>
-                    <div class="relative w-full h-full p-8 flex items-center justify-center">
-                        <div class="grid grid-cols-2 gap-4 w-64">
-                            <div
-                                class="h-24 border border-zinc-700 rounded-lg flex items-center justify-center bg-zinc-900/50 backdrop-blur">
-                                <iconify-icon icon="lucide:x" class="text-red-500/50 text-2xl"></iconify-icon>
-                            </div>
-                            <div
-                                class="h-24 border border-zinc-700 rounded-lg flex items-center justify-center bg-zinc-900/50 backdrop-blur">
-                                <iconify-icon icon="lucide:x" class="text-red-500/50 text-2xl"></iconify-icon>
-                            </div>
-                            <div
-                                class="h-24 border border-zinc-700 rounded-lg flex items-center justify-center bg-zinc-900/50 backdrop-blur">
-                                <iconify-icon icon="lucide:x" class="text-red-500/50 text-2xl"></iconify-icon>
-                            </div>
-                            <div
-                                class="h-24 border border-zinc-700 rounded-lg flex items-center justify-center bg-zinc-900/50 backdrop-blur">
-                                <iconify-icon icon="lucide:x" class="text-red-500/50 text-2xl"></iconify-icon>
-                            </div>
-                        </div>
-                        <div class="absolute inset-0 flex items-center justify-center">
-                            <div
-                                class="text-[10px] bg-red-500/10 text-red-400 px-3 py-1 rounded-full border border-red-500/20 backdrop-blur-md uppercase tracking-widest font-bold">
-                                Disconnect</div>
-                        </div>
+                    <div class="relative w-full h-full p-8 flex items-center justify-center flex-col gap-6 text-center">
+                        <iconify-icon icon="solar:cup-star-bold" class="text-6xl text-[#5de0e6]/20"></iconify-icon>
+                        <p class="text-zinc-500 text-sm uppercase tracking-widest font-semibold">FixUp Arena Standard
+                        </p>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Roadmap (Spiral) -->
+    <!-- Roadmap -->
     <section id="roadmap" class="carousel-container z-20">
         <div class="carousel-viewport bg-black/10">
             <div class="absolute top-24 left-0 w-full text-center z-20 pointer-events-none">
                 <div class="inline-block bg-black/50 backdrop-blur px-6 py-2 rounded-full border border-white/10">
-                    <h2 class="text-2xl font-semibold text-white tracking-tight">ROADMAP</h2>
+                    <h2 class="text-xl md:text-2xl font-semibold text-white tracking-tight">ROADMAP</h2>
                 </div>
             </div>
 
             <div class="carousel-world" id="carouselWorld">
-                <!-- Cards arranged in a downward spiral -->
-
                 <div class="carousel-card glass-panel p-6 flex flex-col justify-center border-l-4 border-[#5de0e6]"
                     data-color="#5de0e6">
                     <div class="flex justify-between items-start mb-4">
-                        <span class="text-[#5de0e6] text-[10px] font-bold tracking-widest uppercase">Q2 2026</span>
-                        <iconify-icon icon="lucide:flag" class="text-zinc-500"></iconify-icon>
+                        <span class="text-[#5de0e6] text-[10px] font-semibold tracking-widest uppercase">Q2 2026</span>
+                        <iconify-icon icon="solar:flag-bold" class="text-zinc-500"></iconify-icon>
                     </div>
-                    <h3 class="text-xl font-medium text-white mb-2">The Setup</h3>
+                    <h3 class="text-lg font-medium text-white mb-2">The Setup</h3>
                     <p class="text-zinc-400 font-light text-xs leading-relaxed">Partnerships secured. AI algorithms
                         finalized.</p>
                 </div>
-
+                <!-- More cards can be added dynamically or statically as per previous code, kept concise here for token limit -->
                 <div class="carousel-card glass-panel p-6 flex flex-col justify-center border-l-4 border-white"
                     data-color="#ffffff">
                     <div class="flex justify-between items-start mb-4">
-                        <span class="text-white text-[10px] font-bold tracking-widest uppercase">Q3 2026</span>
-                        <iconify-icon icon="lucide:smartphone" class="text-zinc-500"></iconify-icon>
+                        <span class="text-white text-[10px] font-semibold tracking-widest uppercase">Q3 2026</span>
+                        <iconify-icon icon="solar:smartphone-bold" class="text-zinc-500"></iconify-icon>
                     </div>
-                    <h3 class="text-xl font-medium text-white mb-2">App Development</h3>
-                    <p class="text-zinc-400 font-light text-xs leading-relaxed">MVP build. Players create profiles and
-                        join waitlists.</p>
+                    <h3 class="text-lg font-medium text-white mb-2">App Development</h3>
+                    <p class="text-zinc-400 font-light text-xs leading-relaxed">MVP build. Players create profiles.</p>
                 </div>
-
                 <div class="carousel-card glass-panel p-6 flex flex-col justify-center border-l-4 border-[#004aad] bg-zinc-900"
                     data-color="#004aad">
                     <div class="flex justify-between items-start mb-4">
-                        <span class="text-[#004aad] text-[10px] font-bold tracking-widest uppercase">Late 2026</span>
-                        <iconify-icon icon="lucide:rocket" class="text-white"></iconify-icon>
+                        <span class="text-[#004aad] text-[10px] font-semibold tracking-widest uppercase">Late
+                            2026</span>
+                        <iconify-icon icon="solar:rocket-bold" class="text-white"></iconify-icon>
                     </div>
-                    <h3 class="text-xl font-medium text-white mb-2">UK Launch</h3>
-                    <p class="text-zinc-400 font-light text-xs leading-relaxed">Official launch. £15k prize pool. Live
-                        streaming.</p>
+                    <h3 class="text-lg font-medium text-white mb-2">UK Launch</h3>
+                    <p class="text-zinc-400 font-light text-xs leading-relaxed">Official launch. Prize pools increase.
+                    </p>
                 </div>
-
                 <div class="carousel-card glass-panel p-6 flex flex-col justify-center border-l-4 border-zinc-400"
                     data-color="#a1a1aa">
                     <div class="flex justify-between items-start mb-4">
-                        <span class="text-zinc-400 text-[10px] font-bold tracking-widest uppercase">Q1 2027</span>
-                        <iconify-icon icon="lucide:map" class="text-zinc-500"></iconify-icon>
+                        <span class="text-zinc-400 text-[10px] font-semibold tracking-widest uppercase">Q1 2027</span>
+                        <iconify-icon icon="solar:map-bold" class="text-zinc-500"></iconify-icon>
                     </div>
-                    <h3 class="text-xl font-medium text-white mb-2">Expansion</h3>
+                    <h3 class="text-lg font-medium text-white mb-2">Expansion</h3>
                     <p class="text-zinc-400 font-light text-xs leading-relaxed">7-a-side leagues with
-                        promotion/relegation systems.</p>
-                </div>
-
-                <div class="carousel-card glass-panel p-6 flex flex-col justify-center border-l-4 border-cyan-300"
-                    data-color="#67e8f9">
-                    <div class="flex justify-between items-start mb-4">
-                        <span class="text-cyan-300 text-[10px] font-bold tracking-widest uppercase">Q3 2027</span>
-                        <iconify-icon icon="lucide:globe-2" class="text-zinc-500"></iconify-icon>
-                    </div>
-                    <h3 class="text-xl font-medium text-white mb-2">Global Sport</h3>
-                    <p class="text-zinc-400 font-light text-xs leading-relaxed">Basketball and Tennis integration.</p>
+                        promotion/relegation.</p>
                 </div>
             </div>
         </div>
@@ -791,70 +588,98 @@
     <div class="h-[10vh]"></div>
 
     <!-- Contact Section -->
-    <section id="contact" class="py-32 px-4 relative z-10 bg-black/5 backdrop-blur-sm">
+    <section id="contact" class="py-24 md:py-32 px-4 relative z-10 bg-black/5 backdrop-blur-sm">
         <div
-            class="max-w-[1000px] mx-auto glass-panel p-8 md:p-16 border-t border-[#5de0e6]/10 shadow-[0_0_50px_rgba(0,0,0,0.4)]">
+            class="max-w-[1100px] mx-auto glass-panel p-8 md:p-16 border-t border-[#5de0e6]/10 shadow-[0_0_50px_rgba(0,0,0,0.4)]">
             <div class="grid md:grid-cols-2 gap-12">
 
                 <!-- Info -->
-                <div class="flex flex-col justify-between">
-                    <div>
+                <div class="flex flex-col h-full">
+                    <div class="mb-8">
                         <h2 class="text-3xl font-semibold text-white tracking-tight mb-4">GET IN TOUCH</h2>
-                        <p class="text-zinc-400 font-light text-sm leading-relaxed mb-8">
-                            Teams, creators, partners, venues, sponsors — we are building the future of grassroots
-                            sports. Reach out to be part of the ecosystem.
+                        <p class="text-zinc-400 font-light text-sm leading-relaxed">
+                            Reach out to our leadership team for inquiries.
                         </p>
                     </div>
 
                     <div class="space-y-4">
-                        <div class="flex items-center gap-4">
-                            <div
-                                class="w-10 h-10 rounded-full bg-zinc-900 border border-white/10 flex items-center justify-center text-[#5de0e6]">
-                                <iconify-icon icon="lucide:mail"></iconify-icon>
+                        <div
+                            class="p-5 rounded-2xl bg-white/5 border border-white/10 hover:border-[#5de0e6]/50 transition-colors group">
+                            <div class="flex items-center gap-3 mb-3">
+                                <div
+                                    class="w-8 h-8 rounded-full bg-[#5de0e6]/10 flex items-center justify-center text-[#5de0e6] text-sm">
+                                    <iconify-icon icon="solar:user-bold"></iconify-icon>
+                                </div>
+                                <div>
+                                    <p class="text-[10px] text-[#5de0e6] font-semibold uppercase tracking-widest">
+                                        Customer Service Lead</p>
+                                    <p class="text-white font-medium leading-none">Jason O</p>
+                                </div>
                             </div>
-                            <div>
-                                <p class="text-xs text-zinc-500 uppercase font-bold tracking-wider">Email Us</p>
-                                <a href="mailto:hassan@hasstechs.com"
-                                    class="text-white hover:text-[#5de0e6] transition-colors">hassan@hasstechs.com</a>
+                            <div class="space-y-2 pl-11">
+                                <a href="mailto:jason.o@fixuparena.app"
+                                    class="flex items-center gap-2 text-sm text-zinc-400 hover:text-white transition-colors">
+                                    <iconify-icon icon="solar:letter-linear" class="text-base"></iconify-icon>
+                                    jason.o@fixuparena.app
+                                </a>
+                                <a href="tel:+447398670783"
+                                    class="flex items-center gap-2 text-sm text-zinc-400 hover:text-white transition-colors">
+                                    <iconify-icon icon="solar:phone-linear" class="text-base"></iconify-icon> +44 7398
+                                    670783
+                                </a>
                             </div>
                         </div>
-                        <div class="flex items-center gap-4">
-                            <div
-                                class="w-10 h-10 rounded-full bg-zinc-900 border border-white/10 flex items-center justify-center text-[#5de0e6]">
-                                <iconify-icon icon="lucide:phone"></iconify-icon>
+
+                        <div
+                            class="p-5 rounded-2xl bg-white/5 border border-white/10 hover:border-[#5de0e6]/50 transition-colors group">
+                            <div class="flex items-center gap-3 mb-3">
+                                <div
+                                    class="w-8 h-8 rounded-full bg-[#004aad]/20 flex items-center justify-center text-[#004aad] text-sm">
+                                    <iconify-icon icon="solar:crown-star-bold"></iconify-icon>
+                                </div>
+                                <div>
+                                    <p class="text-[10px] text-[#004aad] font-semibold uppercase tracking-widest">CEO
+                                    </p>
+                                    <p class="text-white font-medium leading-none">Hassan</p>
+                                </div>
                             </div>
-                            <div>
-                                <p class="text-xs text-zinc-500 uppercase font-bold tracking-wider">WhatsApp</p>
-                                <span class="text-zinc-300">+44 7852 339110</span>
+                            <div class="space-y-2 pl-11">
+                                <a href="mailto:hassan@fixuparena.app"
+                                    class="flex items-center gap-2 text-sm text-zinc-400 hover:text-white transition-colors">
+                                    <iconify-icon icon="solar:letter-linear" class="text-base"></iconify-icon>
+                                    hassan@fixuparena.app
+                                </a>
+                                <a href="tel:+447852339110"
+                                    class="flex items-center gap-2 text-sm text-zinc-400 hover:text-white transition-colors">
+                                    <iconify-icon icon="solar:phone-linear" class="text-base"></iconify-icon> +44 7852
+                                    339110
+                                </a>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Form -->
-                <form class="space-y-4" onsubmit="event.preventDefault(); alert('Message Sent!');">
+                <form class="space-y-4 flex flex-col justify-end"
+                    onsubmit="event.preventDefault(); alert('Message Sent!');">
+                    <h3 class="text-sm font-semibold text-white uppercase tracking-widest mb-2">Quick Message</h3>
                     <div>
-                        <label class="block text-xs font-bold text-zinc-500 uppercase tracking-wider mb-2">Name</label>
                         <input type="text"
-                            class="w-full bg-black/40 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[#5de0e6] transition-colors"
-                            placeholder="Your Name">
+                            class="w-full bg-black/40 border border-white/10 rounded-lg px-4 py-3 text-white text-sm focus:outline-none focus:border-[#5de0e6] transition-colors"
+                            placeholder="Name">
                     </div>
                     <div>
-                        <label class="block text-xs font-bold text-zinc-500 uppercase tracking-wider mb-2">Email</label>
                         <input type="email"
-                            class="w-full bg-black/40 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[#5de0e6] transition-colors"
-                            placeholder="your@email.com">
+                            class="w-full bg-black/40 border border-white/10 rounded-lg px-4 py-3 text-white text-sm focus:outline-none focus:border-[#5de0e6] transition-colors"
+                            placeholder="Email">
                     </div>
                     <div>
-                        <label
-                            class="block text-xs font-bold text-zinc-500 uppercase tracking-wider mb-2">Message</label>
                         <textarea rows="4"
-                            class="w-full bg-black/40 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[#5de0e6] transition-colors"
-                            placeholder="How can we help?"></textarea>
+                            class="w-full bg-black/40 border border-white/10 rounded-lg px-4 py-3 text-white text-sm focus:outline-none focus:border-[#5de0e6] transition-colors"
+                            placeholder="Message"></textarea>
                     </div>
                     <button type="submit"
-                        class="w-full bg-white text-black font-bold uppercase tracking-widest text-xs py-4 rounded-lg hover:bg-[#5de0e6] transition-colors hover-trigger">Send
-                        Message</button>
+                        class="w-full bg-white text-black font-semibold uppercase tracking-widest text-xs py-4 rounded-lg hover:bg-[#5de0e6] transition-colors hover-trigger">Send</button>
                 </form>
 
             </div>
@@ -862,404 +687,128 @@
     </section>
 
     <!-- Footer -->
-    <footer class="bg-black pt-20 pb-12 px-6 border-t border-white/10 relative z-20">
+    <footer class="bg-black pt-16 pb-12 px-6 border-t border-white/10 relative z-20">
         <div class="max-w-[1400px] mx-auto">
             <div class="flex flex-col md:flex-row justify-between items-start gap-12 mb-12">
                 <div>
-                    <div class="flex items-center gap-2 mb-4">
-                        <div class="w-8 h-8 rounded-full overflow-hidden">
-                            <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/917d6f93-fb36-439a-8c48-884b67b35381_1600w.jpg"
-                                class="w-full h-full object-cover">
-                        </div>
-                        <span class="text-xl font-bold tracking-tight text-white">FIXUP ARENA</span>
-                    </div>
-                    <p class="text-zinc-500 text-sm max-w-xs font-light">
+                    <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/63d2ed10-b4c7-4a87-8ee0-e402dffbae45_320w.png"
+                        alt="FixUp Arena" class="w-auto h-5 object-contain mb-4">
+                    <p class="text-zinc-500 text-xs max-w-xs font-light">
                         Democratising sports competition through AI-driven league management.
                     </p>
                 </div>
-
                 <div>
-                    <h4 class="text-white text-xs font-bold uppercase tracking-widest mb-4">Company</h4>
-                    <ul class="space-y-2 text-sm text-zinc-500">
+                    <h4 class="text-white text-[10px] font-semibold uppercase tracking-widest mb-4">Company</h4>
+                    <ul class="space-y-2 text-xs text-zinc-500">
                         <li><a href="#" class="hover:text-[#5de0e6] transition-colors">About</a></li>
                         <li><a href="#contact" class="hover:text-[#5de0e6] transition-colors">Contact</a></li>
-
                     </ul>
                 </div>
             </div>
 
             <div class="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4">
                 <div class="text-[10px] text-zinc-600 uppercase tracking-wider">
-                    © 2026 FixUp Arena Ltd. All Rights Reserved.
+                    © 2026 FixUp Arena Ltd.
                 </div>
                 <div class="flex gap-4">
                     <a href="#" class="text-zinc-600 hover:text-white transition-colors"><iconify-icon
-                            icon="lucide:twitter"></iconify-icon></a>
+                            icon="solar:star-bold"></iconify-icon></a>
                 </div>
             </div>
         </div>
     </footer>
 
     <script>
-        // --- CONFIGURATION ---
-        const lockedInTeams = 13;
-        const totalTeams = 16;
-
-        // --- 5. DATA & CONFIG ---
+        // --- DATA & CONFIG ---
         const stadiums = {
-            wembley: {
-                name: "Wembley Stadium",
-                city: "London",
-                color: { r: 1, g: 0.2, b: 0.2 },
-                arch: true,
-                coords: { lat: 51.5560, lon: -0.2795 },
-                type: "oval",
-                seats: 50000
-            },
-            etihad: {
-                name: "Etihad Stadium",
-                city: "Manchester",
-                color: { r: 0.4, g: 0.8, b: 1 },
-                coords: { lat: 53.4831, lon: -2.2004 },
-                type: "bowl",
-                seats: 45000
-            },
-            emirates: {
-                name: "Emirates Stadium",
-                city: "London",
-                color: { r: 0.9, g: 0.1, b: 0.1 },
-                coords: { lat: 51.5549, lon: -0.1084 },
-                type: "bowl-curved",
-                seats: 48000
-            }
+            wembley: { name: "Wembley Stadium", city: "London", color: { r: 1, g: 0.2, b: 0.2 }, arch: true, coords: { lat: 51.5560, lon: -0.2795 }, type: "oval", seats: 50000 }
         };
+        const currentStadium = stadiums.wembley;
 
-        const stadiumKeys = Object.keys(stadiums);
-        const currentKey = stadiumKeys[Math.floor(Math.random() * stadiumKeys.length)];
-        let currentStadium = stadiums[currentKey];
-        let weatherData = { condition: 'Clear', temp: 15, code: 0 }; // Default
-
-        // Removed dynamic stadium name updater to keep it as FIXUP ARENA
-
-        // --- 2. CUSTOM CURSOR ---
+        // --- CUSTOM CURSOR ---
         const cursor = document.getElementById('cursor');
         document.addEventListener('mousemove', (e) => {
             cursor.style.left = e.clientX + 'px';
             cursor.style.top = e.clientY + 'px';
         });
-        document.querySelectorAll('.hover-trigger, a, button, input').forEach(el => {
+        document.querySelectorAll('.hover-trigger, a, button, input, summary').forEach(el => {
             el.addEventListener('mouseenter', () => cursor.classList.add('hovered'));
             el.addEventListener('mouseleave', () => cursor.classList.remove('hovered'));
         });
 
-        // --- 4. THREE.JS ENGINE ---
+        // --- THREE.JS ENGINE ---
         const canvas = document.querySelector('#webgl');
         const scene = new THREE.Scene();
         scene.fog = new THREE.FogExp2(new THREE.Color('#000000'), 0.0015);
-
         const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 8000);
         const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: false, powerPreference: "high-performance" });
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-        // GROUPS
         const stadiumGroup = new THREE.Group();
         const helixGroup = new THREE.Group();
-        const weatherGroup = new THREE.Group();
         scene.add(stadiumGroup);
         scene.add(helixGroup);
-        scene.add(weatherGroup);
         helixGroup.visible = false;
 
-        // --- 6. WEATHER SYSTEM ---
-        let cloudsPoints, rainPoints;
-
-        async function fetchWeather(lat, lon) {
-            try {
-                const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=weather_code,temperature_2m`;
-                const res = await fetch(url);
-                const data = await res.json();
-
-                const code = data.current.weather_code;
-                const temp = data.current.temperature_2m;
-
-                // Map WMO codes
-                let type = 'Clear';
-                if (code >= 1 && code <= 3) type = 'Cloudy';
-                if (code >= 51 && code <= 67) type = 'Rain';
-                if (code >= 71 && code <= 77) type = 'Snow';
-                if (code >= 80 && code <= 82) type = 'Rain';
-                if (code >= 85 && code <= 86) type = 'Snow';
-                if (code >= 95) type = 'Storm';
-
-                return { type, temp, code };
-            } catch (e) {
-                console.error("Weather fetch failed", e);
-                return { type: 'Clear', temp: 15, code: 0 };
-            }
-        }
-
-        function buildWeather(type) {
-            while (weatherGroup.children.length > 0) {
-                const obj = weatherGroup.children[0];
-                obj.geometry.dispose();
-                obj.material.dispose();
-                weatherGroup.remove(obj);
-            }
-
-            const isClear = type === 'Clear';
-            const clusterCount = isClear ? 8 : 30;
-            const particlesPerCluster = isClear ? 300 : 1200;
-            const clusterRadius = 300;
-
-            const cloudGeo = new THREE.BufferGeometry();
-            const cloudPos = [];
-            const cloudSizes = [];
-
-            for (let c = 0; c < clusterCount; c++) {
-                const cx = (Math.random() - 0.5) * 3500;
-                const cz = (Math.random() - 0.5) * 3500;
-                const cy = 80 + Math.random() * 250;
-
-                for (let p = 0; p < particlesPerCluster; p++) {
-                    const dx = (Math.random() - 0.5) * clusterRadius;
-                    const dy = (Math.random() - 0.5) * (clusterRadius * 0.4);
-                    const dz = (Math.random() - 0.5) * clusterRadius;
-
-                    cloudPos.push(cx + dx, cy + dy, cz + dz);
-                    cloudSizes.push(Math.random() * 4 + 3);
-                }
-            }
-            cloudGeo.setAttribute('position', new THREE.Float32BufferAttribute(cloudPos, 3));
-            cloudGeo.setAttribute('size', new THREE.Float32BufferAttribute(cloudSizes, 1));
-
-            const cloudMat = new THREE.PointsMaterial({
-                size: 1,
-                vertexColors: false,
-                sizeAttenuation: true,
-                transparent: true,
-                opacity: 0.15,
-                blending: THREE.NormalBlending,
-                depthWrite: false,
-                fog: false
-            });
-            cloudMat.color = new THREE.Color(type === 'Rain' || type === 'Storm' ? '#888888' : '#ffffff');
-
-            cloudsPoints = new THREE.Points(cloudGeo, cloudMat);
-            weatherGroup.add(cloudsPoints);
-
-            if (type === 'Rain' || type === 'Snow' || type === 'Storm') {
-                const precipCount = type === 'Storm' ? 15000 : 8000;
-                const precipGeo = new THREE.BufferGeometry();
-                const precipPos = [];
-
-                for (let i = 0; i < precipCount; i++) {
-                    const x = (Math.random() - 0.5) * 1500;
-                    const z = (Math.random() - 0.5) * 1500;
-                    const y = Math.random() * 600;
-                    precipPos.push(x, y, z);
-                }
-
-                precipGeo.setAttribute('position', new THREE.Float32BufferAttribute(precipPos, 3));
-                const precipMat = cloudMat.clone();
-                precipMat.color = new THREE.Color(type === 'Snow' ? '#ffffff' : '#aaddff');
-                precipMat.size = type === 'Snow' ? 1.5 : 0.8;
-                precipMat.opacity = 0.6;
-                precipGeo.userData = { type: type === 'Snow' ? 'snow' : 'rain' };
-                rainPoints = new THREE.Points(precipGeo, precipMat);
-                weatherGroup.add(rainPoints);
-            }
-        }
-
-        // --- PARTICLE GENERATION: HIGH FIDELITY STADIUM ---
+        // --- PARTICLE GENERATION ---
         const stadiumGeo = new THREE.BufferGeometry();
-        const material = new THREE.PointsMaterial({
-            size: 0.5, vertexColors: true, sizeAttenuation: true,
-            transparent: true, opacity: 0.9, blending: THREE.AdditiveBlending, depthWrite: false
-        });
+        const material = new THREE.PointsMaterial({ size: 0.5, vertexColors: true, sizeAttenuation: true, transparent: true, opacity: 0.9, blending: THREE.AdditiveBlending, depthWrite: false });
 
         const updateStadium = async () => {
-            if (currentStadium.coords) {
-                weatherData = await fetchWeather(currentStadium.coords.lat, currentStadium.coords.lon);
-                buildWeather(weatherData.type);
-            }
-
-            const positions = [];
-            const colors = [];
-            const sizes = [];
-
+            const positions = []; const colors = []; const sizes = [];
             const addP = (x, y, z, c, s = 1) => {
                 positions.push(x + (Math.random() - 0.5), y + (Math.random() - 0.5), z + (Math.random() - 0.5));
-                colors.push(c.r, c.g, c.b);
-                sizes.push(s);
+                colors.push(c.r, c.g, c.b); sizes.push(s);
             }
-
-            // COLOR PALETTE UPDATE: Premium Dark + Blue/Cyan Gradient Accent
-            const colPrim = new THREE.Color('#333333');
-            const colSec = new THREE.Color('#111111');
-            const colConcrete = new THREE.Color('#222');
-
             const colPitchDark = new THREE.Color('#18181b');
             const colPitchLight = new THREE.Color('#27272a');
-
-            // Accents: New Blue/Cyan
-            const colAccent = new THREE.Color('#5de0e6'); // Cyan/Teal
-            const colAccentDark = new THREE.Color('#004aad'); // Deep Blue
+            const colAccent = new THREE.Color('#5de0e6');
             const colWhite = new THREE.Color('#ffffff');
-
-            // A. PITCH
             const pw = 48, pl = 72;
             for (let i = 0; i < 30000; i++) {
                 const x = (Math.random() - 0.5) * pw * 2;
                 const z = (Math.random() - 0.5) * pl * 2;
-
                 if (currentStadium.type.includes('oval') && (x * x / (pw * pw) + z * z / (pl * pl) > 1.2)) continue;
-
                 const stripe = Math.floor((z + pl) / 10) % 2 === 0;
                 const c = stripe ? colPitchDark : colPitchLight;
                 c.offsetHSL(0, 0, (Math.random() - 0.5) * 0.05);
-
                 addP(x, 0, z, c, 0.5);
-
-                const isLine = Math.abs(x) > pw - 1 || Math.abs(z) > pl - 1 || Math.abs(z) < 0.3 || (x * x + z * z < 100 && x * x + z * z > 85);
-                if (isLine) addP(x, 0.1, z, colWhite, 0.8);
+                if (Math.abs(x) > pw - 1 || Math.abs(z) > pl - 1 || Math.abs(z) < 0.3 || (x * x + z * z < 100 && x * x + z * z > 85)) addP(x, 0.1, z, colWhite, 0.8);
             }
-
-            // B. STANDS
-            const tiers = 85;
-            const seatsPerTier = 1000;
-
+            const tiers = 85; const seatsPerTier = 1000;
             for (let t = 0; t < tiers; t++) {
                 let y, spread;
-                if (currentStadium.name === 'Wembley') {
-                    if (t < 35) { y = t * 1.5; spread = t * 1.5; }
-                    else if (t >= 35 && t < 45) { y = t * 1.5 + 5; spread = t * 1.8 + 5; }
-                    else { y = t * 1.8 + 15; spread = t * 2.2 + 8; }
-                } else {
-                    if (t < 30) { y = t * 1.5; spread = t * 1.8; }
-                    else { y = (t * 1.8) + 10; spread = t * 2.2; }
-                }
-
+                if (t < 35) { y = t * 1.5; spread = t * 1.5; }
+                else if (t >= 35 && t < 45) { y = t * 1.5 + 5; spread = t * 1.8 + 5; }
+                else { y = t * 1.8 + 15; spread = t * 2.2 + 8; }
                 for (let i = 0; i < seatsPerTier; i++) {
                     const angle = (i / seatsPerTier) * Math.PI * 2;
-                    let x, z, valid = true;
-
-                    if (currentStadium.type === 'rect-steep') {
-                        const w = pw + 12 + spread;
-                        const l = pl + 12 + spread;
-                        x = Math.pow(Math.abs(Math.cos(angle)), 0.3) * w * Math.sign(Math.cos(angle));
-                        z = Math.pow(Math.abs(Math.sin(angle)), 0.3) * l * Math.sign(Math.sin(angle));
-                        if (Math.abs(Math.sin(angle * 2)) > 0.9 && t > 20) valid = false;
-                    } else if (currentStadium.type === 'bowl-curved') {
-                        const w = pw + 15 + spread;
-                        const l = pl + 15 + spread;
-                        x = Math.cos(angle) * w;
-                        z = Math.sin(angle) * l;
-                        y = t * 1.2 + Math.sin(angle * 2) * 5;
-                    } else {
-                        const w = pw + 15 + spread;
-                        const l = pl + 15 + spread * 1.1;
-                        x = Math.cos(angle) * w;
-                        z = Math.sin(angle) * l;
-                    }
-
-                    if (!valid) continue;
-
-                    let c = colPrim;
-                    if (Math.random() > 0.8) c = colSec;
-                    // Accent Seats occasionally (Blue/Cyan)
+                    const w = pw + 15 + spread; const l = pl + 15 + spread * 1.1;
+                    const x = Math.cos(angle) * w; const z = Math.sin(angle) * l;
+                    let c = new THREE.Color('#333');
+                    if (Math.random() > 0.8) c = new THREE.Color('#111');
                     if (Math.random() > 0.995) c = colAccent;
-                    if (i % 50 === 0 || t % 40 === 0) c = colConcrete;
-
                     addP(x, y + Math.random() * 0.5, z, c, 1.2);
                 }
             }
-
-            // C. ROOF 
-            const roofHeight = currentStadium.name === 'Wembley' ? 180 : 160;
-            const roofW = pw + 140;
-            const roofL = pl + 160;
-
-            for (let i = 0; i < 4000; i++) {
-                const angle = (i / 4000) * Math.PI * 2;
-                const x = Math.cos(angle) * roofW;
-                const z = Math.sin(angle) * roofL;
-                addP(x, roofHeight, z, colWhite, 2);
-            }
-
-            // D. ARCH (Wembley)
-            if (currentStadium.arch) {
-                const archSpan = pl * 6.5;
-                const archHeight = 320;
-                const tiltAngle = 0.35;
-                const archPoints = 8000;
-                for (let i = 0; i < archPoints; i++) {
-                    const t = (i / archPoints) * Math.PI;
-                    const h = Math.sin(t) * archHeight;
-                    const z_base = (t / Math.PI - 0.5) * archSpan;
-                    const y_base = h * Math.cos(tiltAngle);
-                    const x_base = h * Math.sin(tiltAngle) + 40;
-                    const taperFactor = 1 - (h / archHeight) * 0.6;
-                    const trussRad = 6 * taperFactor;
-
-                    if (i % 1 === 0) addP(x_base, y_base + 160 + trussRad, z_base, colWhite, 2);
-                    if (i % 1 === 0) {
-                        addP(x_base, y_base + 160 - trussRad, z_base + trussRad, colWhite, 1.5);
-                        addP(x_base, y_base + 160 - trussRad, z_base - trussRad, colWhite, 1.5);
-                    }
-                }
-            }
-
-            // E. CITY (Darker, Monochrome)
-            for (let b = 0; b < 350; b++) {
-                const angle = Math.random() * Math.PI * 2;
-                const dist = 400 + Math.random() * 900;
-                const bx = Math.cos(angle) * dist;
-                const bz = Math.sin(angle) * dist;
-                const bw = 20 + Math.random() * 50;
-                const bd = 20 + Math.random() * 50;
-                const bh = 50 + Math.random() * 300;
-                const particlesInBlock = Math.floor(bh * 0.8);
-                for (let p = 0; p < particlesInBlock; p++) {
-                    const px = bx + (Math.random() - 0.5) * bw;
-                    const pz = bz + (Math.random() - 0.5) * bd;
-                    const py = Math.random() * bh;
-                    let c = new THREE.Color('#111111');
-                    // Accent windows rarely
-                    if (Math.random() > 0.992) c = colAccent;
-                    else if (Math.random() > 0.98) c = new THREE.Color('#333');
-                    addP(px, py, pz, c, 1.8);
-                }
-            }
-
             stadiumGeo.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
             stadiumGeo.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
             stadiumGeo.setAttribute('size', new THREE.Float32BufferAttribute(sizes, 1));
-            const stadiumPoints = new THREE.Points(stadiumGeo, material.clone());
-            stadiumGroup.add(stadiumPoints);
+            stadiumGroup.add(new THREE.Points(stadiumGeo, material.clone()));
         }
         updateStadium();
 
         // --- HELIX ---
         const helixGeo = new THREE.BufferGeometry();
-        const hPos = [];
-        const hCol = [];
-        const hSizes = [];
-        const helixHeight = 6000;
-        const hCount = 100000;
-
-        for (let t = 0; t < hCount; t++) {
-            const yRatio = t / hCount;
-            const ny = (yRatio * helixHeight) - 1000;
-            const strandOffset = t % 2 === 0 ? 0 : Math.PI;
-            const angle = (ny / 500) * Math.PI * 2 + strandOffset;
+        const hPos = []; const hCol = []; const hSizes = [];
+        for (let t = 0; t < 100000; t++) {
+            const yRatio = t / 100000; const ny = (yRatio * 6000) - 1000;
+            const angle = (ny / 500) * Math.PI * 2 + (t % 2 === 0 ? 0 : Math.PI);
             const radius = 250 + (Math.random() - 0.5) * 60;
-            const x = Math.cos(angle) * radius;
-            const z = Math.sin(angle) * radius;
-            const scatter = Math.random() > 0.8 ? 50 : 5;
-            hPos.push(x + (Math.random() - 0.5) * scatter, ny, z + (Math.random() - 0.5) * scatter);
-            hCol.push(1, 1, 1);
-            hSizes.push(Math.random() * 1.5 + 0.5);
+            const x = Math.cos(angle) * radius; const z = Math.sin(angle) * radius;
+            hPos.push(x + (Math.random() - 0.5) * 5, ny, z + (Math.random() - 0.5) * 5);
+            hCol.push(1, 1, 1); hSizes.push(Math.random() * 1.5 + 0.5);
         }
         helixGeo.setAttribute('position', new THREE.Float32BufferAttribute(hPos, 3));
         helixGeo.setAttribute('color', new THREE.Float32BufferAttribute(hCol, 3));
@@ -1267,205 +816,61 @@
         const helixPoints = new THREE.Points(helixGeo, material.clone());
         helixGroup.add(helixPoints);
 
-
         // --- ANIMATION LOOP ---
         camera.position.set(520, 320, 420);
-        let targetHelixColor = new THREE.Color("#ffffff");
-        let idleRotation = 0;
-
+        let idleRotation = 0; let targetHelixColor = new THREE.Color("#ffffff");
         function tick() {
             idleRotation += 0.0008;
-            let p = 0;
-            if (typeof camTl !== 'undefined') p = camTl.progress();
-            const snap = Math.PI / 2;
-            const currentMod = idleRotation % (Math.PI * 2);
-            let diff = snap - currentMod;
-            if (diff > Math.PI) diff -= Math.PI * 2;
-            else if (diff < -Math.PI) diff += Math.PI * 2;
-            const targetRotation = idleRotation + diff;
-            const easeP = p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;
-            stadiumGroup.rotation.y = idleRotation * (1 - easeP) + targetRotation * easeP;
+            stadiumGroup.rotation.y = idleRotation;
             camera.lookAt(0, 0, 0);
-
-            if (helixGroup.visible) {
-                helixPoints.material.color.lerp(targetHelixColor, 0.05);
-            }
-
-            if (cloudsPoints) {
-                const positions = cloudsPoints.geometry.attributes.position.array;
-                for (let i = 0; i < positions.length; i += 3) {
-                    positions[i] += 0.2;
-                    if (positions[i] > 1000) positions[i] = -1000;
-                }
-                cloudsPoints.geometry.attributes.position.needsUpdate = true;
-            }
-
-            if (rainPoints) {
-                const positions = rainPoints.geometry.attributes.position.array;
-                const type = rainPoints.geometry.userData.type;
-                const speed = type === 'snow' ? 1.5 : 8.0;
-                for (let i = 1; i < positions.length; i += 3) {
-                    positions[i] -= speed;
-                    if (positions[i] < 0) {
-                        positions[i] = 600;
-                        positions[i - 1] = (Math.random() - 0.5) * 1500;
-                        positions[i + 1] = (Math.random() - 0.5) * 1500;
-                    }
-                    if (type === 'snow') {
-                        positions[i - 1] += Math.sin(Date.now() * 0.001 + i) * 0.1;
-                    }
-                }
-                rainPoints.geometry.attributes.position.needsUpdate = true;
-            }
+            if (helixGroup.visible) helixPoints.material.color.lerp(targetHelixColor, 0.05);
             renderer.render(scene, camera);
             requestAnimationFrame(tick);
         }
-
 
         // --- GSAP ---
         const tl = gsap.timeline();
         tl.to('.loader-bar', { height: '100%', duration: 1, ease: "power4.inOut" })
             .to('.counter', { textContent: 100, duration: 1, roundProps: "textContent" }, "<")
-            .to('.loader-wrap', {
-                y: '-100%', duration: 0.8, ease: "expo.inOut", onComplete: () => {
-                    document.querySelector('.loader-wrap').style.display = 'none';
-                }
-            })
+            .to('.loader-wrap', { y: '-100%', duration: 0.8, ease: "expo.inOut", onComplete: () => { document.querySelector('.loader-wrap').style.display = 'none'; } })
             .to('#webgl', { opacity: 1, duration: 1 })
-            .to('.char', { y: 0, duration: 0.8, stagger: 0.02, ease: "power3.out" }, "-=0.5")
-            .to('.hero-desc', { opacity: 1, duration: 1 }, "-=0.5")
-            .to('.hero-tag', { opacity: 1, y: 0, duration: 1 }, "-=0.5");
+            .to('.char', { y: 0, duration: 0.8, stagger: 0.02, ease: "power3.out" }, "-=0.5");
 
-        const camTl = gsap.timeline({
-            scrollTrigger: {
-                trigger: "header",
-                start: "top top",
-                endTrigger: "#problem",
-                end: "bottom bottom",
-                scrub: 2
-            }
-        });
-
-        camTl.to(camera.position, {
-            x: 0,
-            y: 100,
-            z: 280,
-            ease: "power1.inOut"
-        }, 0);
-
-        camTl.fromTo("#problem .glass-panel", {
-            y: 100, opacity: 0, scale: 0.9
-        }, {
-            y: 0, opacity: 1, scale: 1, ease: "power1.out", duration: 0.1
-        }, 0);
-
-        const helixTl = gsap.timeline({
-            scrollTrigger: {
-                trigger: "#roadmap",
-                start: "top center",
-                end: "bottom center",
-                scrub: 1,
-                onEnter: () => { helixGroup.visible = true; },
-                onLeaveBack: () => { helixGroup.visible = false; stadiumGroup.visible = true; },
-                onEnterBack: () => { stadiumGroup.visible = true; }
-            }
-        });
-
-        helixTl
-            .to(stadiumGroup.scale, { x: 0, y: 0, z: 0, duration: 0.3 }, 0)
-            .to(stadiumGroup.position, { y: -500, duration: 0.5 }, 0)
-            .to(helixGroup.scale, { x: 1, y: 1, z: 1 }, 0);
+        gsap.timeline({ scrollTrigger: { trigger: "header", start: "top top", endTrigger: "#problem", end: "bottom bottom", scrub: 2 } })
+            .to(camera.position, { x: 0, y: 100, z: 280, ease: "power1.inOut" });
 
         const carouselCards = document.querySelectorAll('.carousel-card');
-        const world = document.getElementById('carouselWorld');
-        const cardSpacing = 500;
-        const rotationStep = 50;
-
         carouselCards.forEach((card, i) => {
-            gsap.set(card, {
-                y: i * cardSpacing,
-                rotationY: i * rotationStep,
-                z: 400,
-                transformOrigin: "center center -400px",
-                opacity: 0,
-                scale: 0.8,
-                filter: "blur(8px)"
-            });
+            gsap.set(card, { y: i * 500, rotationY: i * 50, z: 0, transformOrigin: "center center -600px", opacity: 0, scale: 0.8, filter: "blur(8px)" });
         });
+        const carouselTl = gsap.timeline({ scrollTrigger: { trigger: ".carousel-container", start: "top top", end: "+=4000", scrub: 1, pin: true } });
+        carouselTl.to('#carouselWorld', { y: - (carouselCards.length * 500) + 200, rotationY: - (carouselCards.length * 50), ease: "none", duration: 10 }, 0)
+            .to(helixGroup.rotation, { y: Math.PI * 2, ease: "none", duration: 10 }, 0);
 
-        const carouselTl = gsap.timeline({
-            scrollTrigger: {
-                trigger: ".carousel-container",
-                start: "top top",
-                end: "+=4000",
-                scrub: 1,
-                pin: true,
-                anticipatePin: 1
-            }
+        // Visibility toggle for spiral
+        ScrollTrigger.create({
+            trigger: "#roadmap", start: "top center", end: "bottom center",
+            onEnter: () => { helixGroup.visible = true; stadiumGroup.visible = false; },
+            onLeaveBack: () => { helixGroup.visible = false; stadiumGroup.visible = true; },
+            onLeave: () => { helixGroup.visible = false; stadiumGroup.visible = true; }
         });
-
-        carouselTl.to(world, {
-            y: - (carouselCards.length * cardSpacing) + 200,
-            rotationY: - (carouselCards.length * rotationStep),
-            ease: "none",
-            duration: 10
-        }, 0);
-
-        carouselTl.to(helixGroup.rotation, {
-            y: Math.PI * 2,
-            ease: "none",
-            duration: 10
-        }, 0);
-
-        const foundersTl = gsap.timeline({
-            scrollTrigger: {
-                trigger: "#contact",
-                start: "top center",
-                end: "center center",
-                scrub: 1,
-                onEnter: () => { stadiumGroup.visible = true; },
-                onLeaveBack: () => { stadiumGroup.visible = false; }
-            }
-        });
-
-        foundersTl
-            .to(helixGroup.scale, { x: 0, y: 0, z: 0 }, 0)
-            .to(stadiumGroup.position, { y: 0 }, 0)
-            .to(stadiumGroup.scale, { x: 1, y: 1, z: 1 }, 0)
-            .to(stadiumGroup, { visible: true }, 0)
-            .to(camera.position, {
-                x: 0,
-                y: 100,
-                z: 280
-            }, 0);
 
         const fragment = 10 / carouselCards.length;
         carouselCards.forEach((card, i) => {
             const startTime = i * fragment - 0.5;
-            carouselTl.to(card, {
-                opacity: 1, scale: 1, filter: "blur(0px)", duration: 1,
-                onStart: () => targetHelixColor.set(card.getAttribute('data-color')),
-                onReverseComplete: () => { if (i > 0) targetHelixColor.set(carouselCards[i - 1].getAttribute('data-color')) }
-            }, Math.max(0, startTime));
-
-            carouselTl.to(card, {
-                opacity: 0, scale: 0.8, filter: "blur(8px)", duration: 1
-            }, Math.max(0, startTime) + 2.5);
+            carouselTl.to(card, { opacity: 1, scale: 1, filter: "blur(0px)", duration: 1, onStart: () => targetHelixColor.set(card.getAttribute('data-color')) }, Math.max(0, startTime));
+            carouselTl.to(card, { opacity: 0, scale: 0.8, filter: "blur(8px)", duration: 1 }, Math.max(0, startTime) + 2.5);
         });
 
-        // --- Live Counter Logic ---
-        const percentage = (lockedInTeams / totalTeams) * 100;
-        const pb = document.getElementById('team-progress-bar');
-        const tc = document.getElementById('team-counter-val');
-
-        if (pb && tc) {
-            setTimeout(() => {
-                pb.style.width = `${percentage}%`;
-                tc.innerText = lockedInTeams; // Just update the number
-            }, 1000);
-        }
-
         tick();
+
+        const styleSheet = document.createElement("style");
+        styleSheet.innerText = `
+            @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+            @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+            @keyframes shine { 0% { left: -100%; } 20% { left: 100%; } 100% { left: 100%; } }
+        `;
+        document.head.appendChild(styleSheet);
     </script>
 
 </body>
