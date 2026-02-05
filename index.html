@@ -876,7 +876,7 @@
         carouselCards.forEach((card, i) => {
             const startTime = i * fragment - 0.5;
             carouselTl.to(card, { opacity: 1, scale: 1, filter: "blur(0px)", duration: 1, onStart: () => targetHelixColor.set(card.getAttribute('data-color')) }, Math.max(0, startTime));
-            carouselTl.to(card, { opacity: 0, scale: 0.8, filter: "blur(8px)", duration: 1 }, Math.max(0, startTime) + 2.5);
+            carouselTl.to(card, { opacity: 0, scale: 0.80, filter: "blur(8px)", duration: 1 }, Math.max(0, startTime) + 2.5);
         });
 
         tick();
