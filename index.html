@@ -29,7 +29,6 @@
             background-color: #050505;
             color: #ffffff;
             overflow-x: hidden;
-            cursor: none;
             font-family: 'Geist Sans', sans-serif;
             margin: 0;
         }
@@ -43,22 +42,6 @@
             background: linear-gradient(90deg, #5de0e6 0%, #004aad 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-        }
-
-        /* --- SMOOTH SCROLL --- */
-        html {
-            scroll-behavior: smooth;
-        }
-
-        ::selection {
-            background: rgba(93, 224, 230, 0.3);
-            color: #fff;
-        }
-
-        html,
-        body {
-            overflow-y: auto !important;
-            height: auto !important;
         }
 
         /* --- GLASS MORPHISM --- */
@@ -84,7 +67,7 @@
             background: radial-gradient(circle at 50% 50%, #111 0%, #000000 100%);
         }
 
-        /* --- CUSTOM CURSOR --- */
+        /* --- CUSTOM CURSOR (Hidden on touch devices via JS usually, kept simple here) --- */
         #cursor {
             position: fixed;
             top: 0;
@@ -106,6 +89,12 @@
             height: 40px;
             background: rgba(93, 224, 230, 0.2);
             border-color: #5de0e6;
+        }
+
+        @media (hover: none) {
+            #cursor {
+                display: none;
+            }
         }
 
         /* --- TYPOGRAPHY FX --- */
@@ -174,27 +163,20 @@
             margin-bottom: 32px;
         }
 
-        /* --- UTILS --- */
-        .nav-logo {
-            transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), filter 0.3s;
+        /* --- MOBILE MENU --- */
+        #mobile-menu {
+            transition: opacity 0.3s ease-in-out, visibility 0.3s;
         }
 
-        .nav-logo:hover {
-            transform: scale(1.1);
-            filter: drop-shadow(0 0 10px rgba(93, 224, 230, 0.5));
-        }
-
-        details>summary {
-            list-style: none;
-        }
-
-        details>summary::-webkit-details-marker {
-            display: none;
+        #mobile-menu.active {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
         }
     </style>
 </head>
 
-<body class="">
+<body class="selection:bg-cyan-500/30 selection:text-white">
 
     <div id="cursor"></div>
 
@@ -205,7 +187,6 @@
     <div class="loader-wrap">
         <div class="loader-bar"></div>
         <div class="flex flex-col items-center gap-6">
-            <!-- Logo Made Significantly Bigger & Crystal Clear -->
             <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/63d2ed10-b4c7-4a87-8ee0-e402dffbae45_320w.png"
                 alt="FixUp Arena" class="w-64 md:w-96 h-auto object-contain antialiased">
             <div class="text-xs font-medium tracking-widest text-zinc-500">
@@ -214,45 +195,58 @@
         </div>
     </div>
 
+    <!-- Mobile Menu Overlay -->
+    <div id="mobile-menu"
+        class="fixed inset-0 z-[90] bg-black/95 backdrop-blur-xl flex flex-col items-center justify-center gap-8 opacity-0 invisible">
+        <a href="#" onclick="toggleMenu()"
+            class="text-2xl font-light text-white hover:text-[#5de0e6] transition-colors">Tournament</a>
+        <a href="#problem" onclick="toggleMenu()"
+            class="text-2xl font-light text-white hover:text-[#5de0e6] transition-colors">Concept</a>
+        <a href="#roadmap" onclick="toggleMenu()"
+            class="text-2xl font-light text-white hover:text-[#5de0e6] transition-colors">Roadmap</a>
+        <a href="#contact" onclick="toggleMenu()"
+            class="text-2xl font-light text-white hover:text-[#5de0e6] transition-colors">Contact</a>
+    </div>
+
     <!-- Nav -->
     <nav class="fixed top-0 left-0 w-full z-[100] flex justify-center pt-4 md:pt-6 px-4 pointer-events-none">
+        <!-- Main Nav Container -->
         <div
-            class="pointer-events-auto flex bg-black/80 h-14 md:h-20 border-white/10 border rounded-full px-6 md:px-8 shadow-2xl backdrop-blur-xl items-center justify-between min-w-[300px] md:min-w-[600px] gap-4 md:gap-8">
+            class="pointer-events-auto flex bg-black/80 h-14 md:h-20 border border-white/10 rounded-full px-5 md:px-8 shadow-2xl backdrop-blur-xl items-center justify-between w-full max-w-[calc(100%-2rem)] md:w-auto md:min-w-[600px] gap-4 md:gap-8 transition-all duration-300">
 
-            <!-- Left Links (Desktop) -->
-            <div class="flex items-center gap-6 flex-1 justify-end hidden md:flex">
+            <!-- Left Links (Desktop Only) -->
+            <div class="hidden md:flex items-center gap-6 flex-1 justify-end">
                 <a href="#" onclick="window.scrollTo(0,0); return false;"
                     class="nav-link text-[10px] font-medium text-zinc-400 hover:text-white transition-colors uppercase tracking-widest hover-trigger">Tournament</a>
                 <a href="#problem"
                     class="nav-link text-[10px] font-medium text-zinc-400 hover:text-white transition-colors uppercase tracking-widest hover-trigger">Concept</a>
             </div>
 
-            <!-- Logo -->
+            <!-- Logo (Always Visible) -->
             <a href="#" onclick="window.scrollTo(0,0); return false;"
                 class="flex items-center justify-center nav-logo hover-trigger z-10 shrink-0">
                 <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/40ddb709-c16a-40be-b363-f30c5ca383aa_320w.jpg"
-                    alt="FixUp Arena" class="h-8 md:h-12 w-auto object-contain">
+                    alt="FixUp Arena" class="h-8 md:h-12 w-auto object-contain rounded-full">
             </a>
 
-            <!-- Right Links (Desktop) -->
-            <div class="flex items-center gap-6 flex-1 justify-start hidden md:flex">
+            <!-- Right Links (Desktop Only) -->
+            <div class="hidden md:flex items-center gap-6 flex-1 justify-start">
                 <a href="#roadmap"
                     class="nav-link text-[10px] font-medium text-zinc-400 hover:text-white transition-colors uppercase tracking-widest hover-trigger">Roadmap</a>
                 <a href="#contact"
                     class="nav-link text-[10px] font-medium text-zinc-400 hover:text-white transition-colors uppercase tracking-widest hover-trigger">Contact</a>
             </div>
 
-            <!-- Mobile Menu Icon -->
-            <div class="md:hidden flex-1 flex justify-end">
-                <button class="text-white hover-trigger">
-                    <iconify-icon icon="solar:hamburger-menu-linear" class="text-xl"></iconify-icon>
-                </button>
-            </div>
+            <!-- Mobile Hamburger (Mobile Only) -->
+            <button onclick="toggleMenu()"
+                class="md:hidden flex items-center justify-center text-white w-8 h-8 hover-trigger z-[101]">
+                <iconify-icon icon="solar:hamburger-menu-linear" class="text-xl"></iconify-icon>
+            </button>
         </div>
     </nav>
 
     <!-- HERO SECTION -->
-    <header class="relative min-h-screen flex items-center justify-center pt-20 md:pt-28 pb-12 px-6 overflow-hidden">
+    <header class="relative min-h-screen flex items-center justify-center pt-24 md:pt-28 pb-12 px-6 overflow-hidden">
         <div class="grid lg:grid-cols-12 gap-8 lg:gap-20 z-10 w-full max-w-7xl items-center">
 
             <!-- LEFT COLUMN: Main Content -->
@@ -285,21 +279,67 @@
                 </h1>
 
                 <div class="flex flex-col gap-6 opacity-0" style="animation: fadeIn 1s forwards 0.8s;">
+
+                    <!-- Mobile Only: Sleek 16:9 Image Panel -->
+                    <div
+                        class="md:hidden w-full aspect-video relative rounded-2xl overflow-hidden border border-white/10 shadow-2xl group">
+                        <!-- Image -->
+                        <img src="https://images.unsplash.com/photo-1575361204480-aadea25e6e68?q=80&amp;w=800&amp;auto=format&amp;fit=crop"
+                            alt="Pitch"
+                            class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+
+                        <!-- Gradient Overlay -->
+                        <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
+
+                        <!-- Overlay Text -->
+                        <div class="absolute bottom-4 left-4 right-4 flex flex-col items-start text-left">
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="w-1.5 h-1.5 rounded-full bg-[#5de0e6] animate-pulse"></span>
+                                <span class="text-[10px] font-semibold text-[#5de0e6] uppercase tracking-widest">Live
+                                    Location</span>
+                            </div>
+                            <h3 class="text-white font-medium text-lg leading-tight">Castle Green 3G Pitches</h3>
+                            <p class="text-zinc-300 text-xs font-mono mt-1">Gale St, Dagenham, RM9 4UN</p>
+                        </div>
+                    </div>
+
                     <p class="text-base md:text-lg text-zinc-300 font-light max-w-2xl leading-relaxed mx-auto lg:mx-0">
                         Big prizes, competitive football.
                     </p>
 
-                    <!-- Mobile Only: Simplified Info Row & Essentials -->
-                    <div class="md:hidden flex flex-col gap-6 max-w-sm mx-auto w-full">
-                        <div class="flex items-center justify-center gap-3 text-sm text-zinc-300">
-                            <div class="flex items-center gap-1.5">
-                                <iconify-icon icon="solar:calendar-linear" class="text-[#5de0e6]"></iconify-icon>
-                                <span>14th Feb</span>
+                    <!-- Mobile Only: Clean Stacked Info & CTA -->
+                    <div class="md:hidden flex flex-col gap-5 w-full">
+
+                        <!-- Stacked Details Grid -->
+                        <div class="grid grid-cols-2 gap-3">
+                            <!-- Date -->
+                            <div
+                                class="bg-white/5 border border-white/10 rounded-xl p-3 flex flex-col gap-1 items-start">
+                                <div class="text-[10px] text-zinc-500 uppercase tracking-wider font-semibold">Date</div>
+                                <div class="text-white text-sm font-medium flex items-center gap-1.5">
+                                    <iconify-icon icon="solar:calendar-linear" class="text-[#5de0e6]"></iconify-icon>
+                                    14th Feb
+                                </div>
                             </div>
-                            <span class="text-zinc-700">|</span>
-                            <div class="flex items-center gap-1.5">
-                                <iconify-icon icon="solar:map-point-linear" class="text-[#5de0e6]"></iconify-icon>
-                                <span>Castle Green</span>
+                            <!-- Age -->
+                            <div
+                                class="bg-white/5 border border-white/10 rounded-xl p-3 flex flex-col gap-1 items-start">
+                                <div class="text-[10px] text-zinc-500 uppercase tracking-wider font-semibold">Age</div>
+                                <div class="text-white text-sm font-medium flex items-center gap-1.5">
+                                    <iconify-icon icon="solar:user-circle-linear" class="text-[#5de0e6]"></iconify-icon>
+                                    17+
+                                </div>
+                            </div>
+                            <!-- Format -->
+                            <div
+                                class="col-span-2 bg-white/5 border border-white/10 rounded-xl p-3 flex items-center justify-between">
+                                <div>
+                                    <div class="text-[10px] text-zinc-500 uppercase tracking-wider font-semibold">Format
+                                    </div>
+                                    <div class="text-white text-sm font-medium">7-a-side Football</div>
+                                </div>
+                                <iconify-icon icon="solar:users-group-rounded-linear"
+                                    class="text-[#5de0e6] text-lg"></iconify-icon>
                             </div>
                         </div>
 
@@ -308,34 +348,6 @@
                             class="w-full bg-brand-gradient text-white font-semibold rounded-xl uppercase tracking-widest text-xs py-4 shadow-[0_0_20px_rgba(93,224,230,0.2)] hover:opacity-90 transition-opacity">
                             Secure Spot — £70
                         </a>
-
-                        <!-- Mobile Accordion for Details -->
-                        <details class="group w-full border-t border-white/10 pt-4">
-                            <summary
-                                class="flex items-center justify-between cursor-pointer list-none text-xs uppercase tracking-widest font-semibold text-zinc-500 hover:text-white transition-colors">
-                                <span>Tournament Details</span>
-                                <iconify-icon icon="solar:alt-arrow-down-linear"
-                                    class="text-lg transition-transform group-open:rotate-180"></iconify-icon>
-                            </summary>
-                            <div class="pt-4 pb-2 text-left space-y-3">
-                                <div class="flex items-start gap-3">
-                                    <iconify-icon icon="solar:map-point-bold"
-                                        class="text-[#5de0e6] mt-0.5"></iconify-icon>
-                                    <div>
-                                        <div class="text-white text-sm font-medium">Castle Green 3G Pitches</div>
-                                        <div class="text-zinc-500 text-xs">Gale St, Dagenham, RM9 4UN</div>
-                                    </div>
-                                </div>
-                                <div class="flex items-start gap-3">
-                                    <iconify-icon icon="solar:users-group-rounded-bold"
-                                        class="text-[#5de0e6] mt-0.5"></iconify-icon>
-                                    <div>
-                                        <div class="text-white text-sm font-medium">7-a-side Format</div>
-                                        <div class="text-zinc-500 text-xs">Min. Age 16+</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </details>
                     </div>
 
                     <!-- Desktop Only: Grid Info -->
@@ -427,7 +439,7 @@
                                     </div>
                                     <div>
                                         <div class="text-white font-medium">7-a-side Format</div>
-                                        <div class="text-zinc-500 text-sm">Min. Age 16+</div>
+                                        <div class="text-zinc-500 text-sm">Min. Age 17+</div>
                                     </div>
                                 </div>
                             </div>
@@ -550,7 +562,7 @@
                     <p class="text-zinc-400 font-light text-xs leading-relaxed">Partnerships secured. AI algorithms
                         finalized.</p>
                 </div>
-                <!-- More cards can be added dynamically or statically as per previous code, kept concise here for token limit -->
+                <!-- More cards -->
                 <div class="carousel-card glass-panel p-6 flex flex-col justify-center border-l-4 border-white"
                     data-color="#ffffff">
                     <div class="flex justify-between items-start mb-4">
@@ -719,6 +731,12 @@
     </footer>
 
     <script>
+        // --- MOBILE MENU ---
+        function toggleMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('active');
+        }
+
         // --- DATA & CONFIG ---
         const stadiums = {
             wembley: { name: "Wembley Stadium", city: "London", color: { r: 1, g: 0.2, b: 0.2 }, arch: true, coords: { lat: 51.5560, lon: -0.2795 }, type: "oval", seats: 50000 }
@@ -847,7 +865,6 @@
         carouselTl.to('#carouselWorld', { y: - (carouselCards.length * 500) + 200, rotationY: - (carouselCards.length * 50), ease: "none", duration: 10 }, 0)
             .to(helixGroup.rotation, { y: Math.PI * 2, ease: "none", duration: 10 }, 0);
 
-        // Visibility toggle for spiral
         ScrollTrigger.create({
             trigger: "#roadmap", start: "top center", end: "bottom center",
             onEnter: () => { helixGroup.visible = true; stadiumGroup.visible = false; },
