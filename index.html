@@ -1,23 +1,22 @@
+<!DOCTYPE html>
 <html lang="en" class="lenis lenis-smooth">
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FIXUP ARENA | Next Tournament</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>FIXUP ARENA | Win £500</title>
     <link rel="icon" type="image/svg+xml" href="FixUp Arena Logo.svg">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
-
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/@fontsource/geist-sans@5.0.1/300.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/@fontsource/geist-sans@5.0.1/400.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/@fontsource/geist-sans@5.0.1/500.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/@fontsource/geist-sans@5.0.1/600.min.css" rel="stylesheet">
-
     <style>
         :root {
             --cursor-size: 20px;
@@ -25,18 +24,22 @@
             --brand-blue: #004aad;
         }
 
+        html,
+        body {
+            overscroll-behavior-y: none;
+            touch-action: pan-y;
+        }
+
         body {
             background-color: #050505;
             color: #ffffff;
             overflow-x: hidden;
             cursor: none;
-            /* Custom cursor on desktop */
             font-family: 'Geist Sans', sans-serif;
             margin: 0;
             opacity: 1;
         }
 
-        /* Restore default cursor on touch devices */
         @media (hover: none) and (pointer: coarse) {
             body {
                 cursor: auto;
@@ -47,7 +50,6 @@
             }
         }
 
-        /* --- GRADIENTS --- */
         .bg-brand-gradient {
             background: linear-gradient(90deg, #5de0e6 0%, #004aad 100%);
         }
@@ -58,7 +60,11 @@
             -webkit-text-fill-color: transparent;
         }
 
-        /* --- SMOOTH SCROLL --- */
+        /* Neon Glow Text */
+        .text-glow {
+            text-shadow: 0 0 20px rgba(93, 224, 230, 0.5), 0 0 40px rgba(0, 74, 173, 0.3);
+        }
+
         html {
             scroll-behavior: smooth;
         }
@@ -68,7 +74,6 @@
             color: #fff;
         }
 
-        /* --- GLASS MORPHISM --- */
         .glass-panel {
             background: rgba(20, 20, 20, 0.6);
             backdrop-filter: blur(20px);
@@ -78,7 +83,6 @@
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
         }
 
-        /* --- 3D CANVAS --- */
         #webgl {
             position: fixed;
             top: 0;
@@ -91,7 +95,6 @@
             background: radial-gradient(circle at 50% 50%, #111 0%, #000000 100%);
         }
 
-        /* --- CUSTOM CURSOR --- */
         #cursor {
             position: fixed;
             top: 0;
@@ -115,7 +118,6 @@
             border-color: #5de0e6;
         }
 
-        /* --- TYPOGRAPHY FX --- */
         .reveal-text {
             clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
         }
@@ -126,7 +128,6 @@
             will-change: transform;
         }
 
-        /* --- CAROUSEL (SPIRAL - DESKTOP) --- */
         .carousel-container {
             position: relative;
         }
@@ -162,7 +163,6 @@
             opacity: 0;
         }
 
-        /* --- LOADER --- */
         .loader-wrap {
             position: fixed;
             z-index: 10000;
@@ -181,7 +181,6 @@
             margin-bottom: 32px;
         }
 
-        /* --- UTILS --- */
         .nav-logo {
             transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), filter 0.3s;
         }
@@ -199,7 +198,6 @@
             display: none;
         }
 
-        /* --- MOBILE MENU --- */
         #mobile-menu {
             transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
@@ -215,14 +213,36 @@
             pointer-events: auto;
             transform: translateY(0);
         }
+
+        .no-select {
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        /* Pulse animation for prize */
+        @keyframes subtle-pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 0.9;
+                transform: scale(0.98);
+            }
+        }
+
+        .animate-subtle-pulse {
+            animation: subtle-pulse 3s infinite ease-in-out;
+        }
     </style>
 </head>
 
-<body class="antialiased selection:bg-[#5de0e6] selection:text-white">
+<body class="antialiased selection:bg-[#5de0e6] selection:text-white touch-pan-y">
 
     <div id="cursor"></div>
-
-    <!-- 3D Background -->
     <canvas id="webgl"></canvas>
 
     <!-- Loader -->
@@ -243,10 +263,9 @@
         <button id="close-menu-btn" class="absolute top-6 right-6 p-4 text-white/50 hover:text-white transition-colors">
             <iconify-icon icon="solar:close-square-linear" width="32"></iconify-icon>
         </button>
-
         <div class="flex flex-col items-center gap-8 text-center">
-            <a href="#" class="mobile-nav-link text-3xl font-medium text-white hover:text-[#5de0e6] transition-colors"
-                onclick="closeMenu()">Tournament</a>
+            <a href="javascript:void(0)" onclick="closeMenu(); window.scrollTo({top:0, behavior:'smooth'})"
+                class="mobile-nav-link text-3xl font-medium text-white hover:text-[#5de0e6] transition-colors">Tournament</a>
             <a href="#problem"
                 class="mobile-nav-link text-3xl font-medium text-white hover:text-[#5de0e6] transition-colors"
                 onclick="closeMenu()">Concept</a>
@@ -257,7 +276,6 @@
                 class="mobile-nav-link text-3xl font-medium text-white hover:text-[#5de0e6] transition-colors"
                 onclick="closeMenu()">Contact</a>
         </div>
-
         <div class="absolute bottom-12 flex flex-col items-center gap-4">
             <div class="h-px w-12 bg-white/20"></div>
             <p class="text-[10px] text-zinc-500 uppercase tracking-widest">FixUp Arena</p>
@@ -267,42 +285,34 @@
     <!-- Nav -->
     <nav class="fixed top-0 left-0 w-full z-[100] flex justify-center pt-4 md:pt-6 px-4 pointer-events-none">
         <div
-            class="pointer-events-auto flex bg-black/80 h-14 md:h-20 border-white/10 border rounded-full px-6 md:px-8 shadow-2xl backdrop-blur-xl items-center justify-between min-w-[300px] md:min-w-[600px] gap-4 md:gap-8">
-
-            <!-- Left Links (Desktop) -->
+            class="pointer-events-auto flex bg-black/80 h-14 md:h-20 border-white/10 border rounded-full px-6 md:px-8 shadow-2xl backdrop-blur-xl items-center justify-between min-w-[300px] md:min-w-[600px] gap-4 md:gap-8 touch-manipulation">
             <div class="flex items-center gap-6 flex-1 justify-end hidden md:flex">
-                <a href="#" onclick="window.scrollTo(0,0); return false;"
+                <a href="javascript:void(0)" onclick="window.scrollTo({top:0, behavior:'smooth'})"
                     class="nav-link text-[10px] font-medium text-zinc-400 hover:text-white transition-colors uppercase tracking-widest hover-trigger">Tournament</a>
                 <a href="#problem"
                     class="nav-link text-[10px] font-medium text-zinc-400 hover:text-white transition-colors uppercase tracking-widest hover-trigger">Concept</a>
             </div>
-
-            <!-- Logo -->
-            <a href="#" onclick="window.scrollTo(0,0); return false;"
-                class="flex items-center justify-center nav-logo hover-trigger z-10 shrink-0">
+            <a href="javascript:void(0)" onclick="window.scrollTo({top:0, behavior:'smooth'})"
+                class="flex items-center justify-center nav-logo hover-trigger z-10 shrink-0 select-none">
                 <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/40ddb709-c16a-40be-b363-f30c5ca383aa_320w.jpg"
                     alt="FixUp Arena" class="h-8 md:h-12 w-auto object-contain">
             </a>
-
-            <!-- Right Links (Desktop) -->
             <div class="flex items-center gap-6 flex-1 justify-start hidden md:flex">
                 <a href="#roadmap"
                     class="nav-link text-[10px] font-medium text-zinc-400 hover:text-white transition-colors uppercase tracking-widest hover-trigger">Roadmap</a>
                 <a href="#contact"
                     class="nav-link text-[10px] font-medium text-zinc-400 hover:text-white transition-colors uppercase tracking-widest hover-trigger">Contact</a>
             </div>
-
-            <!-- Mobile Menu Icon -->
             <div class="md:hidden flex-1 flex justify-end">
-                <button id="open-menu-btn" class="text-white hover-trigger p-2 -mr-2">
-                    <iconify-icon icon="solar:hamburger-menu-linear" class="text-xl"></iconify-icon>
+                <button id="open-menu-btn" class="text-white hover-trigger p-2 -mr-2 cursor-pointer">
+                    <iconify-icon icon="solar:hamburger-menu-linear" class="text-xl pointer-events-none"></iconify-icon>
                 </button>
             </div>
         </div>
     </nav>
 
     <!-- HERO SECTION -->
-    <header class="relative min-h-screen flex items-center justify-center pt-20 md:pt-28 pb-12 px-6 overflow-hidden">
+    <header class="relative min-h-screen flex items-center justify-center pt-28 md:pt-28 pb-12 px-6 overflow-hidden">
         <div class="grid lg:grid-cols-12 gap-8 lg:gap-20 z-10 w-full max-w-7xl items-center">
 
             <!-- LEFT COLUMN: Main Content -->
@@ -313,26 +323,30 @@
                     alt=""
                     class="absolute top-1/2 left-1/2 lg:left-0 -translate-x-1/2 lg:-translate-x-1/4 -translate-y-1/2 w-[280px] lg:w-[560px] opacity-[0.08] blur-[2px] pointer-events-none -z-10 mix-blend-screen select-none">
 
-                <!-- Prize Badge -->
-                <div class="mb-6 md:mb-8 flex justify-center lg:justify-start opacity-0 animate-fade-in-down"
-                    style="animation: fadeIn 1s forwards 0.5s;">
-                    <div
-                        class="inline-flex items-center gap-2 md:gap-3 px-3 py-1.5 md:px-4 md:py-2 rounded-full bg-[#5de0e6]/10 border border-[#5de0e6] shadow-[0_0_20px_rgba(93,224,230,0.3)] backdrop-blur-md">
-                        <iconify-icon icon="solar:cup-star-bold"
-                            class="text-[#5de0e6] text-base md:text-lg animate-pulse"></iconify-icon>
-                        <span class="text-[#5de0e6] font-semibold text-xs md:text-sm tracking-widest uppercase">£500
-                            Prize Money</span>
-                    </div>
-                </div>
-
                 <!-- Main Title -->
                 <h1
-                    class="font-display text-5xl md:text-7xl lg:text-8xl font-semibold leading-[0.9] tracking-tight text-white mb-6 md:mb-8 mix-blend-overlay">
+                    class="font-display text-5xl md:text-7xl lg:text-8xl font-semibold leading-[0.9] tracking-tight text-white mb-2 md:mb-6 mix-blend-overlay no-select">
                     <div class="reveal-text"><span class="char">NEXT</span></div>
                     <div class="reveal-text"><span
                             class="char text-transparent bg-clip-text bg-gradient-to-b from-white to-zinc-400">TOURNAMENT</span>
                     </div>
                 </h1>
+
+                <!-- MASSIVE PRIZE FEATURE -->
+                <div class="reveal-text mb-6 md:mb-10 opacity-0 animate-fade-in-up"
+                    style="animation: fadeInUp 1s forwards 0.6s;">
+                    <div class="inline-flex flex-col items-center lg:items-start gap-1">
+                        <span class="text-sm font-semibold text-[#5de0e6] uppercase tracking-[0.2em]">Winner Takes
+                            All</span>
+                        <div class="relative group">
+                            <div
+                                class="absolute -inset-2 bg-brand-gradient rounded-lg blur opacity-20 group-hover:opacity-40 transition duration-1000">
+                            </div>
+                            <span
+                                class="relative text-6xl md:text-8xl font-bold tracking-tighter text-white text-glow char">£500</span>
+                        </div>
+                    </div>
+                </div>
 
                 <div class="flex flex-col gap-6 opacity-0" style="animation: fadeIn 1s forwards 0.8s;">
                     <p class="text-base md:text-lg text-zinc-300 font-light max-w-2xl leading-relaxed mx-auto lg:mx-0">
@@ -341,6 +355,20 @@
 
                     <!-- Mobile Only: Info Row & Essentials -->
                     <div class="md:hidden flex flex-col gap-6 max-w-sm mx-auto w-full">
+
+                        <!-- Mobile Primary CTA - Updated to be less prominent -->
+                        <a href="https://buy.stripe.com/14AcN6cY4aCe3DgerUfnO00" target="_blank"
+                            class="w-full bg-[#5de0e6]/10 text-white font-bold uppercase tracking-widest text-sm py-4 rounded-xl flex items-center justify-center gap-3 backdrop-blur-md border border-[#5de0e6]/50 hover:bg-[#5de0e6]/20 transition-all active:scale-95 group relative overflow-hidden">
+                            <div
+                                class="absolute inset-0 bg-gradient-to-r from-transparent via-[#5de0e6]/20 to-transparent translate-x-[-100%] animate-[shine_2s_infinite]">
+                            </div>
+                            <span>Register Team</span>
+                            <span class="w-1.5 h-1.5 rounded-full bg-[#5de0e6]"></span>
+                            <span class="text-[#5de0e6]">£10 / PP</span>
+                            <iconify-icon icon="solar:arrow-right-linear"
+                                class="text-lg group-hover:translate-x-1 transition-transform"></iconify-icon>
+                        </a>
+
                         <div class="flex flex-wrap justify-center gap-x-4 gap-y-2 text-sm text-zinc-300">
                             <span class="flex items-center gap-1.5"><iconify-icon icon="solar:calendar-linear"
                                     class="text-[#5de0e6]"></iconify-icon> 14th Feb</span>
@@ -349,12 +377,6 @@
                             <span class="flex items-center gap-1.5"><iconify-icon icon="solar:map-point-linear"
                                     class="text-[#5de0e6]"></iconify-icon> Castle Green</span>
                         </div>
-
-                        <!-- Mobile CTA -->
-                        <a href="https://buy.stripe.com/14AcN6cY4aCe3DgerUfnO00" target="_blank"
-                            class="w-full bg-brand-gradient text-white font-semibold rounded-xl uppercase tracking-widest text-xs py-4 shadow-[0_0_20px_rgba(93,224,230,0.2)] hover:opacity-90 transition-opacity">
-                            Secure Spot — £70
-                        </a>
 
                         <!-- Mobile Content - Always Visible + Image -->
                         <div class="w-full border-t border-white/10 pt-6 mt-2 text-left">
@@ -409,7 +431,8 @@
                                     </div>
                                     <div class="">
                                         <div class="text-white text-sm font-medium">7-a-side Format</div>
-                                        <div class="text-zinc-500 text-xs mt-0.5">Min. Age 16+</div>
+                                        <div class="text-[#5de0e6] text-xs font-semibold mt-0.5">Entry: £10 per person
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -485,77 +508,55 @@
 
                         <!-- Card Content -->
                         <div class="p-8 pt-2 flex flex-col gap-6 relative z-10">
-                            <div class="flex justify-between items-end">
-                                <div class="flex flex-col">
-                                    <span
-                                        class="text-zinc-500 text-xs font-semibold uppercase tracking-widest mb-1">Total
-                                        Prize Pool</span>
-                                    <span class="text-4xl font-semibold text-white tracking-tight">£500</span>
-                                </div>
+                            <!-- Details Row -->
+                            <div
+                                class="flex justify-between items-center text-xs text-zinc-500 font-medium uppercase tracking-wider">
+                                <span>7-A-Side</span>
+                                <span>16+ Format</span>
+                                <span>Dagenham</span>
                             </div>
 
                             <div class="h-px w-full bg-gradient-to-r from-transparent via-white/10 to-transparent">
                             </div>
 
-                            <div class="space-y-4">
-                                <div class="flex items-start gap-4 group/item">
-                                    <div
-                                        class="p-2 rounded-lg bg-zinc-900 border border-white/5 text-zinc-500 group-hover/item:text-[#5de0e6] transition-colors">
-                                        <iconify-icon icon="solar:clock-circle-bold" class="text-lg"></iconify-icon>
-                                    </div>
-                                    <div>
-                                        <div class="text-white font-medium">11:00 AM - 3:00 PM</div>
-                                        <div class="text-zinc-500 text-sm">Duration: 4 Hours</div>
-                                    </div>
+                            <!-- Massive Prize Section -->
+                            <div
+                                class="py-6 flex flex-col items-center justify-center text-center relative overflow-hidden rounded-2xl border border-white/5 bg-gradient-to-b from-white/5 to-transparent">
+                                <div
+                                    class="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-[#5de0e6] to-transparent opacity-50">
                                 </div>
-                                <div class="flex items-start gap-4 group/item">
-                                    <div
-                                        class="p-2 rounded-lg bg-zinc-900 border border-white/5 text-zinc-500 group-hover/item:text-[#5de0e6] transition-colors">
-                                        <iconify-icon icon="solar:map-point-bold" class="text-lg"></iconify-icon>
-                                    </div>
-                                    <div>
-                                        <div class="text-white font-medium">Castle Green 3G Pitches</div>
-                                        <div class="text-zinc-500 text-sm">Gale St, Dagenham, RM9 4UN</div>
-                                    </div>
+
+                                <span
+                                    class="text-[#5de0e6] text-xs font-semibold uppercase tracking-widest mb-2 flex items-center gap-2">
+                                    <iconify-icon icon="solar:cup-star-bold"></iconify-icon> Cash Prize Pool
+                                </span>
+                                <div class="relative z-10">
+                                    <span
+                                        class="text-7xl font-bold text-white tracking-tighter drop-shadow-[0_0_25px_rgba(93,224,230,0.4)]">£500</span>
                                 </div>
-                                <div class="flex items-start gap-4 group/item">
-                                    <div
-                                        class="p-2 rounded-lg bg-zinc-900 border border-white/5 text-zinc-500 group-hover/item:text-[#5de0e6] transition-colors">
-                                        <iconify-icon icon="solar:users-group-rounded-bold"
-                                            class="text-lg"></iconify-icon>
-                                    </div>
-                                    <div>
-                                        <div class="text-white font-medium">7-a-side Format</div>
-                                        <div class="text-zinc-500 text-sm">Min. Age 16+</div>
-                                    </div>
+                                <div class="mt-2 flex gap-4 opacity-50">
+                                    <iconify-icon icon="logos:stripe" width="32" class="grayscale"></iconify-icon>
+                                    <iconify-icon icon="logos:mastercard" width="20" class="grayscale"></iconify-icon>
                                 </div>
                             </div>
 
-                            <div class="mt-4">
-                                <div class="flex items-end justify-between mb-4">
-                                    <span class="text-zinc-400 text-sm font-medium">Entry Fee</span>
-                                    <div class="text-right">
-                                        <span class="text-2xl font-semibold text-white">£70</span>
-                                        <span class="text-xs text-zinc-500 uppercase">/ Team</span>
-                                    </div>
-                                </div>
-
+                            <!-- CTA Button - Updated to be less prominent -->
+                            <div class="text-center">
                                 <a href="https://buy.stripe.com/14AcN6cY4aCe3DgerUfnO00" target="_blank"
-                                    rel="noopener noreferrer"
-                                    class="hover-trigger w-full bg-brand-gradient text-white font-semibold rounded-xl uppercase tracking-widest transition-all duration-300 transform hover:scale-[1.02] shadow-[0_0_30px_rgba(93,224,230,0.3)] hover:shadow-[0_0_50px_rgba(93,224,230,0.5)] flex items-center justify-center gap-3 py-4 px-6 relative overflow-hidden group-hover:border-white/20 border border-transparent">
-                                    <span class="relative z-10">Secure Your Spot</span>
-                                    <iconify-icon icon="solar:arrow-right-linear"
-                                        class="text-xl relative z-10 group-hover:translate-x-1 transition-transform"></iconify-icon>
+                                    class="w-full group relative overflow-hidden rounded-xl bg-[#5de0e6]/10 border border-[#5de0e6]/50 p-4 text-center transition-all hover:bg-[#5de0e6]/20 hover:shadow-[0_0_20px_rgba(93,224,230,0.2)] block">
+                                    <div class="relative z-10 flex items-center justify-center gap-3 text-white">
+                                        <span class="font-bold uppercase tracking-widest text-sm">Register Team</span>
+                                        <span
+                                            class="bg-[#5de0e6] px-2 py-0.5 rounded text-xs font-semibold text-black">£10/pp</span>
+                                        <iconify-icon icon="solar:arrow-right-linear"
+                                            class="text-lg transition-transform group-hover:translate-x-1"></iconify-icon>
+                                    </div>
                                     <div
-                                        class="absolute top-0 -left-[100%] w-full h-full bg-gradient-to-r from-transparent via-white/30 to-transparent skew-x-[-20deg] animate-[shine_3s_infinite]">
+                                        class="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-[#5de0e6]/20 to-transparent transition-transform duration-1000 group-hover:animate-[shine_1.5s_infinite]">
                                     </div>
                                 </a>
-
-                                <div
-                                    class="flex justify-center gap-4 mt-6 opacity-40 grayscale transition-all hover:grayscale-0">
-                                    <iconify-icon icon="logos:stripe" width="40"></iconify-icon>
-                                    <iconify-icon icon="logos:mastercard" width="24"></iconify-icon>
-                                    <iconify-icon icon="logos:visa" width="24"></iconify-icon>
+                                <div class="mt-3 text-[10px] text-zinc-500">
+                                    Secure payment via Stripe
                                 </div>
                             </div>
                         </div>
@@ -567,7 +568,7 @@
 
         <!-- Scroll Indicator -->
         <div
-            class="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-50 animate-bounce">
+            class="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-50 animate-bounce md:flex hidden">
             <span class="text-[10px] uppercase tracking-widest text-zinc-500">Explore</span>
             <iconify-icon icon="solar:arrow-down-linear" class="text-white"></iconify-icon>
         </div>
@@ -842,8 +843,9 @@
                             class="w-full bg-black/40 border border-white/10 rounded-lg px-4 py-3 text-white text-sm focus:outline-none focus:border-[#5de0e6] transition-colors"
                             placeholder="Message"></textarea>
                     </div>
+                    <!-- Updated Contact Button: Brand Cyan -->
                     <button type="submit"
-                        class="w-full bg-white text-black font-semibold uppercase tracking-widest text-xs py-4 rounded-lg hover:bg-[#5de0e6] transition-colors hover-trigger">Send</button>
+                        class="w-full bg-[#5de0e6] text-black font-semibold uppercase tracking-widest text-xs py-4 rounded-lg hover:bg-[#4bcace] transition-colors hover-trigger">Send</button>
                 </form>
 
             </div>
@@ -1013,6 +1015,9 @@
         }
 
         // --- GSAP ---
+        // Configure ScrollTrigger to avoid resizing issues on mobile
+        ScrollTrigger.config({ ignoreMobileResize: true });
+
         const tl = gsap.timeline();
         tl.to('.loader-bar', { height: '100%', duration: 1, ease: "power4.inOut" })
             .to('.counter', { textContent: 100, duration: 1, roundProps: "textContent" }, "<")
@@ -1025,7 +1030,7 @@
 
         // RESPONSIVE ROADMAP ANIMATIONS
         ScrollTrigger.matchMedia({
-            // Desktop: Complex Spiral Animation
+            // Desktop: Complex Spiral Animation - Only apply strictly above 768px
             "(min-width: 768px)": function () {
                 const carouselCards = document.querySelectorAll('.carousel-card');
                 if (carouselCards.length > 0) {
@@ -1080,6 +1085,7 @@
             renderer.setSize(window.innerWidth, window.innerHeight);
         });
     </script>
+
 </body>
 
 </html>
