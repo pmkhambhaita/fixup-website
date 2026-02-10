@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="en" class="lenis lenis-smooth">
 
 <head>
@@ -34,9 +33,10 @@
             /* Custom cursor on desktop */
             font-family: 'Geist Sans', sans-serif;
             margin: 0;
+            opacity: 1;
         }
 
-        /* Restore default cursor on touch devices for better UX */
+        /* Restore default cursor on touch devices */
         @media (hover: none) and (pointer: coarse) {
             body {
                 cursor: auto;
@@ -66,12 +66,6 @@
         ::selection {
             background: rgba(93, 224, 230, 0.3);
             color: #fff;
-        }
-
-        html,
-        body {
-            overflow-y: auto !important;
-            height: auto !important;
         }
 
         /* --- GLASS MORPHISM --- */
@@ -224,27 +218,26 @@
     </style>
 </head>
 
-<body class="">
+<body class="antialiased selection:bg-[#5de0e6] selection:text-white">
 
-    <div id="cursor" style="left: 4px; top: 432px;"></div>
+    <div id="cursor"></div>
 
     <!-- 3D Background -->
-    <canvas id="webgl" width="393" height="852" style="width: 393px; height: 852px;"></canvas>
+    <canvas id="webgl"></canvas>
 
     <!-- Loader -->
-
-
-    <!-- MOBILE MENU OVERLAY -->
-    <div class="loader-wrap" style=" display: none;">
-        <div class="loader-bar" style="height: 100%;"></div>
+    <div class="loader-wrap">
+        <div class="loader-bar"></div>
         <div class="flex flex-col items-center gap-6">
             <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/63d2ed10-b4c7-4a87-8ee0-e402dffbae45_320w.png"
                 alt="FixUp Arena" class="w-64 md:w-96 h-auto object-contain antialiased">
             <div class="text-xs font-medium tracking-widest text-zinc-500">
-                <span class="counter">100</span>%
+                <span class="counter">0</span>%
             </div>
         </div>
     </div>
+
+    <!-- MOBILE MENU OVERLAY -->
     <div id="mobile-menu"
         class="fixed inset-0 z-[200] bg-black/95 backdrop-blur-2xl flex flex-col items-center justify-center menu-hidden">
         <button id="close-menu-btn" class="absolute top-6 right-6 p-4 text-white/50 hover:text-white transition-colors">
@@ -343,21 +336,18 @@
 
                 <div class="flex flex-col gap-6 opacity-0" style="animation: fadeIn 1s forwards 0.8s;">
                     <p class="text-base md:text-lg text-zinc-300 font-light max-w-2xl leading-relaxed mx-auto lg:mx-0">
-                        Big prizes, competitive football.
+                        Big prizes, competitive football. Join the next generation of grassroots tournaments.
                     </p>
 
-                    <!-- Mobile Only: Simplified Info Row & Essentials -->
+                    <!-- Mobile Only: Info Row & Essentials -->
                     <div class="md:hidden flex flex-col gap-6 max-w-sm mx-auto w-full">
-                        <div class="flex items-center justify-center gap-3 text-sm text-zinc-300">
-                            <div class="flex items-center gap-1.5">
-                                <iconify-icon icon="solar:calendar-linear" class="text-[#5de0e6]"></iconify-icon>
-                                <span>14th Feb</span>
-                            </div>
-                            <span class="text-zinc-700">|</span>
-                            <div class="flex items-center gap-1.5">
-                                <iconify-icon icon="solar:map-point-linear" class="text-[#5de0e6]"></iconify-icon>
-                                <span>Castle Green</span>
-                            </div>
+                        <div class="flex flex-wrap justify-center gap-x-4 gap-y-2 text-sm text-zinc-300">
+                            <span class="flex items-center gap-1.5"><iconify-icon icon="solar:calendar-linear"
+                                    class="text-[#5de0e6]"></iconify-icon> 14th Feb</span>
+                            <span class="flex items-center gap-1.5"><iconify-icon icon="solar:clock-circle-linear"
+                                    class="text-[#5de0e6]"></iconify-icon> 11am - 3pm</span>
+                            <span class="flex items-center gap-1.5"><iconify-icon icon="solar:map-point-linear"
+                                    class="text-[#5de0e6]"></iconify-icon> Castle Green</span>
                         </div>
 
                         <!-- Mobile CTA -->
@@ -394,6 +384,16 @@
                             <div class="space-y-4 bg-white/5 rounded-xl p-4 border border-white/5">
                                 <div class="flex items-start gap-3">
                                     <div class="mt-0.5 p-1.5 bg-[#5de0e6]/10 rounded-md text-[#5de0e6]">
+                                        <iconify-icon icon="solar:clock-circle-bold" class="text-sm"></iconify-icon>
+                                    </div>
+                                    <div class="">
+                                        <div class="text-white text-sm font-medium">11:00 AM - 3:00 PM</div>
+                                        <div class="text-zinc-500 text-xs mt-0.5">Duration: 4 Hours</div>
+                                    </div>
+                                </div>
+                                <div class="h-px bg-white/5 w-full"></div>
+                                <div class="flex items-start gap-3">
+                                    <div class="mt-0.5 p-1.5 bg-[#5de0e6]/10 rounded-md text-[#5de0e6]">
                                         <iconify-icon icon="solar:map-point-bold" class="text-sm"></iconify-icon>
                                     </div>
                                     <div class="">
@@ -417,28 +417,39 @@
                     </div>
 
                     <!-- Desktop Only: Grid Info -->
-                    <div class="hidden md:grid grid-cols-2 gap-4 max-w-lg mx-auto lg:mx-0">
+                    <div class="hidden md:grid grid-cols-3 gap-4 max-w-3xl mx-auto lg:mx-0">
                         <div
                             class="flex items-center gap-4 p-4 rounded-xl bg-white/5 border border-white/10 backdrop-blur-sm">
                             <div
-                                class="w-10 h-10 rounded-full bg-[#5de0e6]/10 flex items-center justify-center text-[#5de0e6] border border-[#5de0e6]/20">
+                                class="w-10 h-10 rounded-full bg-[#5de0e6]/10 flex items-center justify-center text-[#5de0e6] border border-[#5de0e6]/20 shrink-0">
                                 <iconify-icon icon="solar:calendar-linear" class="text-xl"></iconify-icon>
                             </div>
                             <div>
                                 <div class="text-[10px] text-zinc-500 uppercase font-semibold tracking-wider">Date</div>
-                                <div class="text-white font-medium">14th February</div>
+                                <div class="text-white font-medium">14th Feb</div>
                             </div>
                         </div>
                         <div
                             class="flex items-center gap-4 p-4 rounded-xl bg-white/5 border border-white/10 backdrop-blur-sm">
                             <div
-                                class="w-10 h-10 rounded-full bg-[#5de0e6]/10 flex items-center justify-center text-[#5de0e6] border border-[#5de0e6]/20">
+                                class="w-10 h-10 rounded-full bg-[#5de0e6]/10 flex items-center justify-center text-[#5de0e6] border border-[#5de0e6]/20 shrink-0">
+                                <iconify-icon icon="solar:clock-circle-linear" class="text-xl"></iconify-icon>
+                            </div>
+                            <div>
+                                <div class="text-[10px] text-zinc-500 uppercase font-semibold tracking-wider">Time</div>
+                                <div class="text-white font-medium">11am - 3pm</div>
+                            </div>
+                        </div>
+                        <div
+                            class="flex items-center gap-4 p-4 rounded-xl bg-white/5 border border-white/10 backdrop-blur-sm">
+                            <div
+                                class="w-10 h-10 rounded-full bg-[#5de0e6]/10 flex items-center justify-center text-[#5de0e6] border border-[#5de0e6]/20 shrink-0">
                                 <iconify-icon icon="solar:map-point-linear" class="text-xl"></iconify-icon>
                             </div>
                             <div>
                                 <div class="text-[10px] text-zinc-500 uppercase font-semibold tracking-wider">Location
                                 </div>
-                                <div class="text-white font-medium">Castle Green, RM9</div>
+                                <div class="text-white font-medium">Castle Green</div>
                             </div>
                         </div>
                     </div>
@@ -486,7 +497,17 @@
                             <div class="h-px w-full bg-gradient-to-r from-transparent via-white/10 to-transparent">
                             </div>
 
-                            <div class="space-y-5">
+                            <div class="space-y-4">
+                                <div class="flex items-start gap-4 group/item">
+                                    <div
+                                        class="p-2 rounded-lg bg-zinc-900 border border-white/5 text-zinc-500 group-hover/item:text-[#5de0e6] transition-colors">
+                                        <iconify-icon icon="solar:clock-circle-bold" class="text-lg"></iconify-icon>
+                                    </div>
+                                    <div>
+                                        <div class="text-white font-medium">11:00 AM - 3:00 PM</div>
+                                        <div class="text-zinc-500 text-sm">Duration: 4 Hours</div>
+                                    </div>
+                                </div>
                                 <div class="flex items-start gap-4 group/item">
                                     <div
                                         class="p-2 rounded-lg bg-zinc-900 border border-white/5 text-zinc-500 group-hover/item:text-[#5de0e6] transition-colors">
@@ -879,8 +900,8 @@
             document.body.style.overflow = ''; // Unlock scroll
         }
 
-        openMenuBtn.addEventListener('click', openMenu);
-        closeMenuBtn.addEventListener('click', closeMenu);
+        if (openMenuBtn) openMenuBtn.addEventListener('click', openMenu);
+        if (closeMenuBtn) closeMenuBtn.addEventListener('click', closeMenu);
 
         // --- DATA & CONFIG ---
         const stadiums = {
@@ -1007,27 +1028,29 @@
             // Desktop: Complex Spiral Animation
             "(min-width: 768px)": function () {
                 const carouselCards = document.querySelectorAll('.carousel-card');
-                carouselCards.forEach((card, i) => {
-                    gsap.set(card, { y: i * 500, rotationY: i * 50, z: 0, transformOrigin: "center center -600px", opacity: 0, scale: 0.8, filter: "blur(8px)" });
-                });
-                const carouselTl = gsap.timeline({ scrollTrigger: { trigger: ".carousel-container", start: "top top", end: "+=4000", scrub: 1, pin: true } });
-                carouselTl.to('#carouselWorld', { y: - (carouselCards.length * 500) + 200, rotationY: - (carouselCards.length * 50), ease: "none", duration: 10 }, 0)
-                    .to(helixGroup.rotation, { y: Math.PI * 2, ease: "none", duration: 10 }, 0);
+                if (carouselCards.length > 0) {
+                    carouselCards.forEach((card, i) => {
+                        gsap.set(card, { y: i * 500, rotationY: i * 50, z: 0, transformOrigin: "center center -600px", opacity: 0, scale: 0.8, filter: "blur(8px)" });
+                    });
+                    const carouselTl = gsap.timeline({ scrollTrigger: { trigger: ".carousel-container", start: "top top", end: "+=4000", scrub: 1, pin: true } });
+                    carouselTl.to('#carouselWorld', { y: - (carouselCards.length * 500) + 200, rotationY: - (carouselCards.length * 50), ease: "none", duration: 10 }, 0)
+                        .to(helixGroup.rotation, { y: Math.PI * 2, ease: "none", duration: 10 }, 0);
 
-                // Visibility toggle for spiral
-                ScrollTrigger.create({
-                    trigger: "#roadmap-desktop", start: "top center", end: "bottom center",
-                    onEnter: () => { helixGroup.visible = true; stadiumGroup.visible = false; },
-                    onLeaveBack: () => { helixGroup.visible = false; stadiumGroup.visible = true; },
-                    onLeave: () => { helixGroup.visible = false; stadiumGroup.visible = true; }
-                });
+                    // Visibility toggle for spiral
+                    ScrollTrigger.create({
+                        trigger: "#roadmap-desktop", start: "top center", end: "bottom center",
+                        onEnter: () => { helixGroup.visible = true; stadiumGroup.visible = false; },
+                        onLeaveBack: () => { helixGroup.visible = false; stadiumGroup.visible = true; },
+                        onLeave: () => { helixGroup.visible = false; stadiumGroup.visible = true; }
+                    });
 
-                const fragment = 10 / carouselCards.length;
-                carouselCards.forEach((card, i) => {
-                    const startTime = i * fragment - 0.5;
-                    carouselTl.to(card, { opacity: 1, scale: 1, filter: "blur(0px)", duration: 1, onStart: () => targetHelixColor.set(card.getAttribute('data-color')) }, Math.max(0, startTime));
-                    carouselTl.to(card, { opacity: 0, scale: 0.8, filter: "blur(8px)", duration: 1 }, Math.max(0, startTime) + 2.5);
-                });
+                    const fragment = 10 / carouselCards.length;
+                    carouselCards.forEach((card, i) => {
+                        const startTime = i * fragment - 0.5;
+                        carouselTl.to(card, { opacity: 1, scale: 1, filter: "blur(0px)", duration: 1, onStart: () => targetHelixColor.set(card.getAttribute('data-color')) }, Math.max(0, startTime));
+                        carouselTl.to(card, { opacity: 0, scale: 0.8, filter: "blur(8px)", duration: 1 }, Math.max(0, startTime) + 2.5);
+                    });
+                }
             },
 
             // Mobile: Simple Fade In
@@ -1049,8 +1072,14 @@
             @keyframes shine { 0% { left: -100%; } 20% { left: 100%; } 100% { left: 100%; } }
         `;
         document.head.appendChild(styleSheet);
-    </script>
 
+        // Window Resize Handler
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
 </body>
 
 </html>
