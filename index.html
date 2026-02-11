@@ -60,7 +60,6 @@
             -webkit-text-fill-color: transparent;
         }
 
-        /* Neon Glow Text */
         .text-glow {
             text-shadow: 0 0 20px rgba(93, 224, 230, 0.5), 0 0 40px rgba(0, 74, 173, 0.3);
         }
@@ -93,6 +92,7 @@
             opacity: 0;
             pointer-events: none;
             background: radial-gradient(circle at 50% 50%, #111 0%, #000000 100%);
+            transition: opacity 1s ease;
         }
 
         #cursor {
@@ -219,19 +219,20 @@
             user-select: none;
         }
 
-        /* Legal Page Styling */
+        /* Legal & Support Typography */
         .legal-content h1 {
             font-size: 2.5rem;
             font-weight: 600;
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
             color: white;
             letter-spacing: -0.02em;
+            line-height: 1.1;
         }
 
         .legal-content h2 {
             font-size: 1.5rem;
             font-weight: 500;
-            margin-top: 2.5rem;
+            margin-top: 3rem;
             margin-bottom: 1rem;
             color: white;
             letter-spacing: -0.01em;
@@ -242,11 +243,12 @@
             line-height: 1.75;
             margin-bottom: 1.25rem;
             font-weight: 300;
+            font-size: 0.95rem;
         }
 
         .legal-content ul {
             list-style-type: disc;
-            padding-left: 1.5rem;
+            padding-left: 1.25rem;
             color: #a1a1aa;
             margin-bottom: 1.25rem;
         }
@@ -254,11 +256,23 @@
         .legal-content li {
             margin-bottom: 0.5rem;
             font-weight: 300;
+            font-size: 0.95rem;
+            line-height: 1.6;
         }
 
         .legal-content strong {
             color: white;
             font-weight: 500;
+        }
+
+        .legal-content a {
+            color: #5de0e6;
+            text-decoration: none;
+            transition: opacity 0.2s;
+        }
+
+        .legal-content a:hover {
+            opacity: 0.8;
         }
 
         .page-hidden {
@@ -268,6 +282,18 @@
         .page-visible {
             display: block;
             animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
     </style>
 </head>
@@ -298,19 +324,12 @@
         <div class="flex flex-col items-center gap-8 text-center">
             <a href="javascript:void(0)" onclick="navigateTo('home'); closeMenu();"
                 class="mobile-nav-link text-3xl font-medium text-white hover:text-[#5de0e6] transition-colors">Tournament</a>
-            <a href="javascript:void(0)"
-                onclick="navigateTo('home'); closeMenu(); document.getElementById('problem').scrollIntoView()"
-                class="mobile-nav-link text-3xl font-medium text-white hover:text-[#5de0e6] transition-colors">Concept</a>
-            <a href="javascript:void(0)"
-                onclick="navigateTo('home'); closeMenu(); document.getElementById('roadmap').scrollIntoView()"
-                class="mobile-nav-link text-3xl font-medium text-white hover:text-[#5de0e6] transition-colors">Roadmap</a>
-            <a href="javascript:void(0)"
-                onclick="navigateTo('home'); closeMenu(); document.getElementById('contact').scrollIntoView()"
-                class="mobile-nav-link text-3xl font-medium text-white hover:text-[#5de0e6] transition-colors">Contact</a>
-        </div>
-        <div class="absolute bottom-12 flex flex-col items-center gap-4">
-            <div class="h-px w-12 bg-white/20"></div>
-            <p class="text-[10px] text-zinc-500 uppercase tracking-widest">FixUp Arena</p>
+            <a href="javascript:void(0)" onclick="navigateTo('support'); closeMenu();"
+                class="mobile-nav-link text-3xl font-medium text-white hover:text-[#5de0e6] transition-colors">Support</a>
+            <a href="javascript:void(0)" onclick="navigateTo('privacy'); closeMenu();"
+                class="mobile-nav-link text-3xl font-medium text-white hover:text-[#5de0e6] transition-colors">Privacy</a>
+            <a href="javascript:void(0)" onclick="navigateTo('tos'); closeMenu();"
+                class="mobile-nav-link text-3xl font-medium text-white hover:text-[#5de0e6] transition-colors">Terms</a>
         </div>
     </div>
 
@@ -334,9 +353,8 @@
                 <a href="javascript:void(0)"
                     onclick="navigateTo('home'); setTimeout(() => document.getElementById('roadmap').scrollIntoView({behavior:'smooth'}), 100)"
                     class="nav-link text-[10px] font-medium text-zinc-400 hover:text-white transition-colors uppercase tracking-widest hover-trigger">Roadmap</a>
-                <a href="javascript:void(0)"
-                    onclick="navigateTo('home'); setTimeout(() => document.getElementById('contact').scrollIntoView({behavior:'smooth'}), 100)"
-                    class="nav-link text-[10px] font-medium text-zinc-400 hover:text-white transition-colors uppercase tracking-widest hover-trigger">Contact</a>
+                <a href="javascript:void(0)" onclick="navigateTo('support')"
+                    class="nav-link text-[10px] font-medium text-zinc-400 hover:text-white transition-colors uppercase tracking-widest hover-trigger">Support</a>
             </div>
             <div class="md:hidden flex-1 flex justify-end">
                 <button id="open-menu-btn" class="text-white hover-trigger p-2 -mr-2 cursor-pointer">
@@ -346,22 +364,17 @@
         </div>
     </nav>
 
-    <!-- MAIN HOME CONTENT -->
-    <main id="home-view" class="page-visible">
+    <!-- VIEW: HOME -->
+    <main id="home-view" class="page-visible min-h-screen">
         <!-- HERO SECTION -->
         <header
             class="relative min-h-screen flex items-center justify-center pt-28 md:pt-28 pb-12 px-6 overflow-hidden">
             <div class="grid lg:grid-cols-12 gap-8 lg:gap-20 z-10 w-full max-w-7xl items-center">
-
-                <!-- LEFT COLUMN: Main Content -->
+                <!-- LEFT COLUMN -->
                 <div class="lg:col-span-7 flex flex-col justify-center text-center lg:text-left relative">
-
-                    <!-- Watermark -->
                     <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/40ddb709-c16a-40be-b363-f30c5ca383aa_320w.jpg?w=800&q=80"
                         alt=""
                         class="absolute top-1/2 left-1/2 lg:left-0 -translate-x-1/2 lg:-translate-x-1/4 -translate-y-1/2 w-[280px] lg:w-[560px] opacity-[0.08] blur-[2px] pointer-events-none -z-10 mix-blend-screen select-none">
-
-                    <!-- Main Title -->
                     <h1
                         class="font-display text-5xl md:text-7xl lg:text-8xl font-semibold leading-[0.9] tracking-tight text-white mb-2 md:mb-6 mix-blend-overlay no-select">
                         <div class="reveal-text"><span class="char">NEXT</span></div>
@@ -369,8 +382,6 @@
                                 class="char text-transparent bg-clip-text bg-gradient-to-b from-white to-zinc-400">TOURNAMENT</span>
                         </div>
                     </h1>
-
-                    <!-- MASSIVE PRIZE FEATURE -->
                     <div class="reveal-text mb-6 md:mb-10 opacity-0 animate-fade-in-up"
                         style="animation: fadeInUp 1s forwards 0.6s;">
                         <div class="inline-flex flex-col items-center lg:items-start gap-1">
@@ -385,17 +396,13 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="flex flex-col gap-6 opacity-0" style="animation: fadeIn 1s forwards 0.8s;">
                         <p
                             class="text-base md:text-lg text-zinc-300 font-light max-w-2xl leading-relaxed mx-auto lg:mx-0">
                             Big prizes, competitive football. Join the next generation of grassroots tournaments.
                         </p>
-
                         <!-- Mobile Only: Info Row & Essentials -->
                         <div class="md:hidden flex flex-col gap-6 max-w-sm mx-auto w-full">
-
-                            <!-- Mobile Primary CTA - Updated to be less prominent -->
                             <a href="https://buy.stripe.com/14AcN6cY4aCe3DgerUfnO00" target="_blank"
                                 class="w-full bg-[#5de0e6]/10 text-white font-bold uppercase tracking-widest text-sm py-4 rounded-xl flex items-center justify-center gap-3 backdrop-blur-md border border-[#5de0e6]/50 hover:bg-[#5de0e6]/20 transition-all active:scale-95 group relative overflow-hidden">
                                 <div
@@ -407,7 +414,6 @@
                                 <iconify-icon icon="solar:arrow-right-linear"
                                     class="text-lg group-hover:translate-x-1 transition-transform"></iconify-icon>
                             </a>
-
                             <div class="flex flex-wrap justify-center gap-x-4 gap-y-2 text-sm text-zinc-300">
                                 <span class="flex items-center gap-1.5"><iconify-icon icon="solar:calendar-linear"
                                         class="text-[#5de0e6]"></iconify-icon> 14th Feb</span>
@@ -416,11 +422,7 @@
                                 <span class="flex items-center gap-1.5"><iconify-icon icon="solar:map-point-linear"
                                         class="text-[#5de0e6]"></iconify-icon> Castle Green</span>
                             </div>
-
-                            <!-- Mobile Content - Always Visible + Image -->
                             <div class="w-full border-t border-white/10 pt-6 mt-2 text-left">
-
-                                <!-- Pitch Image (Mobile Only) -->
                                 <div
                                     class="relative w-full h-32 rounded-xl overflow-hidden border border-white/10 mb-6 group shadow-lg">
                                     <div
@@ -435,19 +437,12 @@
                                             class="text-[10px] font-medium text-white tracking-wide uppercase">Venue</span>
                                     </div>
                                 </div>
-
-                                <!-- Static Details List -->
-                                <div class="flex mb-4 items-center justify-between">
-                                    <h3 class="text-xs uppercase tracking-widest font-semibold text-zinc-500">Tournament
-                                        Details</h3>
-                                </div>
-
                                 <div class="space-y-4 bg-white/5 rounded-xl p-4 border border-white/5">
                                     <div class="flex items-start gap-3">
                                         <div class="mt-0.5 p-1.5 bg-[#5de0e6]/10 rounded-md text-[#5de0e6]">
                                             <iconify-icon icon="solar:clock-circle-bold" class="text-sm"></iconify-icon>
                                         </div>
-                                        <div class="">
+                                        <div>
                                             <div class="text-white text-sm font-medium">11:00 AM - 3:00 PM</div>
                                             <div class="text-zinc-500 text-xs mt-0.5">Duration: 4 Hours</div>
                                         </div>
@@ -457,35 +452,21 @@
                                         <div class="mt-0.5 p-1.5 bg-[#5de0e6]/10 rounded-md text-[#5de0e6]">
                                             <iconify-icon icon="solar:map-point-bold" class="text-sm"></iconify-icon>
                                         </div>
-                                        <div class="">
+                                        <div>
                                             <div class="text-white text-sm font-medium">Castle Green 3G Pitches</div>
                                             <div class="text-zinc-500 text-xs mt-0.5">Gale St, Dagenham, RM9 4UN</div>
-                                        </div>
-                                    </div>
-                                    <div class="h-px bg-white/5 w-full"></div>
-                                    <div class="flex items-start gap-3">
-                                        <div class="mt-0.5 p-1.5 bg-[#5de0e6]/10 rounded-md text-[#5de0e6]">
-                                            <iconify-icon icon="solar:users-group-rounded-bold"
-                                                class="text-sm"></iconify-icon>
-                                        </div>
-                                        <div class="">
-                                            <div class="text-white text-sm font-medium">7-a-side Format</div>
-                                            <div class="text-[#5de0e6] text-xs font-semibold mt-0.5">Entry: £10 per
-                                                person</div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-
-                        <!-- Desktop Only: Grid Info -->
+                        <!-- Desktop Only Info -->
                         <div class="hidden md:grid grid-cols-3 gap-4 max-w-3xl mx-auto lg:mx-0">
                             <div
                                 class="flex items-center gap-4 p-4 rounded-xl bg-white/5 border border-white/10 backdrop-blur-sm">
                                 <div
                                     class="w-10 h-10 rounded-full bg-[#5de0e6]/10 flex items-center justify-center text-[#5de0e6] border border-[#5de0e6]/20 shrink-0">
-                                    <iconify-icon icon="solar:calendar-linear" class="text-xl"></iconify-icon>
-                                </div>
+                                    <iconify-icon icon="solar:calendar-linear" class="text-xl"></iconify-icon></div>
                                 <div>
                                     <div class="text-[10px] text-zinc-500 uppercase font-semibold tracking-wider">Date
                                     </div>
@@ -496,8 +477,7 @@
                                 class="flex items-center gap-4 p-4 rounded-xl bg-white/5 border border-white/10 backdrop-blur-sm">
                                 <div
                                     class="w-10 h-10 rounded-full bg-[#5de0e6]/10 flex items-center justify-center text-[#5de0e6] border border-[#5de0e6]/20 shrink-0">
-                                    <iconify-icon icon="solar:clock-circle-linear" class="text-xl"></iconify-icon>
-                                </div>
+                                    <iconify-icon icon="solar:clock-circle-linear" class="text-xl"></iconify-icon></div>
                                 <div>
                                     <div class="text-[10px] text-zinc-500 uppercase font-semibold tracking-wider">Time
                                     </div>
@@ -508,8 +488,7 @@
                                 class="flex items-center gap-4 p-4 rounded-xl bg-white/5 border border-white/10 backdrop-blur-sm">
                                 <div
                                     class="w-10 h-10 rounded-full bg-[#5de0e6]/10 flex items-center justify-center text-[#5de0e6] border border-[#5de0e6]/20 shrink-0">
-                                    <iconify-icon icon="solar:map-point-linear" class="text-xl"></iconify-icon>
-                                </div>
+                                    <iconify-icon icon="solar:map-point-linear" class="text-xl"></iconify-icon></div>
                                 <div>
                                     <div class="text-[10px] text-zinc-500 uppercase font-semibold tracking-wider">
                                         Location</div>
@@ -519,18 +498,13 @@
                         </div>
                     </div>
                 </div>
-
-                <!-- RIGHT COLUMN: Desktop Card (Hidden on Mobile) -->
+                <!-- RIGHT COLUMN -->
                 <div class="hidden lg:col-span-5 lg:block relative opacity-0 transform translate-y-10"
                     style="animation: fadeInUp 1s forwards 1s;">
-                    <!-- Glowing Backlight -->
                     <div class="absolute inset-0 bg-brand-gradient blur-[80px] opacity-20 rounded-full"></div>
-
                     <div
                         class="relative glass-panel p-1 rounded-3xl border border-[#5de0e6]/30 shadow-[0_0_80px_rgba(0,0,0,0.5)] overflow-hidden group hover:scale-[1.01] transition-transform duration-500">
                         <div class="bg-[#0a0a0a] rounded-[22px] h-full flex flex-col relative overflow-hidden">
-
-                            <!-- Image Banner -->
                             <div class="relative w-full h-48 overflow-hidden group">
                                 <div
                                     class="absolute inset-0 bg-gradient-to-b from-transparent via-[#0a0a0a]/10 to-[#0a0a0a] z-10">
@@ -541,75 +515,52 @@
                                 <div class="absolute top-6 right-6 z-20">
                                     <div
                                         class="px-3 py-1 rounded-full border border-green-500/30 bg-black/60 backdrop-blur-md text-green-400 text-[10px] font-semibold uppercase tracking-widest flex items-center gap-2 shadow-lg">
-                                        <span class="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse"></span>
-                                        Registration Open
-                                    </div>
+                                        <span
+                                            class="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse"></span>Registration
+                                        Open</div>
                                 </div>
                             </div>
-
-                            <!-- Card Content -->
                             <div class="p-8 pt-2 flex flex-col gap-6 relative z-10">
-                                <!-- Details Row -->
                                 <div
                                     class="flex justify-between items-center text-xs text-zinc-500 font-medium uppercase tracking-wider">
-                                    <span>7-A-Side</span>
-                                    <span>16+ Format</span>
-                                    <span>Dagenham</span>
-                                </div>
-
+                                    <span>7-A-Side</span><span>16+ Format</span><span>Dagenham</span></div>
                                 <div class="h-px w-full bg-gradient-to-r from-transparent via-white/10 to-transparent">
                                 </div>
-
-                                <!-- Massive Prize Section -->
                                 <div
                                     class="py-6 flex flex-col items-center justify-center text-center relative overflow-hidden rounded-2xl border border-white/5 bg-gradient-to-b from-white/5 to-transparent">
                                     <div
                                         class="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-[#5de0e6] to-transparent opacity-50">
                                     </div>
-
                                     <span
-                                        class="text-[#5de0e6] text-xs font-semibold uppercase tracking-widest mb-2 flex items-center gap-2">
-                                        <iconify-icon icon="solar:cup-star-bold"></iconify-icon> Cash Prize Pool
-                                    </span>
-                                    <div class="relative z-10">
-                                        <span
+                                        class="text-[#5de0e6] text-xs font-semibold uppercase tracking-widest mb-2 flex items-center gap-2"><iconify-icon
+                                            icon="solar:cup-star-bold"></iconify-icon> Cash Prize Pool</span>
+                                    <div class="relative z-10"><span
                                             class="text-7xl font-bold text-white tracking-tighter drop-shadow-[0_0_25px_rgba(93,224,230,0.4)]">£500</span>
                                     </div>
-                                    <div class="mt-2 flex gap-4 opacity-50">
-                                        <iconify-icon icon="logos:stripe" width="32" class="grayscale"></iconify-icon>
-                                        <iconify-icon icon="logos:mastercard" width="20"
-                                            class="grayscale"></iconify-icon>
-                                    </div>
+                                    <div class="mt-2 flex gap-4 opacity-50"><iconify-icon icon="logos:stripe" width="32"
+                                            class="grayscale"></iconify-icon><iconify-icon icon="logos:mastercard"
+                                            width="20" class="grayscale"></iconify-icon></div>
                                 </div>
-
-                                <!-- CTA Button - Updated to be less prominent -->
                                 <div class="text-center">
                                     <a href="https://buy.stripe.com/14AcN6cY4aCe3DgerUfnO00" target="_blank"
                                         class="w-full group relative overflow-hidden rounded-xl bg-[#5de0e6]/10 border border-[#5de0e6]/50 p-4 text-center transition-all hover:bg-[#5de0e6]/20 hover:shadow-[0_0_20px_rgba(93,224,230,0.2)] block">
                                         <div class="relative z-10 flex items-center justify-center gap-3 text-white">
                                             <span class="font-bold uppercase tracking-widest text-sm">Register
-                                                Team</span>
-                                            <span
-                                                class="bg-[#5de0e6] px-2 py-0.5 rounded text-xs font-semibold text-black">£10/pp</span>
-                                            <iconify-icon icon="solar:arrow-right-linear"
+                                                Team</span><span
+                                                class="bg-[#5de0e6] px-2 py-0.5 rounded text-xs font-semibold text-black">£10/pp</span><iconify-icon
+                                                icon="solar:arrow-right-linear"
                                                 class="text-lg transition-transform group-hover:translate-x-1"></iconify-icon>
                                         </div>
                                         <div
                                             class="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-[#5de0e6]/20 to-transparent transition-transform duration-1000 group-hover:animate-[shine_1.5s_infinite]">
                                         </div>
                                     </a>
-                                    <div class="mt-3 text-[10px] text-zinc-500">
-                                        Secure payment via Stripe
-                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
             </div>
-
-            <!-- Scroll Indicator -->
             <div
                 class="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-50 animate-bounce md:flex hidden">
                 <span class="text-[10px] uppercase tracking-widest text-zinc-500">Explore</span>
@@ -622,7 +573,6 @@
             class="relative min-h-screen py-24 md:py-32 px-4 z-10 bg-black/10 backdrop-blur-sm flex items-center justify-center border-t border-white/5">
             <div class="max-w-3xl w-full mx-auto glass-panel p-8 md:p-12 lg:p-16 relative overflow-hidden">
                 <div class="absolute -top-40 -right-40 w-80 h-80 bg-[#5de0e6]/10 rounded-full blur-[100px]"></div>
-
                 <div class="flex items-end justify-between mb-12 md:mb-16 border-b border-white/5 pb-8 relative z-10">
                     <h2 class="text-3xl md:text-5xl font-semibold tracking-tight text-white">THE MISSION</h2>
                     <div class="text-right hidden md:block">
@@ -630,35 +580,27 @@
                             Potential.</p>
                     </div>
                 </div>
-
                 <div class="grid lg:grid-cols-2 gap-12 relative z-10">
                     <div class="space-y-12">
                         <div class="group">
-                            <div class="flex items-center gap-3 mb-4">
-                                <span class="w-1.5 h-1.5 bg-red-500 rounded-full"></span>
-                                <span class="text-[10px] font-semibold text-red-500 uppercase tracking-widest">Current
-                                    State</span>
-                            </div>
+                            <div class="flex items-center gap-3 mb-4"><span
+                                    class="w-1.5 h-1.5 bg-red-500 rounded-full"></span><span
+                                    class="text-[10px] font-semibold text-red-500 uppercase tracking-widest">Current
+                                    State</span></div>
                             <h3 class="text-2xl font-medium text-white mb-3">Fragmented Ecosystem</h3>
-                            <p class="text-zinc-400 font-light leading-relaxed text-sm">
-                                The amateur world is scattered. Dozens of small tournaments operate in silos with no
-                                central system.
-                            </p>
+                            <p class="text-zinc-400 font-light leading-relaxed text-sm">The amateur world is scattered.
+                                Dozens of small tournaments operate in silos with no central system.</p>
                         </div>
                         <div class="group">
-                            <div class="flex items-center gap-3 mb-4">
-                                <span class="w-1.5 h-1.5 bg-[#5de0e6] rounded-full"></span>
-                                <span class="text-[10px] font-semibold text-[#5de0e6] uppercase tracking-widest">The
-                                    Future</span>
-                            </div>
+                            <div class="flex items-center gap-3 mb-4"><span
+                                    class="w-1.5 h-1.5 bg-[#5de0e6] rounded-full"></span><span
+                                    class="text-[10px] font-semibold text-[#5de0e6] uppercase tracking-widest">The
+                                    Future</span></div>
                             <h3 class="text-2xl font-medium text-white mb-3">Professional Stage</h3>
-                            <p class="text-zinc-400 font-light leading-relaxed text-sm">
-                                We treat grassroots players like pros. Production quality, stats, rewards, and a clear
-                                pathway.
-                            </p>
+                            <p class="text-zinc-400 font-light leading-relaxed text-sm">We treat grassroots players like
+                                pros. Production quality, stats, rewards, and a clear pathway.</p>
                         </div>
                     </div>
-
                     <div
                         class="relative min-h-[300px] md:min-h-[400px] bg-black/50 rounded-xl overflow-hidden border border-white/5 flex items-center justify-center">
                         <div
@@ -675,10 +617,9 @@
             </div>
         </section>
 
-        <!-- Anchor for Roadmap Link -->
         <div id="roadmap" class="absolute -mt-20"></div>
 
-        <!-- ROADMAP (DESKTOP: 3D SPIRAL) -->
+        <!-- ROADMAP (DESKTOP) -->
         <section id="roadmap-desktop" class="carousel-container z-20 hidden md:block">
             <div class="carousel-viewport bg-black/10">
                 <div class="absolute top-24 left-0 w-full text-center z-20 pointer-events-none">
@@ -686,14 +627,12 @@
                         <h2 class="text-xl md:text-2xl font-semibold text-white tracking-tight">ROADMAP</h2>
                     </div>
                 </div>
-
                 <div class="carousel-world" id="carouselWorld">
                     <div class="carousel-card glass-panel p-6 flex flex-col justify-center border-l-4 border-[#5de0e6]"
                         data-color="#5de0e6">
-                        <div class="flex justify-between items-start mb-4">
-                            <span class="text-[#5de0e6] text-[10px] font-semibold tracking-widest uppercase">Q2
-                                2026</span>
-                            <iconify-icon icon="solar:flag-bold" class="text-zinc-500"></iconify-icon>
+                        <div class="flex justify-between items-start mb-4"><span
+                                class="text-[#5de0e6] text-[10px] font-semibold tracking-widest uppercase">Q2
+                                2026</span><iconify-icon icon="solar:flag-bold" class="text-zinc-500"></iconify-icon>
                         </div>
                         <h3 class="text-lg font-medium text-white mb-2">The Setup</h3>
                         <p class="text-zinc-400 font-light text-xs leading-relaxed">Partnerships secured. AI algorithms
@@ -701,20 +640,19 @@
                     </div>
                     <div class="carousel-card glass-panel p-6 flex flex-col justify-center border-l-4 border-white"
                         data-color="#ffffff">
-                        <div class="flex justify-between items-start mb-4">
-                            <span class="text-white text-[10px] font-semibold tracking-widest uppercase">Q3 2026</span>
-                            <iconify-icon icon="solar:smartphone-bold" class="text-zinc-500"></iconify-icon>
-                        </div>
+                        <div class="flex justify-between items-start mb-4"><span
+                                class="text-white text-[10px] font-semibold tracking-widest uppercase">Q3
+                                2026</span><iconify-icon icon="solar:smartphone-bold"
+                                class="text-zinc-500"></iconify-icon></div>
                         <h3 class="text-lg font-medium text-white mb-2">App Development</h3>
                         <p class="text-zinc-400 font-light text-xs leading-relaxed">MVP build. Players create profiles.
                         </p>
                     </div>
                     <div class="carousel-card glass-panel p-6 flex flex-col justify-center border-l-4 border-[#004aad] bg-zinc-900"
                         data-color="#004aad">
-                        <div class="flex justify-between items-start mb-4">
-                            <span class="text-[#004aad] text-[10px] font-semibold tracking-widest uppercase">Late
-                                2026</span>
-                            <iconify-icon icon="solar:rocket-bold" class="text-white"></iconify-icon>
+                        <div class="flex justify-between items-start mb-4"><span
+                                class="text-[#004aad] text-[10px] font-semibold tracking-widest uppercase">Late
+                                2026</span><iconify-icon icon="solar:rocket-bold" class="text-white"></iconify-icon>
                         </div>
                         <h3 class="text-lg font-medium text-white mb-2">UK Launch</h3>
                         <p class="text-zinc-400 font-light text-xs leading-relaxed">Official launch. Prize pools
@@ -722,10 +660,9 @@
                     </div>
                     <div class="carousel-card glass-panel p-6 flex flex-col justify-center border-l-4 border-zinc-400"
                         data-color="#a1a1aa">
-                        <div class="flex justify-between items-start mb-4">
-                            <span class="text-zinc-400 text-[10px] font-semibold tracking-widest uppercase">Q1
-                                2027</span>
-                            <iconify-icon icon="solar:map-bold" class="text-zinc-500"></iconify-icon>
+                        <div class="flex justify-between items-start mb-4"><span
+                                class="text-zinc-400 text-[10px] font-semibold tracking-widest uppercase">Q1
+                                2027</span><iconify-icon icon="solar:map-bold" class="text-zinc-500"></iconify-icon>
                         </div>
                         <h3 class="text-lg font-medium text-white mb-2">Expansion</h3>
                         <p class="text-zinc-400 font-light text-xs leading-relaxed">7-a-side leagues with
@@ -735,18 +672,14 @@
             </div>
         </section>
 
-        <!-- ROADMAP (MOBILE: VERTICAL TIMELINE) -->
+        <!-- ROADMAP (MOBILE) -->
         <section id="roadmap-mobile"
             class="md:hidden py-24 px-4 z-20 relative bg-black/10 backdrop-blur-sm border-t border-white/5">
             <div class="text-center mb-12">
                 <h2 class="text-3xl font-semibold text-white tracking-tight">ROADMAP</h2>
             </div>
-
             <div class="relative max-w-sm mx-auto space-y-6">
-                <!-- Vertical Line -->
                 <div class="absolute left-4 top-4 bottom-4 w-px bg-white/10 z-0"></div>
-
-                <!-- Card 1 -->
                 <div class="relative pl-12 roadmap-item">
                     <div
                         class="absolute left-[13px] top-5 w-2 h-2 rounded-full bg-[#5de0e6] z-10 shadow-[0_0_10px_#5de0e6]">
@@ -759,8 +692,6 @@
                             finalized.</p>
                     </div>
                 </div>
-
-                <!-- Card 2 -->
                 <div class="relative pl-12 roadmap-item">
                     <div class="absolute left-[13px] top-5 w-2 h-2 rounded-full bg-white z-10"></div>
                     <div class="glass-panel p-6 border-l-2 border-white">
@@ -771,8 +702,6 @@
                         </p>
                     </div>
                 </div>
-
-                <!-- Card 3 -->
                 <div class="relative pl-12 roadmap-item">
                     <div class="absolute left-[13px] top-5 w-2 h-2 rounded-full bg-[#004aad] z-10"></div>
                     <div class="glass-panel p-6 border-l-2 border-[#004aad] bg-zinc-900/50">
@@ -783,47 +712,27 @@
                             increase.</p>
                     </div>
                 </div>
-
-                <!-- Card 4 -->
-                <div class="relative pl-12 roadmap-item">
-                    <div class="absolute left-[13px] top-5 w-2 h-2 rounded-full bg-zinc-400 z-10"></div>
-                    <div class="glass-panel p-6 border-l-2 border-zinc-400">
-                        <span class="text-zinc-400 text-[10px] font-semibold tracking-widest uppercase block mb-2">Q1
-                            2027</span>
-                        <h3 class="text-lg font-medium text-white mb-2">Expansion</h3>
-                        <p class="text-zinc-400 font-light text-xs leading-relaxed">7-a-side leagues with
-                            promotion/relegation.</p>
-                    </div>
-                </div>
             </div>
         </section>
 
-        <!-- Desktop Spacer -->
-        <div class="hidden md:block h-[10vh]"></div>
-
-        <!-- Contact Section -->
+        <!-- CONTACT -->
         <section id="contact" class="py-24 md:py-32 px-4 relative z-10 bg-black/5 backdrop-blur-sm">
             <div
                 class="max-w-[1100px] mx-auto glass-panel p-8 md:p-16 border-t border-[#5de0e6]/10 shadow-[0_0_50px_rgba(0,0,0,0.4)]">
                 <div class="grid md:grid-cols-2 gap-12">
-
-                    <!-- Info -->
                     <div class="flex flex-col h-full">
                         <div class="mb-8">
                             <h2 class="text-3xl font-semibold text-white tracking-tight mb-4">GET IN TOUCH</h2>
-                            <p class="text-zinc-400 font-light text-sm leading-relaxed">
-                                Reach out to our leadership team for inquiries.
-                            </p>
+                            <p class="text-zinc-400 font-light text-sm leading-relaxed">Reach out to our leadership team
+                                for inquiries.</p>
                         </div>
-
                         <div class="space-y-4">
                             <div
                                 class="p-5 rounded-2xl bg-white/5 border border-white/10 hover:border-[#5de0e6]/50 transition-colors group">
                                 <div class="flex items-center gap-3 mb-3">
                                     <div
                                         class="w-8 h-8 rounded-full bg-[#5de0e6]/10 flex items-center justify-center text-[#5de0e6] text-sm">
-                                        <iconify-icon icon="solar:user-bold"></iconify-icon>
-                                    </div>
+                                        <iconify-icon icon="solar:user-bold"></iconify-icon></div>
                                     <div>
                                         <p class="text-[10px] text-[#5de0e6] font-semibold uppercase tracking-widest">
                                             Customer Service Lead</p>
@@ -832,87 +741,49 @@
                                 </div>
                                 <div class="space-y-2 pl-11">
                                     <a href="mailto:jason.o@fixuparena.app"
-                                        class="flex items-center gap-2 text-sm text-zinc-400 hover:text-white transition-colors">
-                                        <iconify-icon icon="solar:letter-linear" class="text-base"></iconify-icon>
-                                        jason.o@fixuparena.app
-                                    </a>
+                                        class="flex items-center gap-2 text-sm text-zinc-400 hover:text-white transition-colors"><iconify-icon
+                                            icon="solar:letter-linear" class="text-base"></iconify-icon>
+                                        jason.o@fixuparena.app</a>
                                     <a href="tel:+447398670783"
-                                        class="flex items-center gap-2 text-sm text-zinc-400 hover:text-white transition-colors">
-                                        <iconify-icon icon="solar:phone-linear" class="text-base"></iconify-icon> +44
-                                        7398 670783
-                                    </a>
-                                </div>
-                            </div>
-
-                            <div
-                                class="p-5 rounded-2xl bg-white/5 border border-white/10 hover:border-[#5de0e6]/50 transition-colors group">
-                                <div class="flex items-center gap-3 mb-3">
-                                    <div
-                                        class="w-8 h-8 rounded-full bg-[#004aad]/20 flex items-center justify-center text-[#004aad] text-sm">
-                                        <iconify-icon icon="solar:crown-star-bold"></iconify-icon>
-                                    </div>
-                                    <div>
-                                        <p class="text-[10px] text-[#004aad] font-semibold uppercase tracking-widest">
-                                            CEO</p>
-                                        <p class="text-white font-medium leading-none">Hassan</p>
-                                    </div>
-                                </div>
-                                <div class="space-y-2 pl-11">
-                                    <a href="mailto:hassan@fixuparena.app"
-                                        class="flex items-center gap-2 text-sm text-zinc-400 hover:text-white transition-colors">
-                                        <iconify-icon icon="solar:letter-linear" class="text-base"></iconify-icon>
-                                        hassan@fixuparena.app
-                                    </a>
-                                    <a href="tel:+447852339110"
-                                        class="flex items-center gap-2 text-sm text-zinc-400 hover:text-white transition-colors">
-                                        <iconify-icon icon="solar:phone-linear" class="text-base"></iconify-icon> +44
-                                        7852 339110
-                                    </a>
+                                        class="flex items-center gap-2 text-sm text-zinc-400 hover:text-white transition-colors"><iconify-icon
+                                            icon="solar:phone-linear" class="text-base"></iconify-icon> +44 7398
+                                        670783</a>
                                 </div>
                             </div>
                         </div>
                     </div>
-
-                    <!-- Form -->
                     <form class="space-y-4 flex flex-col justify-end"
                         onsubmit="event.preventDefault(); alert('Message Sent!');">
                         <h3 class="text-sm font-semibold text-white uppercase tracking-widest mb-2">Quick Message</h3>
-                        <div>
-                            <input type="text"
+                        <div><input type="text"
                                 class="w-full bg-black/40 border border-white/10 rounded-lg px-4 py-3 text-white text-sm focus:outline-none focus:border-[#5de0e6] transition-colors"
-                                placeholder="Name">
-                        </div>
-                        <div class="">
-                            <input type="email"
+                                placeholder="Name"></div>
+                        <div><input type="email"
                                 class="w-full bg-black/40 border border-white/10 rounded-lg px-4 py-3 text-white text-sm focus:outline-none focus:border-[#5de0e6] transition-colors"
-                                placeholder="Email">
-                        </div>
-                        <div class="">
-                            <textarea rows="4"
+                                placeholder="Email"></div>
+                        <div><textarea rows="4"
                                 class="w-full bg-black/40 border border-white/10 rounded-lg px-4 py-3 text-white text-sm focus:outline-none focus:border-[#5de0e6] transition-colors"
-                                placeholder="Message"></textarea>
-                        </div>
-                        <!-- Updated Contact Button: Brand Cyan -->
+                                placeholder="Message"></textarea></div>
                         <button type="submit"
                             class="w-full bg-[#5de0e6] text-black font-semibold uppercase tracking-widest text-xs py-4 rounded-lg hover:bg-[#4bcace] transition-colors hover-trigger">Send</button>
                     </form>
-
                 </div>
             </div>
         </section>
     </main>
 
-    <!-- PRIVACY POLICY VIEW -->
+    <!-- VIEW: PRIVACY POLICY -->
     <div id="privacy-view" class="page-hidden pt-32 pb-20 px-6 max-w-4xl mx-auto min-h-screen">
         <div class="mb-8">
             <button onclick="navigateTo('home')"
-                class="text-zinc-500 hover:text-white flex items-center gap-2 text-sm font-medium transition-colors mb-4">
+                class="text-zinc-500 hover:text-white flex items-center gap-2 text-sm font-medium transition-colors mb-4 border border-white/10 rounded-full px-4 py-2 hover:bg-white/5">
                 <iconify-icon icon="solar:arrow-left-linear"></iconify-icon> Back to Home
             </button>
         </div>
-        <div class="legal-content">
+        <div class="legal-content glass-panel p-8 md:p-12">
             <h1 class="text-glow">Privacy Policy</h1>
-            <p class="text-sm uppercase tracking-widest text-zinc-500 mb-8">Last Updated: October 2025</p>
+            <p class="text-sm uppercase tracking-widest text-zinc-500 mb-8 pb-4 border-b border-white/10">Last Updated:
+                October 2025</p>
 
             <p>Welcome to FixUp Arena. We are committed to protecting your personal data and respecting your privacy.
                 This policy explains how we collect, use, and safeguard your information when you register for our
@@ -950,22 +821,23 @@
                 over the Internet is 100% secure, and we cannot guarantee absolute security.</p>
 
             <h2>5. Contact Us</h2>
-            <p>If you have questions about this policy, please contact us at <a href="mailto:privacy@fixuparena.app"
-                    class="text-[#5de0e6] hover:underline">privacy@fixuparena.app</a>.</p>
+            <p>If you have questions about this policy, please contact us at <a
+                    href="mailto:support@fixuparena.app">support@fixuparena.app</a>.</p>
         </div>
     </div>
 
-    <!-- TERMS OF SERVICE VIEW -->
-    <div id="terms-view" class="page-hidden pt-32 pb-20 px-6 max-w-4xl mx-auto min-h-screen">
+    <!-- VIEW: TERMS OF SERVICE -->
+    <div id="tos-view" class="page-hidden pt-32 pb-20 px-6 max-w-4xl mx-auto min-h-screen">
         <div class="mb-8">
             <button onclick="navigateTo('home')"
-                class="text-zinc-500 hover:text-white flex items-center gap-2 text-sm font-medium transition-colors mb-4">
+                class="text-zinc-500 hover:text-white flex items-center gap-2 text-sm font-medium transition-colors mb-4 border border-white/10 rounded-full px-4 py-2 hover:bg-white/5">
                 <iconify-icon icon="solar:arrow-left-linear"></iconify-icon> Back to Home
             </button>
         </div>
-        <div class="legal-content">
+        <div class="legal-content glass-panel p-8 md:p-12">
             <h1 class="text-glow">Terms of Service</h1>
-            <p class="text-sm uppercase tracking-widest text-zinc-500 mb-8">Effective Date: October 2025</p>
+            <p class="text-sm uppercase tracking-widest text-zinc-500 mb-8 pb-4 border-b border-white/10">Effective
+                Date: October 2025</p>
 
             <p>By registering for a tournament or using the FixUp Arena platform, you agree to be bound by these Terms
                 of Service.</p>
@@ -1003,12 +875,87 @@
             <p>By participating, you consent to being photographed or filmed during the tournament. FixUp Arena retains
                 the right to use this media for promotional purposes on social media and our website.</p>
 
-            <h2>5. Governing Law</h2>
-            <p>These terms are governed by the laws of the United Kingdom.</p>
+            <h2>5. Contact & Support</h2>
+            <p>For any disputes or queries regarding these terms, please contact <a
+                    href="mailto:support@fixuparena.app">support@fixuparena.app</a>.</p>
         </div>
     </div>
 
-    <!-- Footer -->
+    <!-- VIEW: SUPPORT / FAQ -->
+    <div id="support-view" class="page-hidden pt-32 pb-20 px-6 max-w-4xl mx-auto min-h-screen">
+        <div class="mb-8">
+            <button onclick="navigateTo('home')"
+                class="text-zinc-500 hover:text-white flex items-center gap-2 text-sm font-medium transition-colors mb-4 border border-white/10 rounded-full px-4 py-2 hover:bg-white/5">
+                <iconify-icon icon="solar:arrow-left-linear"></iconify-icon> Back to Home
+            </button>
+        </div>
+
+        <div class="text-center mb-12">
+            <h1 class="text-4xl md:text-5xl font-semibold text-white tracking-tight mb-4">Support Center</h1>
+            <p class="text-zinc-400">Everything you need to know about match day.</p>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-6 mb-12">
+            <!-- FAQ Item -->
+            <div class="glass-panel p-6 border border-white/5 hover:border-[#5de0e6]/30 transition-colors">
+                <h3 class="text-lg font-medium text-white mb-3 flex items-start gap-3">
+                    <iconify-icon icon="solar:question-circle-linear" class="text-[#5de0e6] mt-1"></iconify-icon>
+                    How do I register a team?
+                </h3>
+                <p class="text-zinc-400 text-sm leading-relaxed">
+                    Registration is handled via Stripe. Click the "Register Team" button on the homepage to pay the
+                    entry fee. Once paid, you'll receive an email to submit your roster.
+                </p>
+            </div>
+            <!-- FAQ Item -->
+            <div class="glass-panel p-6 border border-white/5 hover:border-[#5de0e6]/30 transition-colors">
+                <h3 class="text-lg font-medium text-white mb-3 flex items-start gap-3">
+                    <iconify-icon icon="solar:users-group-rounded-linear" class="text-[#5de0e6] mt-1"></iconify-icon>
+                    What is the squad size?
+                </h3>
+                <p class="text-zinc-400 text-sm leading-relaxed">
+                    The tournament is 7-a-side. You can register up to 10 players per team (7 starters + 3 subs).
+                    Rolling substitutions are allowed throughout the game.
+                </p>
+            </div>
+            <!-- FAQ Item -->
+            <div class="glass-panel p-6 border border-white/5 hover:border-[#5de0e6]/30 transition-colors">
+                <h3 class="text-lg font-medium text-white mb-3 flex items-start gap-3">
+                    <iconify-icon icon="solar:cloud-rain-linear" class="text-[#5de0e6] mt-1"></iconify-icon>
+                    What happens if it rains?
+                </h3>
+                <p class="text-zinc-400 text-sm leading-relaxed">
+                    We play on high-quality 3G pitches at Castle Green, which are all-weather surfaces. The tournament
+                    proceeds rain or shine unless conditions are deemed dangerous by officials.
+                </p>
+            </div>
+            <!-- FAQ Item -->
+            <div class="glass-panel p-6 border border-white/5 hover:border-[#5de0e6]/30 transition-colors">
+                <h3 class="text-lg font-medium text-white mb-3 flex items-start gap-3">
+                    <iconify-icon icon="solar:card-linear" class="text-[#5de0e6] mt-1"></iconify-icon>
+                    What is the refund policy?
+                </h3>
+                <p class="text-zinc-400 text-sm leading-relaxed">
+                    Entry fees are non-refundable to ensure commitment and fixture stability. However, if FixUp Arena
+                    cancels the event, 100% of fees will be refunded immediately.
+                </p>
+            </div>
+        </div>
+
+        <!-- Direct Contact -->
+        <div
+            class="glass-panel p-8 text-center border-t border-[#5de0e6]/20 bg-gradient-to-b from-white/5 to-transparent">
+            <h3 class="text-xl font-medium text-white mb-2">Still have questions?</h3>
+            <p class="text-zinc-400 text-sm mb-6">Our team is available to assist you directly.</p>
+            <a href="mailto:support@fixuparena.app"
+                class="inline-flex items-center gap-2 bg-white text-black px-6 py-3 rounded-lg text-sm font-semibold hover:bg-zinc-200 transition-colors">
+                <iconify-icon icon="solar:letter-bold"></iconify-icon>
+                support@fixuparena.app
+            </a>
+        </div>
+    </div>
+
+    <!-- Global Footer -->
     <footer class="bg-black pt-16 pb-12 px-6 border-t border-white/10 relative z-20">
         <div class="max-w-[1400px] mx-auto">
             <div class="flex flex-col md:flex-row justify-between items-start gap-12 mb-12">
@@ -1032,12 +979,15 @@
                         </ul>
                     </div>
                     <div>
-                        <h4 class="text-white text-[10px] font-semibold uppercase tracking-widest mb-4">Legal</h4>
+                        <h4 class="text-white text-[10px] font-semibold uppercase tracking-widest mb-4">Legal & Support
+                        </h4>
                         <ul class="space-y-2 text-xs text-zinc-500">
                             <li><a href="javascript:void(0)" onclick="navigateTo('privacy')"
                                     class="hover:text-[#5de0e6] transition-colors">Privacy Policy</a></li>
-                            <li><a href="javascript:void(0)" onclick="navigateTo('terms')"
+                            <li><a href="javascript:void(0)" onclick="navigateTo('tos')"
                                     class="hover:text-[#5de0e6] transition-colors">Terms of Service</a></li>
+                            <li><a href="javascript:void(0)" onclick="navigateTo('support')"
+                                    class="hover:text-[#5de0e6] transition-colors">Support / FAQ</a></li>
                         </ul>
                     </div>
                 </div>
@@ -1058,35 +1008,48 @@
     <script>
         // --- NAVIGATION ROUTING (SPA) ---
         function navigateTo(pageId) {
-            // Hide all views
-            document.getElementById('home-view').classList.add('page-hidden');
-            document.getElementById('home-view').classList.remove('page-visible');
-            document.getElementById('privacy-view').classList.add('page-hidden');
-            document.getElementById('privacy-view').classList.remove('page-visible');
-            document.getElementById('terms-view').classList.add('page-hidden');
-            document.getElementById('terms-view').classList.remove('page-visible');
+            const views = ['home', 'privacy', 'tos', 'support'];
 
-            // Show selected view
+            // 1. Hide all views
+            views.forEach(view => {
+                const el = document.getElementById(view + '-view');
+                if (el) {
+                    el.classList.add('page-hidden');
+                    el.classList.remove('page-visible');
+                }
+            });
+
+            // 2. Show target view
             const selectedView = document.getElementById(pageId + '-view');
             if (selectedView) {
                 selectedView.classList.remove('page-hidden');
                 selectedView.classList.add('page-visible');
             }
 
-            // Scroll to top
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            // 3. Scroll to top
+            window.scrollTo({ top: 0, behavior: 'instant' }); // Use instant for crisp page change
 
-            // Manage WebGL Background Visibility
+            // 4. Background Management (ThreeJS)
             const webglCanvas = document.getElementById('webgl');
             if (pageId === 'home') {
                 gsap.to(webglCanvas, { opacity: 1, duration: 0.5 });
-                // Re-enable ScrollTrigger for homepage
-                ScrollTrigger.refresh();
+                ScrollTrigger.refresh(); // Re-calc triggers
             } else {
-                // Dim background for readability on legal pages
-                gsap.to(webglCanvas, { opacity: 0.15, duration: 0.5 });
+                // Dim background significantly for readability on content pages
+                gsap.to(webglCanvas, { opacity: 0.1, duration: 0.5 });
             }
+
+            // 5. Update URL Hash (optional, simulating routes)
+            if (pageId === 'home') history.replaceState(null, null, ' ');
+            else history.replaceState(null, null, '#' + pageId);
         }
+
+        // Handle browser back/forward buttons
+        window.addEventListener('popstate', () => {
+            const hash = location.hash.replace('#', '');
+            if (hash) navigateTo(hash);
+            else navigateTo('home');
+        });
 
         // --- MOBILE MENU ---
         const mobileMenu = document.getElementById('mobile-menu');
@@ -1096,13 +1059,13 @@
         function openMenu() {
             mobileMenu.classList.remove('menu-hidden');
             mobileMenu.classList.add('menu-visible');
-            document.body.style.overflow = 'hidden'; // Lock scroll
+            document.body.style.overflow = 'hidden';
         }
 
         function closeMenu() {
             mobileMenu.classList.remove('menu-visible');
             mobileMenu.classList.add('menu-hidden');
-            document.body.style.overflow = ''; // Unlock scroll
+            document.body.style.overflow = '';
         }
 
         if (openMenuBtn) openMenuBtn.addEventListener('click', openMenu);
@@ -1120,10 +1083,13 @@
             cursor.style.left = e.clientX + 'px';
             cursor.style.top = e.clientY + 'px';
         });
-        document.querySelectorAll('.hover-trigger, a, button, input, summary').forEach(el => {
-            el.addEventListener('mouseenter', () => cursor.classList.add('hovered'));
-            el.addEventListener('mouseleave', () => cursor.classList.remove('hovered'));
-        });
+        const addHoverListeners = () => {
+            document.querySelectorAll('.hover-trigger, a, button, input, summary').forEach(el => {
+                el.addEventListener('mouseenter', () => cursor.classList.add('hovered'));
+                el.addEventListener('mouseleave', () => cursor.classList.remove('hovered'));
+            });
+        };
+        addHoverListeners(); // Initial call
 
         // --- THREE.JS ENGINE ---
         const canvas = document.querySelector('#webgl');
@@ -1218,7 +1184,6 @@
         }
 
         // --- GSAP ---
-        // Configure ScrollTrigger to avoid resizing issues on mobile
         ScrollTrigger.config({ ignoreMobileResize: true });
 
         const tl = gsap.timeline();
@@ -1231,9 +1196,7 @@
         gsap.timeline({ scrollTrigger: { trigger: "header", start: "top top", endTrigger: "#problem", end: "bottom bottom", scrub: 2 } })
             .to(camera.position, { x: 0, y: 100, z: 280, ease: "power1.inOut" });
 
-        // RESPONSIVE ROADMAP ANIMATIONS
         ScrollTrigger.matchMedia({
-            // Desktop: Complex Spiral Animation - Only apply strictly above 768px
             "(min-width: 768px)": function () {
                 const carouselCards = document.querySelectorAll('.carousel-card');
                 if (carouselCards.length > 0) {
@@ -1244,7 +1207,6 @@
                     carouselTl.to('#carouselWorld', { y: - (carouselCards.length * 500) + 200, rotationY: - (carouselCards.length * 50), ease: "none", duration: 10 }, 0)
                         .to(helixGroup.rotation, { y: Math.PI * 2, ease: "none", duration: 10 }, 0);
 
-                    // Visibility toggle for spiral
                     ScrollTrigger.create({
                         trigger: "#roadmap-desktop", start: "top center", end: "bottom center",
                         onEnter: () => { helixGroup.visible = true; stadiumGroup.visible = false; },
@@ -1260,8 +1222,6 @@
                     });
                 }
             },
-
-            // Mobile: Simple Fade In
             "(max-width: 767px)": function () {
                 const items = document.querySelectorAll('.roadmap-item');
                 gsap.from(items, {
@@ -1281,14 +1241,18 @@
         `;
         document.head.appendChild(styleSheet);
 
-        // Window Resize Handler
         window.addEventListener('resize', () => {
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
             renderer.setSize(window.innerWidth, window.innerHeight);
         });
-    </script>
 
+        // Check initial hash
+        const initialHash = window.location.hash.replace('#', '');
+        if (initialHash && ['privacy', 'tos', 'support'].includes(initialHash)) {
+            navigateTo(initialHash);
+        }
+    </script>
 </body>
 
 </html>
