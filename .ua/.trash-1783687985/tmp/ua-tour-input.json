@@ -1,0 +1,21 @@
+{
+  "nodes": [
+    {"id":"document:CLAUDE.md","name":"CLAUDE.md","filePath":"CLAUDE.md","summary":"Guidance document for Claude Code explaining that FixUp Arena is a single static index.html landing page with no build step, describing its view-switching, 3D background, and scroll-animation architecture, and directing questions to the graphify knowledge graph first.","type":"document"},
+    {"id":"file:index.html","name":"index.html","filePath":"index.html","summary":"The entire FixUp Arena marketing/landing page — a single static HTML file combining Tailwind-styled markup for four faux 'views' (home, privacy, terms, support), a Three.js particle background, GSAP/ScrollTrigger scroll animations, and vanilla JS hash-based client-side navigation, with Stripe Payment Links for registration.","type":"file"},
+    {"id":"function:index.html:navigateTo","name":"navigateTo","filePath":"index.html","summary":"Hash-based client-side view navigation function that switches between the faux home/privacy/terms/support views.","type":"function"},
+    {"id":"function:index.html:openMenu","name":"openMenu","filePath":"index.html","summary":"Opens the mobile navigation menu.","type":"function"},
+    {"id":"function:index.html:closeMenu","name":"closeMenu","filePath":"index.html","summary":"Closes the mobile navigation menu.","type":"function"},
+    {"id":"function:index.html:tick","name":"tick","filePath":"index.html","summary":"Animation loop tick function driving the Three.js particle background render loop.","type":"function"}
+  ],
+  "edges": [
+    {"source":"file:index.html","target":"function:index.html:navigateTo","type":"contains"},
+    {"source":"file:index.html","target":"function:index.html:openMenu","type":"contains"},
+    {"source":"file:index.html","target":"function:index.html:closeMenu","type":"contains"},
+    {"source":"file:index.html","target":"function:index.html:tick","type":"contains"},
+    {"source":"document:CLAUDE.md","target":"file:index.html","type":"documents"}
+  ],
+  "layers": [
+    {"id":"layer:ui","name":"Presentation Layer","description":"The single-page marketing site itself — index.html's Tailwind markup, Three.js particle background, GSAP/ScrollTrigger animations, and hash-based view navigation for the FixUp Arena landing page."},
+    {"id":"layer:documentation","name":"Documentation","description":"Project guidance for AI assistants describing the site's no-build, single-file architecture and pointing to the graphify knowledge graph for deeper questions."}
+  ]
+}

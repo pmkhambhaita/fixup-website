@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "algorithm": "louvain",
+  "totalFiles": 2,
+  "totalBatches": 1,
+  "exportsByPath": {},
+  "batches": [
+    {
+      "batchIndex": 1,
+      "files": [
+        {
+          "path": "CLAUDE.md",
+          "language": "markdown",
+          "sizeLines": 53,
+          "fileCategory": "docs"
+        },
+        {
+          "path": "index.html",
+          "language": "html",
+          "sizeLines": 1323,
+          "fileCategory": "markup"
+        }
+      ],
+      "batchImportData": {
+        "CLAUDE.md": [],
+        "index.html": []
+      },
+      "neighborMap": {}
+    }
+  ]
+}

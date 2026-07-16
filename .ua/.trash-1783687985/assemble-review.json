@@ -1,0 +1,14 @@
+{
+  "fixedSectionOk": true,
+  "nodesRecovered": 0,
+  "edgesRestored": 0,
+  "crossBatchEdgesAdded": 0,
+  "typesRemapped": 0,
+  "complexityRemapped": 0,
+  "notes": [
+    "Single-batch, single-file project (index.html + CLAUDE.md). Input and output node/edge counts matched exactly (6 nodes, 5 edges) — no mechanical fixes were even needed, let alone unresolved issues.",
+    "All node IDs already follow the <type>:<filePath>[:<name>] convention; no unknown types or complexity values present.",
+    "Import map entries for both files are empty arrays (CDN-only dependencies, no local ES module imports), so the 0 recovered imports edges is expected and correct, not a gap.",
+    "Graph structure is sane: file:index.html contains 4 function nodes via 'contains' edges, and document:CLAUDE.md documents file:index.html via a 'documents' edge."
+  ]
+}

@@ -1,0 +1,100 @@
+{
+  "nodes": [
+    {
+      "id": "document:CLAUDE.md",
+      "type": "document",
+      "name": "CLAUDE.md",
+      "filePath": "CLAUDE.md",
+      "summary": "Guidance document for Claude Code explaining that FixUp Arena is a single static index.html landing page with no build step, describing its view-switching, 3D background, and scroll-animation architecture, and directing questions to the graphify knowledge graph first.",
+      "tags": ["documentation", "entry-point", "architecture-notes", "ai-instructions"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:index.html",
+      "type": "file",
+      "name": "index.html",
+      "filePath": "index.html",
+      "summary": "The entire FixUp Arena marketing/landing page — a single static HTML file combining Tailwind-styled markup for four faux 'views' (home, privacy, terms, support), a Three.js particle background, GSAP/ScrollTrigger scroll animations, and vanilla JS hash-based client-side navigation, with Stripe Payment Links for registration.",
+      "tags": ["entry-point", "single-page-app", "landing-page", "animation", "no-build"],
+      "complexity": "complex",
+      "languageNotes": "All HTML, CSS, and JavaScript live in one file with no bundler; dependencies (Tailwind, Three.js, GSAP, ScrollTrigger, Iconify, fonts) are loaded from CDNs directly in <head>. JS uses history.pushState/popstate plus location.hash to fake multi-page routing within a single DOM."
+    },
+    {
+      "id": "function:index.html:navigateTo",
+      "type": "function",
+      "name": "navigateTo",
+      "filePath": "index.html",
+      "lineRange": [1075, 1112],
+      "summary": "Toggles page-visible/page-hidden classes on the four view containers (#home-view, #privacy-view, #tos-view, #support-view) to fake page navigation, updates browser history state and the URL hash, and re-runs ScrollTrigger.refresh() so scroll animations recalibrate for the newly shown view.",
+      "tags": ["routing", "spa-navigation", "dom-manipulation"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:index.html:openMenu",
+      "type": "function",
+      "name": "openMenu",
+      "filePath": "index.html",
+      "lineRange": [1124, 1129],
+      "summary": "Opens the mobile navigation menu overlay, wired to the menu button's click handler.",
+      "tags": ["event-handler", "mobile-nav", "ui"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:index.html:closeMenu",
+      "type": "function",
+      "name": "closeMenu",
+      "filePath": "index.html",
+      "lineRange": [1130, 1135],
+      "summary": "Closes the mobile navigation menu overlay, wired to the close button's click handler.",
+      "tags": ["event-handler", "mobile-nav", "ui"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:index.html:tick",
+      "type": "function",
+      "name": "tick",
+      "filePath": "index.html",
+      "lineRange": [1242, 1251],
+      "summary": "Per-frame render loop callback that animates and redraws the Three.js particle scene (stadium crowd and helix) behind the page content.",
+      "tags": ["animation", "three-js", "render-loop"],
+      "complexity": "moderate"
+    }
+  ],
+  "edges": [
+    {
+      "source": "file:index.html",
+      "target": "function:index.html:navigateTo",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:index.html",
+      "target": "function:index.html:openMenu",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:index.html",
+      "target": "function:index.html:closeMenu",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:index.html",
+      "target": "function:index.html:tick",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "document:CLAUDE.md",
+      "target": "file:index.html",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    }
+  ]
+}

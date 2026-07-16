@@ -1,0 +1,31 @@
+{
+  "scriptCompleted": true,
+  "files": [
+    {
+      "path": "CLAUDE.md",
+      "language": "markdown",
+      "sizeLines": 53,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "index.html",
+      "language": "html",
+      "sizeLines": 1323,
+      "fileCategory": "markup"
+    }
+  ],
+  "totalFiles": 2,
+  "filteredByIgnore": 12,
+  "estimatedComplexity": "small",
+  "stats": {
+    "filesScanned": 2,
+    "byCategory": {
+      "docs": 1,
+      "markup": 1
+    },
+    "byLanguage": {
+      "markdown": 1,
+      "html": 1
+    }
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "name": "fixup_website",
+  "description": "No description available",
+  "languages": [
+    "html",
+    "markdown"
+  ],
+  "frameworks": [],
+  "files": [
+    {
+      "path": "CLAUDE.md",
+      "language": "markdown",
+      "sizeLines": 53,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "index.html",
+      "language": "html",
+      "sizeLines": 1323,
+      "fileCategory": "markup"
+    }
+  ],
+  "totalFiles": 2,
+  "filteredByIgnore": 12,
+  "estimatedComplexity": "small",
+  "importMap": {
+    "CLAUDE.md": [],
+    "index.html": []
+  }
+}

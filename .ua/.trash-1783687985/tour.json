@@ -1,0 +1,35 @@
+[
+  {
+    "order": 1,
+    "title": "Project Guidance & Architecture Overview",
+    "description": "Start with CLAUDE.md, the project's guidance document for AI assistants. It explains that FixUp Arena is a single static index.html landing page with no build step at all — no bundler, no framework, no package.json — and previews the three moving parts you'll explore next: hash-based view switching, a Three.js particle background, and GSAP/ScrollTrigger scroll animations.",
+    "nodeIds": ["document:CLAUDE.md"]
+  },
+  {
+    "order": 2,
+    "title": "The Entire Site: index.html",
+    "description": "index.html is the whole application — every view, style, and script lives in this one file. It combines Tailwind-styled markup for four faux 'views' (home, privacy, terms, support), a Three.js particle background, GSAP/ScrollTrigger scroll animations, and vanilla JS hash-based navigation, with Stripe Payment Links handling registration. Because there's no build tooling, what you read here is exactly what ships to the browser.",
+    "nodeIds": ["file:index.html"],
+    "languageLesson": "Single-file static sites trade modularity for zero build complexity: HTML, CSS (via Tailwind's CDN/utility classes), and JS all live together, so the entire page can be understood by scrolling one file top to bottom."
+  },
+  {
+    "order": 3,
+    "title": "Faking Multiple Pages: navigateTo",
+    "description": "Since there's no server-side routing or framework router, navigateTo() is what makes this feel like a multi-page site. It reads the URL hash and toggles which 'view' section (home, privacy, terms, support) is visible, giving the illusion of separate pages while staying a single HTML document. This is the core navigation mechanism tying together everything else in the file.",
+    "nodeIds": ["function:index.html:navigateTo"],
+    "languageLesson": "Hash-based routing (#privacy, #terms) works without any server configuration because the hash never triggers a page reload — JavaScript just listens for hashchange and swaps visible DOM sections."
+  },
+  {
+    "order": 4,
+    "title": "Mobile Navigation: openMenu / closeMenu",
+    "description": "openMenu() and closeMenu() control the mobile hamburger navigation, a small but essential piece of UX alongside navigateTo(). Together these three functions form the site's complete interaction layer — everything a visitor clicks to move around the page.",
+    "nodeIds": ["function:index.html:openMenu", "function:index.html:closeMenu"]
+  },
+  {
+    "order": 5,
+    "title": "The Animated Background: tick",
+    "description": "tick() is the render loop driving the Three.js particle background — the animated visual backdrop behind the marketing content. It's called continuously (typically via requestAnimationFrame) to update particle positions and redraw the scene each frame, running independently of the navigation logic covered in the previous steps.",
+    "nodeIds": ["function:index.html:tick"],
+    "languageLesson": "A 'tick' function is the standard name for a render-loop callback in real-time graphics: each call advances animation state by one frame, and the loop re-invokes itself (via requestAnimationFrame) for smooth 60fps rendering without blocking the main thread."
+  }
+]
