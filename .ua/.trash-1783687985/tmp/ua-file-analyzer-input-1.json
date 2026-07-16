@@ -1,0 +1,8 @@
+{
+  "projectRoot": "/Users/ryanowers/Downloads/FIXUP/fixup_website",
+  "batchFiles": [
+    {"path": "CLAUDE.md", "language": "markdown", "sizeLines": 53, "fileCategory": "docs"},
+    {"path": "index.html", "language": "html", "sizeLines": 1323, "fileCategory": "markup"}
+  ],
+  "batchImportData": {"CLAUDE.md": [], "index.html": []}
+}

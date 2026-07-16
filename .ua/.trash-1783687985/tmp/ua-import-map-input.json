@@ -1,0 +1,7 @@
+{
+  "projectRoot": "/Users/ryanowers/Downloads/FIXUP/fixup_website",
+  "files": [
+    {"path": "CLAUDE.md", "language": "markdown", "fileCategory": "docs"},
+    {"path": "index.html", "language": "html", "fileCategory": "markup"}
+  ]
+}

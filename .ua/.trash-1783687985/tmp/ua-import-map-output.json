@@ -1,0 +1,12 @@
+{
+  "scriptCompleted": true,
+  "stats": {
+    "filesScanned": 2,
+    "filesWithImports": 0,
+    "totalEdges": 0
+  },
+  "importMap": {
+    "CLAUDE.md": [],
+    "index.html": []
+  }
+}

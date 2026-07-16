@@ -1,0 +1,14 @@
+{
+  "fileNodes": [
+    {"id":"document:CLAUDE.md","type":"document","name":"CLAUDE.md","filePath":"CLAUDE.md","summary":"Guidance document for Claude Code explaining that FixUp Arena is a single static index.html landing page with no build step, describing its view-switching, 3D background, and scroll-animation architecture, and directing questions to the graphify knowledge graph first.","tags":["documentation","entry-point","architecture-notes","ai-instructions"]},
+    {"id":"file:index.html","type":"file","name":"index.html","filePath":"index.html","summary":"The entire FixUp Arena marketing/landing page — a single static HTML file combining Tailwind-styled markup for four faux 'views' (home, privacy, terms, support), a Three.js particle background, GSAP/ScrollTrigger scroll animations, and vanilla JS hash-based client-side navigation, with Stripe Payment Links for registration.","tags":["entry-point","single-page-app","landing-page","animation","no-build"]}
+  ],
+  "importEdges": [],
+  "allEdges": [
+    {"source":"file:index.html","target":"function:index.html:navigateTo","type":"contains"},
+    {"source":"file:index.html","target":"function:index.html:openMenu","type":"contains"},
+    {"source":"file:index.html","target":"function:index.html:closeMenu","type":"contains"},
+    {"source":"file:index.html","target":"function:index.html:tick","type":"contains"},
+    {"source":"document:CLAUDE.md","target":"file:index.html","type":"documents"}
+  ]
+}

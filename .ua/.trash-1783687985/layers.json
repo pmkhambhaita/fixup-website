@@ -1,0 +1,14 @@
+[
+  {
+    "id": "layer:ui",
+    "name": "Presentation Layer",
+    "description": "The single-page marketing site itself — index.html's Tailwind markup, Three.js particle background, GSAP/ScrollTrigger animations, and hash-based view navigation for the FixUp Arena landing page.",
+    "nodeIds": ["file:index.html"]
+  },
+  {
+    "id": "layer:documentation",
+    "name": "Documentation",
+    "description": "Project guidance for AI assistants describing the site's no-build, single-file architecture and pointing to the graphify knowledge graph for deeper questions.",
+    "nodeIds": ["document:CLAUDE.md"]
+  }
+]

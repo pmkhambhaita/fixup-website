@@ -1,0 +1,27 @@
+{
+  "version": "1.0.0",
+  "gitCommitHash": "97351a43eda99c53f9c6027553aace1f45bbb846",
+  "generatedAt": "2026-07-10T12:52:48.479Z",
+  "files": {
+    "CLAUDE.md": {
+      "filePath": "CLAUDE.md",
+      "contentHash": "9f9234569cdae7796e5ac81a7cd76f701057dbd6b47a1860153092e4b661a1d4",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 54,
+      "hasStructuralAnalysis": true
+    },
+    "index.html": {
+      "filePath": "index.html",
+      "contentHash": "165c40c1c4284e5e6f5966bde5aa5ffab10c8f3c224a6659692c50d75729f4eb",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 1324,
+      "hasStructuralAnalysis": false
+    }
+  }
+}
