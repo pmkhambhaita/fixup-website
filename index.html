@@ -295,6 +295,59 @@
                 transform: translateY(0);
             }
         }
+
+        .tournament-grid,
+        .tournament-grid-secondary {
+            display: grid;
+            gap: 0.75rem;
+        }
+
+        .tournament-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .tournament-grid-secondary {
+            grid-template-columns: repeat(3, 1fr);
+            margin-top: 0.75rem;
+        }
+
+        .t-cell {
+            position: relative;
+            border-radius: 1rem;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            aspect-ratio: 4 / 5;
+        }
+
+        .t-cell img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+
+        .t-cell:hover img {
+            transform: scale(1.06);
+        }
+
+        .t-cell::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(0, 0, 0, 0) 60%, rgba(0, 0, 0, 0.35) 100%);
+            pointer-events: none;
+        }
+
+        .t-hero {
+            grid-column: span 2;
+            grid-row: span 2;
+        }
+
+        @media (min-width: 768px) {
+            .tournament-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
     </style>
 </head>
 
@@ -511,11 +564,11 @@
                                 class="flex items-center gap-4 p-4 rounded-xl bg-white/5 border border-white/10 backdrop-blur-sm">
                                 <div
                                     class="w-10 h-10 rounded-full bg-[#5de0e6]/10 flex items-center justify-center text-[#5de0e6] border border-[#5de0e6]/20 shrink-0">
-                                    <iconify-icon icon="solar:bell-linear" class="text-xl"></iconify-icon></div>
+                                    <iconify-icon icon="solar:clock-circle-linear" class="text-xl"></iconify-icon></div>
                                 <div>
                                     <div class="text-[10px] text-zinc-500 uppercase font-semibold tracking-wider">
-                                        Status</div>
-                                    <div class="text-white font-medium">Coming Soon</div>
+                                        Time</div>
+                                    <div class="text-white font-medium">TBC</div>
                                 </div>
                             </div>
                             <div
@@ -615,6 +668,51 @@
                 <iconify-icon icon="solar:arrow-down-linear" class="text-white"></iconify-icon>
             </div>
         </header>
+
+        <!-- FIRST TOURNAMENT -->
+        <section id="first-tournament"
+            class="py-24 md:py-32 px-4 relative z-10 bg-black/10 backdrop-blur-sm border-t border-white/5">
+            <div class="max-w-6xl mx-auto">
+                <div class="text-center mb-12 md:mb-16">
+                    <h2 class="text-3xl md:text-5xl font-semibold text-white tracking-tight mb-6">FixUp Arena's First
+                        Tournament</h2>
+                    <p class="tournament-reveal max-w-2xl mx-auto text-zinc-400 font-light leading-relaxed text-sm md:text-base">
+                        16 teams turned up to Castle Green 3G Pitches in Dagenham for the first FixUp Arena. Bibs
+                        against bibs under a low winter sun, every match fought like a final. By the final whistle,
+                        <span class="text-white font-medium">[Winner Team Name]</span> had taken home the
+                        <span class="text-[#5de0e6] font-medium">£500</span> prize.
+                    </p>
+                </div>
+                <div class="tournament-grid">
+                    <div class="t-cell t-hero tournament-reveal">
+                        <img src="generated-images/tournament/batch6-2.jpg" alt="Player striking the ball during the first FixUp Arena tournament at Castle Green, Dagenham" loading="lazy">
+                    </div>
+                    <div class="t-cell tournament-reveal">
+                        <img src="generated-images/tournament/batch6-16.jpg" alt="Players contesting the ball at the first FixUp Arena tournament" loading="lazy">
+                    </div>
+                    <div class="t-cell tournament-reveal">
+                        <img src="generated-images/tournament/batch6-22.jpg" alt="Players in bibs battling for possession at the first FixUp Arena tournament" loading="lazy">
+                    </div>
+                    <div class="t-cell tournament-reveal">
+                        <img src="generated-images/tournament/batch6-9.jpg" alt="Player running with the ball at the first FixUp Arena tournament" loading="lazy">
+                    </div>
+                    <div class="t-cell tournament-reveal">
+                        <img src="generated-images/tournament/batch6-19.jpg" alt="Player in a blue bib chasing the play at the first FixUp Arena tournament" loading="lazy">
+                    </div>
+                </div>
+                <div class="tournament-grid-secondary">
+                    <div class="t-cell tournament-reveal">
+                        <img src="generated-images/tournament/batch6-3.jpg" alt="Player on the 3G pitch at Castle Green during the first FixUp Arena tournament" loading="lazy">
+                    </div>
+                    <div class="t-cell tournament-reveal">
+                        <img src="generated-images/tournament/batch6-8.jpg" alt="Goalkeeper warming up at the first FixUp Arena tournament" loading="lazy">
+                    </div>
+                    <div class="t-cell tournament-reveal">
+                        <img src="generated-images/tournament/batch6-26.jpg" alt="Players challenging for the ball at the first FixUp Arena tournament" loading="lazy">
+                    </div>
+                </div>
+            </div>
+        </section>
 
         <!-- PROBLEM SECTION -->
         <section id="problem"
@@ -779,12 +877,12 @@
                                 class="p-5 rounded-2xl bg-white/5 border border-white/10 hover:border-[#5de0e6]/50 transition-colors group">
                                 <div class="flex items-center gap-3 mb-3">
                                     <div
-                                        class="w-8 h-8 rounded-full bg-[#5de0e6]/10 flex items-center justify-center text-[#5de0e6] text-sm">
+                                        class="w-8 h-8 rounded-full bg-[#5de0e6]/10 flex items-center justify-center text-[#5de0e6] text-sm shrink-0">
                                         <iconify-icon icon="solar:user-bold"></iconify-icon></div>
                                     <div>
                                         <p class="text-[10px] text-[#5de0e6] font-semibold uppercase tracking-widest">
                                             Customer Service Lead</p>
-                                        <p class="text-white font-medium leading-none">Jason O</p>
+                                        <p class="text-white font-medium leading-none mt-1.5">Jason O</p>
                                     </div>
                                 </div>
                                 <div class="space-y-2 pl-11">
@@ -800,21 +898,103 @@
                             </div>
                         </div>
                     </div>
-                    <form class="space-y-4 flex flex-col justify-end"
-                        onsubmit="event.preventDefault(); alert('Message Sent!');">
+                    <form id="contact-form" class="space-y-4 flex flex-col justify-end" novalidate>
                         <h3 class="text-sm font-semibold text-white uppercase tracking-widest mb-2">Quick Message</h3>
-                        <div><input type="text"
+                        <div>
+                            <input id="contact-name" type="text" required minlength="2"
+                                aria-describedby="contact-name-error"
                                 class="w-full bg-black/40 border border-white/10 rounded-lg px-4 py-3 text-white text-sm focus:outline-none focus:border-[#5de0e6] transition-colors"
-                                placeholder="Name"></div>
-                        <div><input type="email"
+                                placeholder="Name">
+                            <p id="contact-name-error" class="contact-error hidden mt-1.5 text-xs text-red-400"></p>
+                        </div>
+                        <div>
+                            <input id="contact-email" type="email" required
+                                aria-describedby="contact-email-error"
                                 class="w-full bg-black/40 border border-white/10 rounded-lg px-4 py-3 text-white text-sm focus:outline-none focus:border-[#5de0e6] transition-colors"
-                                placeholder="Email"></div>
-                        <div><textarea rows="4"
+                                placeholder="Email">
+                            <p id="contact-email-error" class="contact-error hidden mt-1.5 text-xs text-red-400"></p>
+                        </div>
+                        <div>
+                            <textarea id="contact-message" rows="4" required minlength="5"
+                                aria-describedby="contact-message-error"
                                 class="w-full bg-black/40 border border-white/10 rounded-lg px-4 py-3 text-white text-sm focus:outline-none focus:border-[#5de0e6] transition-colors"
-                                placeholder="Message"></textarea></div>
+                                placeholder="Message"></textarea>
+                            <p id="contact-message-error" class="contact-error hidden mt-1.5 text-xs text-red-400"></p>
+                        </div>
                         <button type="submit"
                             class="w-full bg-[#5de0e6] text-black font-semibold uppercase tracking-widest text-xs py-4 rounded-lg hover:bg-[#4bcace] transition-colors hover-trigger">Send</button>
+                        <p id="contact-success" class="hidden text-center text-xs font-semibold uppercase tracking-widest text-[#5de0e6]">
+                            Message sent — we'll be in touch soon.</p>
                     </form>
+                    <script>
+                    (function () {
+                        const form = document.getElementById('contact-form');
+                        if (!form) return;
+                        const success = document.getElementById('contact-success');
+                        const fields = [
+                            {
+                                el: document.getElementById('contact-name'),
+                                errorEl: document.getElementById('contact-name-error'),
+                                validate: (v) => v.trim().length >= 2,
+                                message: 'Please enter your name (2+ characters).'
+                            },
+                            {
+                                el: document.getElementById('contact-email'),
+                                errorEl: document.getElementById('contact-email-error'),
+                                validate: (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()),
+                                message: 'Please enter a valid email address.'
+                            },
+                            {
+                                el: document.getElementById('contact-message'),
+                                errorEl: document.getElementById('contact-message-error'),
+                                validate: (v) => v.trim().length >= 5,
+                                message: 'Please enter a short message (5+ characters).'
+                            }
+                        ];
+
+                        function setFieldError(field) {
+                            field.el.classList.add('border-red-400');
+                            field.el.classList.remove('border-white/10');
+                            field.el.setAttribute('aria-invalid', 'true');
+                            field.errorEl.textContent = field.message;
+                            field.errorEl.classList.remove('hidden');
+                        }
+
+                        function clearFieldError(field) {
+                            field.el.classList.remove('border-red-400');
+                            field.el.classList.add('border-white/10');
+                            field.el.removeAttribute('aria-invalid');
+                            field.errorEl.classList.add('hidden');
+                            field.errorEl.textContent = '';
+                        }
+
+                        fields.forEach((field) => {
+                            field.el.addEventListener('input', () => {
+                                if (field.validate(field.el.value)) clearFieldError(field);
+                            });
+                        });
+
+                        form.addEventListener('submit', (event) => {
+                            event.preventDefault();
+                            success.classList.add('hidden');
+                            let firstInvalid = null;
+                            fields.forEach((field) => {
+                                if (field.validate(field.el.value)) {
+                                    clearFieldError(field);
+                                } else {
+                                    setFieldError(field);
+                                    if (!firstInvalid) firstInvalid = field.el;
+                                }
+                            });
+                            if (firstInvalid) {
+                                firstInvalid.focus();
+                                return;
+                            }
+                            success.classList.remove('hidden');
+                            form.reset();
+                        });
+                    })();
+                    </script>
                 </div>
             </div>
         </section>
@@ -1205,7 +1385,6 @@
         const helixGroup = new THREE.Group();
         scene.add(stadiumGroup);
         scene.add(helixGroup);
-        helixGroup.visible = false;
 
         // --- PARTICLE GENERATION ---
         const stadiumGeo = new THREE.BufferGeometry();
@@ -1270,6 +1449,7 @@
         helixGeo.setAttribute('color', new THREE.Float32BufferAttribute(hCol, 3));
         helixGeo.setAttribute('size', new THREE.Float32BufferAttribute(hSizes, 1));
         const helixPoints = new THREE.Points(helixGeo, material.clone());
+        helixPoints.material.opacity = 0;
         helixGroup.add(helixPoints);
 
         // --- ANIMATION LOOP ---
@@ -1304,16 +1484,20 @@
                     carouselCards.forEach((card, i) => {
                         gsap.set(card, { y: i * 500, rotationY: i * 50, z: 0, transformOrigin: "center center -600px", opacity: 0, scale: 0.8, filter: "blur(8px)" });
                     });
-                    const carouselTl = gsap.timeline({ scrollTrigger: { trigger: ".carousel-container", start: "top top", end: "+=4000", scrub: 1, pin: true } });
+                    const fadeStadium = (v) => stadiumGroup.children.forEach(child => gsap.to(child.material, { opacity: v, duration: 0.9, ease: "power2.inOut" }));
+                    const fadeHelix = (v) => gsap.to(helixPoints.material, { opacity: v, duration: 0.9, ease: "power2.inOut" });
+                    const showHelix = () => { fadeHelix(0.9); fadeStadium(0); };
+                    const showStadium = () => { fadeHelix(0); fadeStadium(0.9); };
+
+                    const carouselTl = gsap.timeline({
+                        scrollTrigger: {
+                            trigger: ".carousel-container", start: "top top", end: "+=4000", scrub: 1, pin: true,
+                            onEnter: showHelix, onEnterBack: showHelix,
+                            onLeave: showStadium, onLeaveBack: showStadium
+                        }
+                    });
                     carouselTl.to('#carouselWorld', { y: - (carouselCards.length * 500) + 200, rotationY: - (carouselCards.length * 50), ease: "none", duration: 10 }, 0)
                         .to(helixGroup.rotation, { y: Math.PI * 2, ease: "none", duration: 10 }, 0);
-
-                    ScrollTrigger.create({
-                        trigger: "#roadmap-desktop", start: "top center", end: "bottom center",
-                        onEnter: () => { helixGroup.visible = true; stadiumGroup.visible = false; },
-                        onLeaveBack: () => { helixGroup.visible = false; stadiumGroup.visible = true; },
-                        onLeave: () => { helixGroup.visible = false; stadiumGroup.visible = true; }
-                    });
 
                     const fragment = 10 / carouselCards.length;
                     carouselCards.forEach((card, i) => {
@@ -1331,6 +1515,14 @@
                 });
             }
         });
+
+        const tournamentRevealItems = document.querySelectorAll('.tournament-reveal');
+        if (tournamentRevealItems.length > 0) {
+            gsap.from(tournamentRevealItems, {
+                y: 30, opacity: 0, scale: 0.96, stagger: 0.08, duration: 0.7, ease: "power2.out",
+                scrollTrigger: { trigger: "#first-tournament", start: "top 75%" }
+            });
+        }
 
         tick();
 
