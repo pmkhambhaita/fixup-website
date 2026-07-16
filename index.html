@@ -182,12 +182,14 @@
         }
 
         .nav-logo {
-            transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), filter 0.3s;
+            border-radius: 50%;
+            overflow: hidden;
+            transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.3s;
         }
 
         .nav-logo:hover {
             transform: scale(1.1);
-            filter: drop-shadow(0 0 10px rgba(93, 224, 230, 0.5));
+            box-shadow: 0 0 14px 2px rgba(93, 224, 230, 0.5);
         }
 
         details>summary {
@@ -534,7 +536,7 @@
                 <a href="javascript:void(0)" onclick="navigateTo('home')"
                     class="nav-link text-[10px] font-medium text-zinc-400 hover:text-white transition-colors uppercase tracking-widest hover-trigger">Tournament</a>
                 <a href="javascript:void(0)"
-                    onclick="navigateTo('home'); setTimeout(() => document.getElementById('problem').scrollIntoView({behavior:'smooth'}), 100)"
+                    onclick="navigateTo('home', 'problem')"
                     class="nav-link text-[10px] font-medium text-zinc-400 hover:text-white transition-colors uppercase tracking-widest hover-trigger">Concept</a>
             </div>
             <a href="javascript:void(0)" onclick="navigateTo('home')"
@@ -544,7 +546,7 @@
             </a>
             <div class="flex items-center gap-6 flex-1 justify-start hidden md:flex">
                 <a href="javascript:void(0)"
-                    onclick="navigateTo('home'); setTimeout(() => document.getElementById('roadmap').scrollIntoView({behavior:'smooth'}), 100)"
+                    onclick="navigateTo('home', 'roadmap')"
                     class="nav-link text-[10px] font-medium text-zinc-400 hover:text-white transition-colors uppercase tracking-widest hover-trigger">Roadmap</a>
                 <a href="javascript:void(0)" onclick="navigateTo('support')"
                     class="nav-link text-[10px] font-medium text-zinc-400 hover:text-white transition-colors uppercase tracking-widest hover-trigger">Support</a>
@@ -1625,10 +1627,10 @@
                         <h4 class="text-white text-[10px] font-semibold uppercase tracking-widest mb-4">Company</h4>
                         <ul class="space-y-2 text-xs text-zinc-500">
                             <li><a href="javascript:void(0)"
-                                    onclick="navigateTo('home'); setTimeout(() => document.getElementById('problem').scrollIntoView({behavior:'smooth'}), 100)"
+                                    onclick="navigateTo('home', 'problem')"
                                     class="hover:text-[#5de0e6] transition-colors">Concept</a></li>
                             <li><a href="javascript:void(0)"
-                                    onclick="navigateTo('home'); setTimeout(() => document.getElementById('contact').scrollIntoView({behavior:'smooth'}), 100)"
+                                    onclick="navigateTo('home', 'contact')"
                                     class="hover:text-[#5de0e6] transition-colors">Contact</a></li>
                         </ul>
                     </div>
@@ -1661,7 +1663,7 @@
 
     <script>
         // --- NAVIGATION ROUTING (SPA) ---
-        function navigateTo(pageId) {
+        function navigateTo(pageId, scrollTargetId) {
             const views = ['home', 'privacy', 'tos', 'support'];
 
             // 1. Hide all views
@@ -1680,8 +1682,14 @@
                 selectedView.classList.add('page-visible');
             }
 
-            // 3. Scroll to top
-            window.scrollTo({ top: 0, behavior: 'instant' }); // Use instant for crisp page change
+            // 3. Scroll to top, unless we're about to smooth-scroll to a specific section
+            if (scrollTargetId) {
+                requestAnimationFrame(() => {
+                    document.getElementById(scrollTargetId)?.scrollIntoView({ behavior: 'smooth' });
+                });
+            } else {
+                window.scrollTo({ top: 0, behavior: 'instant' }); // Use instant for crisp page change
+            }
 
             // 4. Background Management (ThreeJS)
             const webglCanvas = document.getElementById('webgl');
