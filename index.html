@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>FIXUP ARENA | Win £500</title>
+    <title>FIXUP ARENA | Win £1,000</title>
     <link rel="icon" type="image/svg+xml" href="FixUp Arena Logo.svg">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -403,6 +403,115 @@
             }
         }
 
+        .t-cell--stat::after {
+            background: linear-gradient(180deg, rgba(0, 0, 0, 0) 35%, rgba(0, 0, 0, 0.85) 100%);
+        }
+
+        .t-stat {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            gap: 0.1rem;
+            padding: 1rem 1.1rem;
+            pointer-events: none;
+        }
+
+        .t-stat-value {
+            font-size: clamp(1.9rem, 4vw, 2.75rem);
+            font-weight: 700;
+            line-height: 0.95;
+            letter-spacing: -0.02em;
+            background: linear-gradient(180deg, #ffffff 0%, #5de0e6 155%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            filter: drop-shadow(0 2px 14px rgba(0, 0, 0, 0.55));
+        }
+
+        .t-hero .t-stat-value {
+            font-size: clamp(3rem, 7vw, 5rem);
+        }
+
+        .t-stat-label {
+            font-size: 0.6rem;
+            font-weight: 600;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.88);
+        }
+
+        .t-hero .t-stat-label {
+            font-size: 0.7rem;
+        }
+
+        .champions-banner {
+            position: relative;
+            max-width: 900px;
+            margin: 0 auto 3rem;
+            border-radius: 1.25rem;
+            overflow: hidden;
+            border: 1px solid rgba(93, 224, 230, 0.3);
+            box-shadow: 0 0 80px rgba(0, 0, 0, 0.5);
+            aspect-ratio: 16 / 10;
+        }
+
+        .champions-banner img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center 32%;
+            transition: transform 0.8s ease;
+        }
+
+        .champions-banner:hover img {
+            transform: scale(1.04);
+        }
+
+        .champions-overlay {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 1.5rem 1.75rem;
+            background: linear-gradient(180deg, rgba(0, 0, 0, 0) 42%, rgba(0, 0, 0, 0.82) 100%);
+        }
+
+        .champions-eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--brand-cyan);
+            margin-bottom: 0.4rem;
+        }
+
+        .champions-name {
+            font-size: clamp(2rem, 6vw, 3.5rem);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            line-height: 1;
+            background: linear-gradient(180deg, #ffffff 0%, #5de0e6 160%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .champions-caption {
+            margin-top: 0.6rem;
+            font-size: 0.8rem;
+            font-weight: 300;
+            letter-spacing: 0.02em;
+            color: rgb(212, 212, 216);
+        }
+
         .socials-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -599,7 +708,7 @@
                                     style="background: radial-gradient(ellipse 60% 65% at center, rgba(93,224,230,0.55) 0%, rgba(0,74,173,0.25) 45%, transparent 75%); filter: blur(18px);">
                                 </div>
                                 <span
-                                    class="relative text-6xl md:text-8xl font-bold tracking-tighter text-white text-glow char">££££</span>
+                                    class="relative text-6xl md:text-8xl font-bold tracking-tighter text-white text-glow char">£1,000</span>
                             </div>
                         </div>
                     </div>
@@ -764,7 +873,7 @@
                                         class="text-[#5de0e6] text-xs font-semibold uppercase tracking-widest mb-2 flex items-center gap-2"><iconify-icon
                                             icon="solar:cup-star-bold"></iconify-icon> Cash Prize Pool</span>
                                     <div class="relative z-10"><span
-                                            class="text-7xl font-bold text-white tracking-tighter drop-shadow-[0_0_25px_rgba(93,224,230,0.4)]">££££</span>
+                                            class="text-7xl font-bold text-white tracking-tighter drop-shadow-[0_0_25px_rgba(93,224,230,0.4)]">£1,000</span>
                                     </div>
                                 </div>
                                 <!-- RE-ACTIVATE FOR NEXT TOURNAMENT: restore this Stripe CTA and delete the Follow button below once date/venue/price are confirmed.
@@ -828,30 +937,37 @@
                     <p class="tournament-reveal max-w-2xl mx-auto text-zinc-400 font-light leading-relaxed text-sm md:text-base">
                         16 teams turned up to Castle Green 3G Pitches in Dagenham for the first FixUp Arena. Bibs
                         against bibs under a low winter sun, every match fought like a final. By the final whistle,
-                        <span class="text-white font-medium">[Winner Team Name]</span> had taken home the
+                        <span class="text-white font-medium">Brixton FC</span> had taken home the
                         <span class="text-[#5de0e6] font-medium">£500</span> prize.
                     </p>
                 </div>
-                <div class="tournament-stats tournament-reveal">
-                    <div class="tournament-stat">
-                        <span class="tournament-stat-value">[00]</span>
-                        <span class="tournament-stat-label">Goals Scored</span>
-                    </div>
-                    <div class="tournament-stat">
-                        <span class="tournament-stat-value">[00]</span>
-                        <span class="tournament-stat-label">Matches Played</span>
-                    </div>
-                    <div class="tournament-stat">
-                        <span class="tournament-stat-value">[00]</span>
-                        <span class="tournament-stat-label">Goal Diff.</span>
+                <!-- CHAMPIONS -->
+                <div class="champions-banner tournament-reveal">
+                    <img src="generated-images/tournament/brixton-fc-champions.jpg"
+                        alt="Brixton FC celebrating with their medals and the cash prize after winning the first FixUp Arena tournament at Castle Green, Dagenham"
+                        loading="lazy">
+                    <div class="champions-overlay">
+                        <span class="champions-eyebrow"><iconify-icon icon="solar:cup-star-bold"></iconify-icon>
+                            Champions</span>
+                        <h3 class="champions-name">Brixton FC</h3>
+                        <p class="champions-caption">Winners of the first FixUp Arena &middot; 16 teams &middot; £500
+                            prize</p>
                     </div>
                 </div>
                 <div class="tournament-grid">
-                    <div class="t-cell t-hero tournament-reveal">
+                    <div class="t-cell t-hero t-cell--stat tournament-reveal">
                         <img src="generated-images/tournament/batch6-2.jpg" alt="Player striking the ball during the first FixUp Arena tournament at Castle Green, Dagenham" loading="lazy">
+                        <div class="t-stat">
+                            <span class="t-stat-value">108</span>
+                            <span class="t-stat-label">Goals Scored</span>
+                        </div>
                     </div>
-                    <div class="t-cell tournament-reveal">
+                    <div class="t-cell t-cell--stat tournament-reveal">
                         <img src="generated-images/tournament/batch6-16.jpg" alt="Players contesting the ball at the first FixUp Arena tournament" loading="lazy">
+                        <div class="t-stat">
+                            <span class="t-stat-value">37</span>
+                            <span class="t-stat-label">Matches Played</span>
+                        </div>
                     </div>
                     <div class="t-cell tournament-reveal">
                         <img src="generated-images/tournament/batch6-22.jpg" alt="Players in bibs battling for possession at the first FixUp Arena tournament" loading="lazy">
@@ -867,8 +983,12 @@
                     <div class="t-cell tournament-reveal">
                         <img src="generated-images/tournament/batch6-3.jpg" alt="Player on the 3G pitch at Castle Green during the first FixUp Arena tournament" loading="lazy">
                     </div>
-                    <div class="t-cell tournament-reveal">
+                    <div class="t-cell t-cell--stat tournament-reveal">
                         <img src="generated-images/tournament/batch6-8.jpg" alt="Goalkeeper warming up at the first FixUp Arena tournament" loading="lazy">
+                        <div class="t-stat">
+                            <span class="t-stat-value">2.9</span>
+                            <span class="t-stat-label">Goals / Game</span>
+                        </div>
                     </div>
                     <div class="t-cell tournament-reveal">
                         <img src="generated-images/tournament/batch6-26.jpg" alt="Players challenging for the ball at the first FixUp Arena tournament" loading="lazy">
