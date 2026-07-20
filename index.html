@@ -397,9 +397,17 @@
             grid-row: span 2;
         }
 
+        /* Mobile only: promote the first cell to full width so an odd
+           number of cells tiles evenly into the 2-column stack (no orphan). */
+        @media (max-width: 767px) {
+            .t-cell--feature {
+                grid-column: span 2;
+            }
+        }
+
         @media (min-width: 768px) {
             .tournament-grid {
-                grid-template-columns: repeat(4, 1fr);
+                grid-template-columns: repeat(3, 1fr);
             }
         }
 
@@ -955,43 +963,47 @@
                     </div>
                 </div>
                 <div class="tournament-grid">
-                    <div class="t-cell t-hero t-cell--stat tournament-reveal">
-                        <img src="generated-images/tournament/batch6-2.jpg" alt="Player striking the ball during the first FixUp Arena tournament at Castle Green, Dagenham" loading="lazy">
+                    <!-- Row 1 -->
+                    <div class="t-cell t-cell--stat t-cell--feature tournament-reveal">
+                        <img src="generated-images/tournament/player-driving.jpg" alt="Player driving forward with the ball during the first FixUp Arena tournament at Castle Green, Dagenham" loading="lazy">
                         <div class="t-stat">
                             <span class="t-stat-value">108</span>
                             <span class="t-stat-label">Goals Scored</span>
                         </div>
                     </div>
+                    <div class="t-cell tournament-reveal">
+                        <img src="generated-images/tournament/crowd-address.jpg" alt="Organiser addressing the players before kick-off at the first FixUp Arena tournament" loading="lazy">
+                    </div>
+                    <div class="t-cell tournament-reveal">
+                        <img src="generated-images/tournament/batch6-2.jpg" alt="Player in a pink bib driving at two defenders during the first FixUp Arena tournament" loading="lazy">
+                    </div>
+                    <!-- Row 2 -->
+                    <div class="t-cell tournament-reveal">
+                        <img src="generated-images/tournament/sideline.jpg" alt="Players and supporters watching from the sideline at the first FixUp Arena tournament" loading="lazy">
+                    </div>
                     <div class="t-cell t-cell--stat tournament-reveal">
-                        <img src="generated-images/tournament/batch6-16.jpg" alt="Players contesting the ball at the first FixUp Arena tournament" loading="lazy">
+                        <img src="generated-images/tournament/battle-branding.jpg" alt="Players battling for possession in front of the FixUp Arena banner at the first tournament" loading="lazy">
                         <div class="t-stat">
                             <span class="t-stat-value">37</span>
                             <span class="t-stat-label">Matches Played</span>
                         </div>
                     </div>
                     <div class="t-cell tournament-reveal">
-                        <img src="generated-images/tournament/batch6-22.jpg" alt="Players in bibs battling for possession at the first FixUp Arena tournament" loading="lazy">
+                        <img src="generated-images/tournament/huddle.jpg" alt="Team huddle on the pitch at the first FixUp Arena tournament at Castle Green, Dagenham" loading="lazy">
+                    </div>
+                    <!-- Row 3 -->
+                    <div class="t-cell tournament-reveal">
+                        <img src="generated-images/tournament/batch6-8.jpg" alt="Two players battling for the ball during the first FixUp Arena tournament" loading="lazy">
                     </div>
                     <div class="t-cell tournament-reveal">
-                        <img src="generated-images/tournament/batch6-9.jpg" alt="Player running with the ball at the first FixUp Arena tournament" loading="lazy">
-                    </div>
-                    <div class="t-cell tournament-reveal">
-                        <img src="generated-images/tournament/batch6-19.jpg" alt="Player in a blue bib chasing the play at the first FixUp Arena tournament" loading="lazy">
-                    </div>
-                </div>
-                <div class="tournament-grid-secondary">
-                    <div class="t-cell tournament-reveal">
-                        <img src="generated-images/tournament/batch6-3.jpg" alt="Player on the 3G pitch at Castle Green during the first FixUp Arena tournament" loading="lazy">
+                        <img src="generated-images/tournament/celebration-mob.jpg" alt="Players celebrating together on the pitch at the first FixUp Arena tournament" loading="lazy">
                     </div>
                     <div class="t-cell t-cell--stat tournament-reveal">
-                        <img src="generated-images/tournament/batch6-8.jpg" alt="Goalkeeper warming up at the first FixUp Arena tournament" loading="lazy">
+                        <img src="generated-images/tournament/batch6-19.jpg" alt="Goalkeeper controlling the ball by the post at the first FixUp Arena tournament" loading="lazy">
                         <div class="t-stat">
                             <span class="t-stat-value">2.9</span>
                             <span class="t-stat-label">Goals / Game</span>
                         </div>
-                    </div>
-                    <div class="t-cell tournament-reveal">
-                        <img src="generated-images/tournament/batch6-26.jpg" alt="Players challenging for the ball at the first FixUp Arena tournament" loading="lazy">
                     </div>
                 </div>
             </div>
