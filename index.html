@@ -607,6 +607,66 @@
                 max-width: 260px;
             }
         }
+
+        /* Testimonial glassmorphism + physics tilt */
+        .tilt-wrap {
+            perspective: 1200px;
+        }
+
+        .tilt-card {
+            position: relative;
+            transform-style: preserve-3d;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.10), rgba(255, 255, 255, 0.02));
+            backdrop-filter: blur(26px) saturate(180%);
+            -webkit-backdrop-filter: blur(26px) saturate(180%);
+            box-shadow:
+                0 25px 50px rgba(0, 0, 0, 0.55),
+                inset 0 1px 0 rgba(255, 255, 255, 0.22),
+                inset 0 0 24px rgba(255, 255, 255, 0.03);
+            transition: transform 0.5s cubic-bezier(0.03, 0.98, 0.52, 0.99), box-shadow 0.4s ease;
+            will-change: transform;
+        }
+
+        .tilt-card::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            background: radial-gradient(circle at var(--glare-x, 50%) var(--glare-y, 50%),
+                    rgba(255, 255, 255, 0.28), transparent 45%);
+            mix-blend-mode: soft-light;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            pointer-events: none;
+        }
+
+        .tilt-card:hover::after {
+            opacity: 1;
+        }
+
+        .tilt-card:hover {
+            box-shadow:
+                0 40px 75px rgba(0, 0, 0, 0.6),
+                0 0 48px rgba(93, 224, 230, 0.14),
+                inset 0 1px 0 rgba(255, 255, 255, 0.32),
+                inset 0 0 24px rgba(255, 255, 255, 0.05);
+        }
+
+        .tilt-quote {
+            display: inline-block;
+            transform: translateZ(26px);
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .tilt-card {
+                transition: none;
+                transform: none !important;
+            }
+
+            .tilt-quote {
+                transform: none;
+            }
+        }
     </style>
 </head>
 
@@ -635,7 +695,7 @@
         </button>
         <div class="flex flex-col items-center gap-8 text-center">
             <a href="javascript:void(0)" onclick="navigateTo('home'); closeMenu();"
-                class="mobile-nav-link text-3xl font-medium text-white hover:text-[#5de0e6] transition-colors">Tournament</a>
+                class="mobile-nav-link text-3xl font-medium text-white hover:text-[#5de0e6] transition-colors">Tournaments</a>
             <a href="javascript:void(0)" onclick="navigateTo('support'); closeMenu();"
                 class="mobile-nav-link text-3xl font-medium text-white hover:text-[#5de0e6] transition-colors">Support</a>
             <a href="javascript:void(0)" onclick="navigateTo('privacy'); closeMenu();"
@@ -651,7 +711,7 @@
             class="pointer-events-auto flex bg-black/80 h-14 md:h-20 border-white/10 border rounded-full px-6 md:px-8 shadow-2xl backdrop-blur-xl items-center justify-between min-w-[300px] md:min-w-[600px] gap-4 md:gap-8 touch-manipulation">
             <div class="flex items-center gap-6 flex-1 justify-end hidden md:flex">
                 <a href="javascript:void(0)" onclick="navigateTo('home')"
-                    class="nav-link text-[10px] font-medium text-zinc-400 hover:text-white transition-colors uppercase tracking-widest hover-trigger">Tournament</a>
+                    class="nav-link text-[10px] font-medium text-zinc-400 hover:text-white transition-colors uppercase tracking-widest hover-trigger">Tournaments</a>
                 <a href="javascript:void(0)"
                     onclick="navigateTo('home', 'problem')"
                     class="nav-link text-[10px] font-medium text-zinc-400 hover:text-white transition-colors uppercase tracking-widest hover-trigger">Concept</a>
@@ -1217,6 +1277,62 @@
                         class="p-3 rounded-full border border-white/10 text-white hover:text-[#5de0e6] hover:border-[#5de0e6]/50 transition-colors">
                         <iconify-icon icon="solar:arrow-right-linear"></iconify-icon>
                     </button>
+                </div>
+
+                <!-- TESTIMONIALS -->
+                <div class="mt-20 md:mt-28 relative">
+                    <div class="absolute top-1/3 -left-16 w-64 h-64 bg-[#5de0e6]/10 rounded-full blur-[110px] pointer-events-none">
+                    </div>
+                    <div class="absolute bottom-4 -right-16 w-64 h-64 bg-[#004aad]/15 rounded-full blur-[110px] pointer-events-none">
+                    </div>
+                    <div class="text-center mb-10 md:mb-14 relative">
+                        <h3 class="social-reveal text-xs md:text-sm uppercase tracking-[0.2em] text-[#5de0e6] font-medium mb-3">
+                            What Players Are Saying</h3>
+                        <p class="social-reveal text-2xl md:text-4xl font-semibold text-white tracking-tight">
+                            Real players. Real prize money.</p>
+                    </div>
+                    <!-- TODO: swap the placeholder quotes, names and tags below for real player testimonials once collected. Keep the border-l accent colours (cyan / white / blue) to match the site. -->
+                    <div class="tilt-grid grid grid-cols-1 md:grid-cols-3 gap-6 relative">
+                        <div class="social-reveal tilt-wrap">
+                            <figure class="tilt-card glass-panel p-6 md:p-8 border-l-4 border-[#5de0e6] flex flex-col h-full">
+                                <span class="text-6xl leading-[0.5] text-[#5de0e6]/40 tilt-quote font-serif mb-3" aria-hidden="true">&ldquo;</span>
+                                <blockquote class="text-zinc-200 font-light leading-relaxed text-base md:text-lg flex-1">
+                                    Won and had the &pound;500 in my account the same night. Thought it was too good to
+                                    be true &mdash; it wasn&rsquo;t.</blockquote>
+                                <figcaption class="mt-6 pt-4 border-t border-white/5">
+                                    <span class="block text-white font-semibold text-sm">Marcus T.</span>
+                                    <span class="block text-zinc-500 text-xs uppercase tracking-wider mt-0.5">Winner
+                                        &middot; Brixton FC</span>
+                                </figcaption>
+                            </figure>
+                        </div>
+                        <div class="social-reveal tilt-wrap">
+                            <figure class="tilt-card glass-panel p-6 md:p-8 border-l-4 border-white flex flex-col h-full">
+                                <span class="text-6xl leading-[0.5] text-white/30 tilt-quote font-serif mb-3" aria-hidden="true">&ldquo;</span>
+                                <blockquote class="text-zinc-200 font-light leading-relaxed text-base md:text-lg flex-1">
+                                    Floodlights, a crowd, real stakes &mdash; closest I&rsquo;ve felt to a proper match
+                                    since my Sunday league days.</blockquote>
+                                <figcaption class="mt-6 pt-4 border-t border-white/5">
+                                    <span class="block text-white font-semibold text-sm">Dan R.</span>
+                                    <span class="block text-zinc-500 text-xs uppercase tracking-wider mt-0.5">Player
+                                        &middot; Peckham Town</span>
+                                </figcaption>
+                            </figure>
+                        </div>
+                        <div class="social-reveal tilt-wrap">
+                            <figure class="tilt-card glass-panel p-6 md:p-8 border-l-4 border-[#004aad] flex flex-col h-full">
+                                <span class="text-6xl leading-[0.5] text-[#004aad]/60 tilt-quote font-serif mb-3" aria-hidden="true">&ldquo;</span>
+                                <blockquote class="text-zinc-200 font-light leading-relaxed text-base md:text-lg flex-1">
+                                    Turned up, played, everything ran to the minute. Already got my team signed up for
+                                    the next one.</blockquote>
+                                <figcaption class="mt-6 pt-4 border-t border-white/5">
+                                    <span class="block text-white font-semibold text-sm">Josh M.</span>
+                                    <span class="block text-zinc-500 text-xs uppercase tracking-wider mt-0.5">Captain
+                                        &middot; Camberwell United</span>
+                                </figcaption>
+                            </figure>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -2042,6 +2158,35 @@
             gsap.from(socialRevealItems, {
                 y: 30, opacity: 0, scale: 0.96, stagger: 0.08, duration: 0.7, ease: "power2.out",
                 scrollTrigger: { trigger: "#socials", start: "top 75%" }
+            });
+        }
+
+        // Physics-style tilt on testimonial cards — fine-pointer devices only.
+        // rotateY tracks cursor X (left/right axis), rotateX tracks cursor Y (top/bottom axis),
+        // so hovering a corner rotates the card diagonally toward it. A glare highlight follows.
+        if (window.matchMedia('(hover: hover) and (pointer: fine)').matches &&
+            !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            const MAX_TILT = 9; // degrees
+            document.querySelectorAll('.tilt-card').forEach(card => {
+                let frame = null;
+                card.addEventListener('pointermove', e => {
+                    const rect = card.getBoundingClientRect();
+                    const px = (e.clientX - rect.left) / rect.width;  // 0 (left) → 1 (right)
+                    const py = (e.clientY - rect.top) / rect.height;  // 0 (top)  → 1 (bottom)
+                    if (frame) cancelAnimationFrame(frame);
+                    frame = requestAnimationFrame(() => {
+                        const rotY = (px - 0.5) * 2 * MAX_TILT;
+                        const rotX = (0.5 - py) * 2 * MAX_TILT;
+                        card.style.transform =
+                            `rotateX(${rotX.toFixed(2)}deg) rotateY(${rotY.toFixed(2)}deg) translateZ(8px)`;
+                        card.style.setProperty('--glare-x', (px * 100).toFixed(1) + '%');
+                        card.style.setProperty('--glare-y', (py * 100).toFixed(1) + '%');
+                    });
+                });
+                card.addEventListener('pointerleave', () => {
+                    if (frame) cancelAnimationFrame(frame);
+                    card.style.transform = '';
+                });
             });
         }
 
