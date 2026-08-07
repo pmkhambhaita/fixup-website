@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>FIXUP ARENA | Win £500</title>
+    <title>FIXUP ARENA | Win £1,000</title>
     <link rel="icon" type="image/svg+xml" href="FixUp Arena Logo.svg">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -182,12 +182,14 @@
         }
 
         .nav-logo {
-            transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), filter 0.3s;
+            border-radius: 50%;
+            overflow: hidden;
+            transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.3s;
         }
 
         .nav-logo:hover {
             transform: scale(1.1);
-            filter: drop-shadow(0 0 10px rgba(93, 224, 230, 0.5));
+            box-shadow: 0 0 14px 2px rgba(93, 224, 230, 0.5);
         }
 
         details>summary {
@@ -295,6 +297,376 @@
                 transform: translateY(0);
             }
         }
+
+        .tournament-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 1.25rem;
+            overflow: hidden;
+            max-width: 640px;
+            margin: 0 auto 3rem;
+        }
+
+        .tournament-stat {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 0.35rem;
+            padding: 1.75rem 0.5rem;
+            background: rgba(0, 0, 0, 0.35);
+            backdrop-filter: blur(12px);
+        }
+
+        .tournament-stat-value {
+            font-size: clamp(1.75rem, 4vw, 2.5rem);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            background: linear-gradient(180deg, #ffffff 0%, #5de0e6 140%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .tournament-stat-label {
+            font-size: 0.65rem;
+            font-weight: 500;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: rgb(161, 161, 170);
+        }
+
+        @media (max-width: 480px) {
+            .tournament-stat {
+                padding: 1.5rem 0.25rem;
+            }
+
+            .tournament-stat-label {
+                font-size: 0.55rem;
+                letter-spacing: 0.06em;
+            }
+        }
+
+        .tournament-grid,
+        .tournament-grid-secondary {
+            display: grid;
+            gap: 0.75rem;
+        }
+
+        .tournament-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .tournament-grid-secondary {
+            grid-template-columns: repeat(3, 1fr);
+            margin-top: 0.75rem;
+        }
+
+        .t-cell {
+            position: relative;
+            border-radius: 1rem;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            aspect-ratio: 4 / 5;
+        }
+
+        .t-cell img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+
+        .t-cell:hover img {
+            transform: scale(1.06);
+        }
+
+        .t-cell::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(0, 0, 0, 0) 60%, rgba(0, 0, 0, 0.35) 100%);
+            pointer-events: none;
+        }
+
+        .t-hero {
+            grid-column: span 2;
+            grid-row: span 2;
+        }
+
+        /* Mobile only: promote the first cell to full width so an odd
+           number of cells tiles evenly into the 2-column stack (no orphan). */
+        @media (max-width: 767px) {
+            .t-cell--feature {
+                grid-column: span 2;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .tournament-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .t-cell--stat::after {
+            background: linear-gradient(180deg, rgba(0, 0, 0, 0) 35%, rgba(0, 0, 0, 0.85) 100%);
+        }
+
+        .t-stat {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            gap: 0.1rem;
+            padding: 1rem 1.1rem;
+            pointer-events: none;
+        }
+
+        .t-stat-value {
+            font-size: clamp(1.9rem, 4vw, 2.75rem);
+            font-weight: 700;
+            line-height: 0.95;
+            letter-spacing: -0.02em;
+            background: linear-gradient(180deg, #ffffff 0%, #5de0e6 155%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            filter: drop-shadow(0 2px 14px rgba(0, 0, 0, 0.55));
+        }
+
+        .t-hero .t-stat-value {
+            font-size: clamp(3rem, 7vw, 5rem);
+        }
+
+        .t-stat-label {
+            font-size: 0.6rem;
+            font-weight: 600;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.88);
+        }
+
+        .t-hero .t-stat-label {
+            font-size: 0.7rem;
+        }
+
+        .champions-banner {
+            position: relative;
+            max-width: 900px;
+            margin: 0 auto 3rem;
+            border-radius: 1.25rem;
+            overflow: hidden;
+            border: 1px solid rgba(93, 224, 230, 0.3);
+            box-shadow: 0 0 80px rgba(0, 0, 0, 0.5);
+            aspect-ratio: 16 / 10;
+        }
+
+        .champions-banner img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center 32%;
+            transition: transform 0.8s ease;
+        }
+
+        .champions-banner:hover img {
+            transform: scale(1.04);
+        }
+
+        .champions-overlay {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 1.5rem 1.75rem;
+            background: linear-gradient(180deg, rgba(0, 0, 0, 0) 42%, rgba(0, 0, 0, 0.82) 100%);
+        }
+
+        .champions-eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--brand-cyan);
+            margin-bottom: 0.4rem;
+        }
+
+        .champions-name {
+            font-size: clamp(2rem, 6vw, 3.5rem);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            line-height: 1;
+            background: linear-gradient(180deg, #ffffff 0%, #5de0e6 160%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .champions-caption {
+            margin-top: 0.6rem;
+            font-size: 0.8rem;
+            font-weight: 300;
+            letter-spacing: 0.02em;
+            color: rgb(212, 212, 216);
+        }
+
+        .socials-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            align-items: start;
+        }
+
+        .iphone-frame {
+            position: relative;
+            width: 100%;
+            max-width: 300px;
+            margin: 0 auto;
+            aspect-ratio: 433 / 882;
+            filter: drop-shadow(0 25px 45px rgba(0, 0, 0, 0.55)) drop-shadow(0 0 35px rgba(93, 224, 230, 0.08));
+            transition: transform 0.4s ease, filter 0.4s ease;
+            animation: phoneFloat 6s ease-in-out infinite;
+        }
+
+        .iphone-frame:hover {
+            animation-play-state: paused;
+            transform: translateY(-6px) scale(1.02);
+            filter: drop-shadow(0 32px 55px rgba(0, 0, 0, 0.6)) drop-shadow(0 0 55px rgba(93, 224, 230, 0.22));
+        }
+
+        .socials-slide:nth-child(2) .iphone-frame {
+            animation-delay: -2s;
+        }
+
+        .socials-slide:nth-child(3) .iphone-frame {
+            animation-delay: -4s;
+        }
+
+        @keyframes phoneFloat {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-8px);
+            }
+        }
+
+        .iphone-screen {
+            position: absolute;
+            z-index: 0;
+            overflow: hidden;
+            left: 4.9076%;
+            top: 2.1825%;
+            width: 89.9538%;
+            height: 95.6349%;
+            border-radius: 14.3132% / 6.6094%;
+            background: #000;
+        }
+
+        .iphone-screen video {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .iphone-svg {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        @media (max-width: 767px) {
+            .socials-grid {
+                display: block;
+            }
+
+            .socials-slide {
+                display: none;
+            }
+
+            .socials-slide.active {
+                display: block;
+            }
+
+            .iphone-frame {
+                max-width: 260px;
+            }
+        }
+
+        /* Testimonial glassmorphism + physics tilt */
+        .tilt-wrap {
+            perspective: 1200px;
+        }
+
+        .tilt-card {
+            position: relative;
+            transform-style: preserve-3d;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.10), rgba(255, 255, 255, 0.02));
+            backdrop-filter: blur(26px) saturate(180%);
+            -webkit-backdrop-filter: blur(26px) saturate(180%);
+            box-shadow:
+                0 25px 50px rgba(0, 0, 0, 0.55),
+                inset 0 1px 0 rgba(255, 255, 255, 0.22),
+                inset 0 0 24px rgba(255, 255, 255, 0.03);
+            transition: transform 0.5s cubic-bezier(0.03, 0.98, 0.52, 0.99), box-shadow 0.4s ease;
+            will-change: transform;
+        }
+
+        .tilt-card::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            background: radial-gradient(circle at var(--glare-x, 50%) var(--glare-y, 50%),
+                    rgba(255, 255, 255, 0.28), transparent 45%);
+            mix-blend-mode: soft-light;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            pointer-events: none;
+        }
+
+        .tilt-card:hover::after {
+            opacity: 1;
+        }
+
+        .tilt-card:hover {
+            box-shadow:
+                0 40px 75px rgba(0, 0, 0, 0.6),
+                0 0 48px rgba(93, 224, 230, 0.14),
+                inset 0 1px 0 rgba(255, 255, 255, 0.32),
+                inset 0 0 24px rgba(255, 255, 255, 0.05);
+        }
+
+        .tilt-quote {
+            display: inline-block;
+            transform: translateZ(26px);
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .tilt-card {
+                transition: none;
+                transform: none !important;
+            }
+
+            .tilt-quote {
+                transform: none;
+            }
+        }
     </style>
 </head>
 
@@ -323,7 +695,7 @@
         </button>
         <div class="flex flex-col items-center gap-8 text-center">
             <a href="javascript:void(0)" onclick="navigateTo('home'); closeMenu();"
-                class="mobile-nav-link text-3xl font-medium text-white hover:text-[#5de0e6] transition-colors">Tournament</a>
+                class="mobile-nav-link text-3xl font-medium text-white hover:text-[#5de0e6] transition-colors">Tournaments</a>
             <a href="javascript:void(0)" onclick="navigateTo('support'); closeMenu();"
                 class="mobile-nav-link text-3xl font-medium text-white hover:text-[#5de0e6] transition-colors">Support</a>
             <a href="javascript:void(0)" onclick="navigateTo('privacy'); closeMenu();"
@@ -339,9 +711,9 @@
             class="pointer-events-auto flex bg-black/80 h-14 md:h-20 border-white/10 border rounded-full px-6 md:px-8 shadow-2xl backdrop-blur-xl items-center justify-between min-w-[300px] md:min-w-[600px] gap-4 md:gap-8 touch-manipulation">
             <div class="flex items-center gap-6 flex-1 justify-end hidden md:flex">
                 <a href="javascript:void(0)" onclick="navigateTo('home')"
-                    class="nav-link text-[10px] font-medium text-zinc-400 hover:text-white transition-colors uppercase tracking-widest hover-trigger">Tournament</a>
+                    class="nav-link text-[10px] font-medium text-zinc-400 hover:text-white transition-colors uppercase tracking-widest hover-trigger">Tournaments</a>
                 <a href="javascript:void(0)"
-                    onclick="navigateTo('home'); setTimeout(() => document.getElementById('problem').scrollIntoView({behavior:'smooth'}), 100)"
+                    onclick="navigateTo('home', 'problem')"
                     class="nav-link text-[10px] font-medium text-zinc-400 hover:text-white transition-colors uppercase tracking-widest hover-trigger">Concept</a>
             </div>
             <a href="javascript:void(0)" onclick="navigateTo('home')"
@@ -351,7 +723,7 @@
             </a>
             <div class="flex items-center gap-6 flex-1 justify-start hidden md:flex">
                 <a href="javascript:void(0)"
-                    onclick="navigateTo('home'); setTimeout(() => document.getElementById('roadmap').scrollIntoView({behavior:'smooth'}), 100)"
+                    onclick="navigateTo('home', 'roadmap')"
                     class="nav-link text-[10px] font-medium text-zinc-400 hover:text-white transition-colors uppercase tracking-widest hover-trigger">Roadmap</a>
                 <a href="javascript:void(0)" onclick="navigateTo('support')"
                     class="nav-link text-[10px] font-medium text-zinc-400 hover:text-white transition-colors uppercase tracking-widest hover-trigger">Support</a>
@@ -380,8 +752,8 @@
                         <div
                             class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-[#5de0e6]/30 bg-[#5de0e6]/5 backdrop-blur-md">
                             <span class="w-1.5 h-1.5 rounded-full bg-[#5de0e6] animate-pulse"></span>
-                            <span class="text-[10px] font-semibold text-[#5de0e6] uppercase tracking-widest">Coming
-                                Soon</span>
+                            <span class="text-[10px] font-semibold text-[#5de0e6] uppercase tracking-widest">Registration
+                                Open</span>
                         </div>
                     </div>
                     <h1
@@ -404,7 +776,7 @@
                                     style="background: radial-gradient(ellipse 60% 65% at center, rgba(93,224,230,0.55) 0%, rgba(0,74,173,0.25) 45%, transparent 75%); filter: blur(18px);">
                                 </div>
                                 <span
-                                    class="relative text-6xl md:text-8xl font-bold tracking-tighter text-white text-glow char">££££</span>
+                                    class="relative text-6xl md:text-8xl font-bold tracking-tighter text-white text-glow char">£1,000</span>
                             </div>
                         </div>
                     </div>
@@ -412,37 +784,22 @@
 
                         <!-- Mobile Only: Info Row & Essentials -->
                         <div class="md:hidden flex flex-col gap-6 max-w-sm mx-auto w-full">
-                            <!-- RE-ACTIVATE FOR NEXT TOURNAMENT: restore these two Stripe CTAs and delete the Follow button below once date/venue are confirmed.
                             <div class="flex flex-col gap-3">
-                                <a href="https://buy.stripe.com/7sY4gAbU0cKm6PserUfnO01" target="_blank"
+                                <a href="https://buy.stripe.com/bJebJ2e28aCe0r4dnQfnO03" target="_blank"
                                     class="w-full bg-[#5de0e6]/10 text-white font-bold uppercase tracking-widest text-sm py-4 rounded-xl flex items-center justify-center gap-3 backdrop-blur-md border border-[#5de0e6]/50 hover:bg-[#5de0e6]/20 transition-all active:scale-95 group relative overflow-hidden">
                                     <div
                                         class="absolute inset-0 bg-gradient-to-r from-transparent via-[#5de0e6]/20 to-transparent translate-x-[-100%] animate-[shine_2s_infinite]">
-                                    </div>
-                                    <span>Join as Solo</span>
-                                    <span class="w-1.5 h-1.5 rounded-full bg-[#5de0e6]"></span>
-                                    <span class="text-[#5de0e6]">£10</span>
-                                    <iconify-icon icon="solar:arrow-right-linear"
-                                        class="text-lg group-hover:translate-x-1 transition-transform"></iconify-icon>
-                                </a>
-                                <a href="https://buy.stripe.com/14AcN6cY4aCe3DgerUfnO00" target="_blank"
-                                    class="w-full bg-[#5de0e6]/10 text-white font-bold uppercase tracking-widest text-sm py-4 rounded-xl flex items-center justify-center gap-3 backdrop-blur-md border border-[#5de0e6]/50 hover:bg-[#5de0e6]/20 transition-all active:scale-95 group relative overflow-hidden">
-                                    <div
-                                        class="absolute inset-0 bg-gradient-to-r from-transparent via-[#5de0e6]/20 to-transparent translate-x-[-100%] animate-[shine_2s_infinite] delay-1000">
                                     </div>
                                     <span>Register Team</span>
                                     <span class="w-1.5 h-1.5 rounded-full bg-[#5de0e6]"></span>
-                                    <span class="text-[#5de0e6]">£70</span>
+                                    <span class="text-[#5de0e6]">£100</span>
                                     <iconify-icon icon="solar:arrow-right-linear"
                                         class="text-lg group-hover:translate-x-1 transition-transform"></iconify-icon>
                                 </a>
-                            </div>
-                            -->
-                            <div class="flex flex-col gap-3">
                                 <a href="https://www.instagram.com/fixuparena/" target="_blank" rel="noopener"
                                     class="w-full bg-[#5de0e6]/10 text-white font-bold uppercase tracking-widest text-sm py-4 rounded-xl flex items-center justify-center gap-3 backdrop-blur-md border border-[#5de0e6]/50 hover:bg-[#5de0e6]/20 transition-all active:scale-95 group relative overflow-hidden">
                                     <div
-                                        class="absolute inset-0 bg-gradient-to-r from-transparent via-[#5de0e6]/20 to-transparent translate-x-[-100%] animate-[shine_2s_infinite]">
+                                        class="absolute inset-0 bg-gradient-to-r from-transparent via-[#5de0e6]/20 to-transparent translate-x-[-100%] animate-[shine_2s_infinite] delay-1000">
                                     </div>
                                     <iconify-icon icon="mdi:instagram" class="text-lg"></iconify-icon>
                                     <span>Follow for Updates</span>
@@ -452,9 +809,11 @@
                             </div>
                             <div class="flex flex-wrap justify-center gap-x-4 gap-y-2 text-sm text-zinc-300">
                                 <span class="flex items-center gap-1.5"><iconify-icon icon="solar:calendar-linear"
-                                        class="text-[#5de0e6]"></iconify-icon> Date: TBC</span>
-                                <span class="flex items-center gap-1.5"><iconify-icon icon="solar:map-point-linear"
-                                        class="text-[#5de0e6]"></iconify-icon> London</span>
+                                        class="text-[#5de0e6]"></iconify-icon> 23rd August</span>
+                                <a href="https://share.google/IBffYiVdJqrdTGFdU" target="_blank" rel="noopener"
+                                    class="flex items-center gap-1.5 hover:text-[#5de0e6] transition-colors"><iconify-icon
+                                        icon="solar:map-point-linear" class="text-[#5de0e6]"></iconify-icon> Falcon
+                                    Park</a>
                             </div>
                             <div class="w-full border-t border-white/10 pt-6 mt-2 text-left">
                                 <div
@@ -462,13 +821,15 @@
                                     <div
                                         class="z-10 bg-gradient-to-t from-black/60 to-transparent absolute top-0 right-0 bottom-0 left-0">
                                     </div>
-                                    <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/c8b324a3-9e2c-4747-9353-ee839facef50_3840w.png?w=800&q=80"
-                                        alt="Pitch" class="w-full h-full object-cover z-10">
+                                    <img src="generated-images/hero-banner.jpg"
+                                        alt="FixUp Arena pitch-side banner reading Prove It On The Pitch with a matchball on the turf"
+                                        class="w-full h-full object-cover object-[center_66%] z-10">
                                     <div
-                                        class="absolute bottom-2 right-3 z-20 flex items-center gap-1.5 bg-black/40 backdrop-blur-md border border-white/10 px-2 py-1 rounded-md">
-                                        <div class="w-1.5 h-1.5 bg-[#5de0e6] rounded-full animate-pulse"></div>
+                                        class="absolute bottom-2 right-3 z-20 flex items-center gap-2 rounded-full border border-[#5de0e6]/30 bg-black/60 backdrop-blur-md px-3 py-1 shadow-lg">
+                                        <span class="w-1.5 h-1.5 bg-[#5de0e6] rounded-full animate-pulse"></span>
                                         <span
-                                            class="text-[10px] font-medium text-white tracking-wide uppercase">Preview</span>
+                                            class="text-[10px] font-semibold text-[#5de0e6] uppercase tracking-widest">Registration
+                                            Open</span>
                                     </div>
                                 </div>
                                 <div class="space-y-4 bg-white/5 rounded-xl p-4 border border-white/5">
@@ -477,20 +838,24 @@
                                             <iconify-icon icon="solar:calendar-bold" class="text-sm"></iconify-icon>
                                         </div>
                                         <div>
-                                            <div class="text-white text-sm font-medium">Date: TBC</div>
-                                            <div class="text-zinc-500 text-xs mt-0.5">Announced soon</div>
+                                            <div class="text-white text-sm font-medium">23rd August</div>
+                                            <div class="text-zinc-500 text-xs mt-0.5">Kick-off time to be confirmed
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="h-px bg-white/5 w-full"></div>
-                                    <div class="flex items-start gap-3">
+                                    <a href="https://share.google/IBffYiVdJqrdTGFdU" target="_blank" rel="noopener"
+                                        class="flex items-start gap-3 group">
                                         <div class="mt-0.5 p-1.5 bg-[#5de0e6]/10 rounded-md text-[#5de0e6]">
                                             <iconify-icon icon="solar:map-point-bold" class="text-sm"></iconify-icon>
                                         </div>
                                         <div>
-                                            <div class="text-white text-sm font-medium">London</div>
-                                            <div class="text-zinc-500 text-xs mt-0.5">Venue to be confirmed</div>
+                                            <div class="text-white text-sm font-medium group-hover:text-[#5de0e6] transition-colors">
+                                                Falcon Park Community Sports Centre</div>
+                                            <div class="text-zinc-500 text-xs mt-0.5">Cabul Road, Battersea, London
+                                                SW11 2TF</div>
                                         </div>
-                                    </div>
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -504,31 +869,32 @@
                                 <div>
                                     <div class="text-[10px] text-zinc-500 uppercase font-semibold tracking-wider">Date
                                     </div>
-                                    <div class="text-white font-medium">TBC</div>
+                                    <div class="text-white font-medium">23rd August</div>
                                 </div>
                             </div>
                             <div
                                 class="flex items-center gap-4 p-4 rounded-xl bg-white/5 border border-white/10 backdrop-blur-sm">
                                 <div
                                     class="w-10 h-10 rounded-full bg-[#5de0e6]/10 flex items-center justify-center text-[#5de0e6] border border-[#5de0e6]/20 shrink-0">
-                                    <iconify-icon icon="solar:bell-linear" class="text-xl"></iconify-icon></div>
+                                    <iconify-icon icon="solar:clock-circle-linear" class="text-xl"></iconify-icon></div>
                                 <div>
                                     <div class="text-[10px] text-zinc-500 uppercase font-semibold tracking-wider">
-                                        Status</div>
-                                    <div class="text-white font-medium">Coming Soon</div>
+                                        Time</div>
+                                    <div class="text-white font-medium">TBC</div>
                                 </div>
                             </div>
-                            <div
-                                class="flex items-center gap-4 p-4 rounded-xl bg-white/5 border border-white/10 backdrop-blur-sm">
+                            <a href="https://share.google/IBffYiVdJqrdTGFdU" target="_blank" rel="noopener"
+                                class="flex items-center gap-4 p-4 rounded-xl bg-white/5 border border-white/10 backdrop-blur-sm hover:bg-white/10 hover:border-[#5de0e6]/30 transition-all group">
                                 <div
                                     class="w-10 h-10 rounded-full bg-[#5de0e6]/10 flex items-center justify-center text-[#5de0e6] border border-[#5de0e6]/20 shrink-0">
                                     <iconify-icon icon="solar:map-point-linear" class="text-xl"></iconify-icon></div>
                                 <div>
                                     <div class="text-[10px] text-zinc-500 uppercase font-semibold tracking-wider">
                                         Location</div>
-                                    <div class="text-white font-medium">London</div>
+                                    <div class="text-white font-medium group-hover:text-[#5de0e6] transition-colors">
+                                        Falcon Park</div>
                                 </div>
-                            </div>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -539,25 +905,25 @@
                     <div
                         class="relative glass-panel p-1 rounded-3xl border border-[#5de0e6]/30 shadow-[0_0_80px_rgba(0,0,0,0.5)] overflow-hidden group hover:scale-[1.01] transition-transform duration-500">
                         <div class="bg-[#0a0a0a] rounded-[22px] h-full flex flex-col relative overflow-hidden">
-                            <div class="relative w-full h-48 overflow-hidden group">
+                            <div class="relative w-full h-64 overflow-hidden transform-gpu">
                                 <div
-                                    class="absolute inset-0 bg-gradient-to-b from-transparent via-[#0a0a0a]/10 to-[#0a0a0a] z-10">
+                                    class="absolute inset-0 bg-gradient-to-b from-transparent from-55% to-[#0a0a0a] z-10 origin-bottom transition-transform duration-500 transform-gpu group-hover:scale-105">
                                 </div>
-                                <img src="https://images.unsplash.com/photo-1551958219-acbc608c6377?w=800&q=80"
-                                    alt="Football Tournament"
-                                    class="w-full h-full object-cover opacity-90 transition-transform duration-700 ease-out group-hover:scale-105">
+                                <img src="generated-images/hero-banner.jpg"
+                                    alt="FixUp Arena pitch-side banner reading Prove It On The Pitch with a matchball on the turf"
+                                    class="w-full h-full object-cover object-[center_66%] opacity-90 origin-bottom transition-transform duration-500 transform-gpu group-hover:scale-105">
                                 <div class="absolute top-6 right-6 z-20">
                                     <div
                                         class="px-3 py-1 rounded-full border border-[#5de0e6]/30 bg-black/60 backdrop-blur-md text-[#5de0e6] text-[10px] font-semibold uppercase tracking-widest flex items-center gap-2 shadow-lg">
                                         <span
-                                            class="w-1.5 h-1.5 rounded-full bg-[#5de0e6] animate-pulse"></span>Coming
-                                        Soon</div>
+                                            class="w-1.5 h-1.5 rounded-full bg-[#5de0e6] animate-pulse"></span>Registration
+                                        Open</div>
                                 </div>
                             </div>
                             <div class="p-8 pt-2 flex flex-col gap-6 relative z-10">
                                 <div
                                     class="flex justify-between items-center text-xs text-zinc-500 font-medium uppercase tracking-wider">
-                                    <span>7-A-Side</span><span>16+ Format</span><span>London</span></div>
+                                    <span>7-A-Side</span><span>12-Team Format</span><span>Battersea</span></div>
                                 <div class="h-px w-full bg-gradient-to-r from-transparent via-white/10 to-transparent">
                                 </div>
                                 <div
@@ -569,17 +935,16 @@
                                         class="text-[#5de0e6] text-xs font-semibold uppercase tracking-widest mb-2 flex items-center gap-2"><iconify-icon
                                             icon="solar:cup-star-bold"></iconify-icon> Cash Prize Pool</span>
                                     <div class="relative z-10"><span
-                                            class="text-7xl font-bold text-white tracking-tighter drop-shadow-[0_0_25px_rgba(93,224,230,0.4)]">££££</span>
+                                            class="text-7xl font-bold text-white tracking-tighter drop-shadow-[0_0_25px_rgba(93,224,230,0.4)]">£1,000</span>
                                     </div>
                                 </div>
-                                <!-- RE-ACTIVATE FOR NEXT TOURNAMENT: restore this Stripe CTA and delete the Follow button below once date/venue/price are confirmed.
                                 <div class="text-center">
-                                    <a href="https://buy.stripe.com/14AcN6cY4aCe3DgerUfnO00" target="_blank"
+                                    <a href="https://buy.stripe.com/bJebJ2e28aCe0r4dnQfnO03" target="_blank"
                                         class="w-full group relative overflow-hidden rounded-xl bg-[#5de0e6]/10 border border-[#5de0e6]/50 p-4 text-center transition-all hover:bg-[#5de0e6]/20 hover:shadow-[0_0_20px_rgba(93,224,230,0.2)] block">
                                         <div class="relative z-10 flex items-center justify-center gap-3 text-white">
                                             <span class="font-bold uppercase tracking-widest text-sm">Register
                                                 Team</span><span
-                                                class="bg-[#5de0e6] px-2 py-0.5 rounded text-xs font-semibold text-black">£70</span><iconify-icon
+                                                class="bg-[#5de0e6] px-2 py-0.5 rounded text-xs font-semibold text-black">£100</span><iconify-icon
                                                 icon="solar:arrow-right-linear"
                                                 class="text-lg transition-transform group-hover:translate-x-1"></iconify-icon>
                                         </div>
@@ -587,11 +952,8 @@
                                             class="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-[#5de0e6]/20 to-transparent transition-transform duration-1000 group-hover:animate-[shine_1.5s_infinite]">
                                         </div>
                                     </a>
-                                </div>
-                                -->
-                                <div class="text-center">
                                     <a href="https://www.instagram.com/fixuparena/" target="_blank" rel="noopener"
-                                        class="w-full group relative overflow-hidden rounded-xl bg-[#5de0e6]/10 border border-[#5de0e6]/50 p-4 text-center transition-all hover:bg-[#5de0e6]/20 hover:shadow-[0_0_20px_rgba(93,224,230,0.2)] block">
+                                        class="mt-3 w-full group relative overflow-hidden rounded-xl bg-[#5de0e6]/10 border border-[#5de0e6]/50 p-4 text-center transition-all hover:bg-[#5de0e6]/20 hover:shadow-[0_0_20px_rgba(93,224,230,0.2)] block">
                                         <div class="relative z-10 flex items-center justify-center gap-3 text-white">
                                             <iconify-icon icon="mdi:instagram" class="text-lg"></iconify-icon>
                                             <span class="font-bold uppercase tracking-widest text-sm">Follow for
@@ -602,6 +964,13 @@
                                         <div
                                             class="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-[#5de0e6]/20 to-transparent transition-transform duration-1000 group-hover:animate-[shine_1.5s_infinite]">
                                         </div>
+                                    </a>
+                                    <a href="javascript:void(0)"
+                                        onclick="document.getElementById('first-tournament').scrollIntoView({behavior:'smooth'})"
+                                        class="mt-3 w-full flex items-center justify-center gap-2 text-xs font-semibold uppercase tracking-widest text-zinc-400 hover:text-[#5de0e6] transition-colors group">
+                                        <span>Previous Tournaments</span>
+                                        <iconify-icon icon="solar:arrow-down-linear"
+                                            class="text-sm transition-transform group-hover:translate-y-0.5"></iconify-icon>
                                     </a>
                                 </div>
                             </div>
@@ -615,6 +984,353 @@
                 <iconify-icon icon="solar:arrow-down-linear" class="text-white"></iconify-icon>
             </div>
         </header>
+
+        <!-- FIRST TOURNAMENT -->
+        <section id="first-tournament"
+            class="py-24 md:py-32 px-4 relative z-10 bg-black/10 backdrop-blur-sm border-t border-white/5">
+            <div class="max-w-6xl mx-auto">
+                <div class="text-center mb-12 md:mb-16">
+                    <h2 class="text-3xl md:text-5xl font-semibold text-white tracking-tight mb-6">FixUp Arena's First
+                        Tournament</h2>
+                    <p class="tournament-reveal max-w-2xl mx-auto text-zinc-400 font-light leading-relaxed text-sm md:text-base">
+                        12 teams. One pitch. Everything on the line. FixUp Arena's first tournament went down at
+                        Castle Green 3G Pitches in Dagenham, and <span class="text-white font-medium">Brixton
+                            FC</span> came out on top, taking home the <span
+                            class="text-[#5de0e6] font-medium">£500</span> prize.
+                    </p>
+                </div>
+                <!-- CHAMPIONS -->
+                <div class="champions-banner tournament-reveal">
+                    <img src="generated-images/tournament/brixton-fc-champions.jpg"
+                        alt="Brixton FC celebrating with their medals and the cash prize after winning the first FixUp Arena tournament at Castle Green, Dagenham"
+                        loading="lazy">
+                    <div class="champions-overlay">
+                        <span class="champions-eyebrow"><iconify-icon icon="solar:cup-star-bold"></iconify-icon>
+                            Champions</span>
+                        <h3 class="champions-name">Brixton FC</h3>
+                        <p class="champions-caption">Winners of the first FixUp Arena &middot; 12 teams &middot; £500
+                            prize</p>
+                    </div>
+                </div>
+                <div class="tournament-grid">
+                    <!-- Row 1 -->
+                    <div class="t-cell t-cell--stat t-cell--feature tournament-reveal">
+                        <img src="generated-images/tournament/player-driving.jpg" alt="Player driving forward with the ball during the first FixUp Arena tournament at Castle Green, Dagenham" loading="lazy">
+                        <div class="t-stat">
+                            <span class="t-stat-value">108</span>
+                            <span class="t-stat-label">Goals Scored</span>
+                        </div>
+                    </div>
+                    <div class="t-cell tournament-reveal">
+                        <img src="generated-images/tournament/crowd-address.jpg" alt="Organiser addressing the players before kick-off at the first FixUp Arena tournament" loading="lazy">
+                    </div>
+                    <div class="t-cell tournament-reveal">
+                        <img src="generated-images/tournament/batch6-2.jpg" alt="Player in a pink bib driving at two defenders during the first FixUp Arena tournament" loading="lazy">
+                    </div>
+                    <!-- Row 2 -->
+                    <div class="t-cell tournament-reveal">
+                        <img src="generated-images/tournament/sideline.jpg" alt="Players and supporters watching from the sideline at the first FixUp Arena tournament" loading="lazy">
+                    </div>
+                    <div class="t-cell t-cell--stat tournament-reveal">
+                        <img src="generated-images/tournament/battle-branding.jpg" alt="Players battling for possession in front of the FixUp Arena banner at the first tournament" loading="lazy">
+                        <div class="t-stat">
+                            <span class="t-stat-value">37</span>
+                            <span class="t-stat-label">Matches Played</span>
+                        </div>
+                    </div>
+                    <div class="t-cell tournament-reveal">
+                        <img src="generated-images/tournament/huddle.jpg" alt="Team huddle on the pitch at the first FixUp Arena tournament at Castle Green, Dagenham" loading="lazy">
+                    </div>
+                    <!-- Row 3 -->
+                    <div class="t-cell tournament-reveal">
+                        <img src="generated-images/tournament/batch6-8.jpg" alt="Two players battling for the ball during the first FixUp Arena tournament" loading="lazy">
+                    </div>
+                    <div class="t-cell tournament-reveal">
+                        <img src="generated-images/tournament/celebration-mob.jpg" alt="Players celebrating together on the pitch at the first FixUp Arena tournament" loading="lazy">
+                    </div>
+                    <div class="t-cell t-cell--stat tournament-reveal">
+                        <img src="generated-images/tournament/batch6-19.jpg" alt="Goalkeeper controlling the ball by the post at the first FixUp Arena tournament" loading="lazy">
+                        <div class="t-stat">
+                            <span class="t-stat-value">2.9</span>
+                            <span class="t-stat-label">Goals / Game</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SOCIALS -->
+        <section id="socials"
+            class="py-24 md:py-32 px-4 relative z-10 bg-black/10 backdrop-blur-sm border-t border-white/5">
+            <div class="max-w-6xl mx-auto">
+                <div class="text-center mb-12 md:mb-16">
+                    <h2 class="social-reveal text-3xl md:text-5xl font-semibold text-white tracking-tight mb-6">
+                        Straight From The Pitch</h2>
+                    <p class="social-reveal max-w-2xl mx-auto text-zinc-400 font-light leading-relaxed text-sm md:text-base">
+                        The goals, the reactions, the chaos. Follow <a href="https://www.instagram.com/fixuparena"
+                            target="_blank" rel="noopener"
+                            class="text-[#5de0e6] hover:underline">@fixuparena</a> for more.
+                    </p>
+                </div>
+
+                <div class="relative">
+                    <div class="absolute -top-16 -left-16 w-72 h-72 bg-[#5de0e6]/10 rounded-full blur-[100px] pointer-events-none">
+                    </div>
+                    <div class="absolute -bottom-16 -right-16 w-72 h-72 bg-[#004aad]/20 rounded-full blur-[100px] pointer-events-none">
+                    </div>
+                    <div class="socials-grid">
+                        <!-- TODO: point href="https://www.instagram.com/fixuparena" links at each reel's real permalink once known -->
+                    <div class="socials-slide active social-reveal" data-index="0">
+                        <div class="iphone-frame">
+                            <div class="iphone-screen">
+                                <video src="videos/reel-1.mp4" poster="videos/reel-1.jpg" muted loop playsinline
+                                    preload="metadata" aria-label="FixUp Arena tournament reel"></video>
+                            </div>
+                            <svg class="iphone-svg" viewBox="0 0 433 882" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <g mask="url(#screenPunch-0)">
+                                    <path
+                                        d="M2 73C2 32.6832 34.6832 0 75 0H357C397.317 0 430 32.6832 430 73V809C430 849.317 397.317 882 357 882H75C34.6832 882 2 849.317 2 809V73Z"
+                                        fill="#2c3a44" />
+                                    <path
+                                        d="M0 171C0 170.448 0.447715 170 1 170H3V204H1C0.447715 204 0 203.552 0 203V171Z"
+                                        fill="#2c3a44" />
+                                    <path
+                                        d="M1 234C1 233.448 1.44772 233 2 233H3.5V300H2C1.44772 300 1 299.552 1 299V234Z"
+                                        fill="#2c3a44" />
+                                    <path
+                                        d="M1 319C1 318.448 1.44772 318 2 318H3.5V385H2C1.44772 385 1 384.552 1 384V319Z"
+                                        fill="#2c3a44" />
+                                    <path
+                                        d="M430 279H432C432.552 279 433 279.448 433 280V384C433 384.552 432.552 385 432 385H430V279Z"
+                                        fill="#2c3a44" />
+                                    <path
+                                        d="M6 74C6 35.3401 37.3401 4 76 4H356C394.66 4 426 35.3401 426 74V808C426 846.66 394.66 878 356 878H76C37.3401 878 6 846.66 6 808V74Z"
+                                        fill="#141b21" />
+                                </g>
+                                <path opacity="0.7"
+                                    d="M174 5H258V5.5C258 6.60457 257.105 7.5 256 7.5H176C174.895 7.5 174 6.60457 174 5.5V5Z"
+                                    fill="#5de0e6" />
+                                <path
+                                    d="M21.25 75C21.25 44.2101 46.2101 19.25 77 19.25H355C385.79 19.25 410.75 44.2101 410.75 75V807C410.75 837.79 385.79 862.75 355 862.75H77C46.2101 862.75 21.25 837.79 21.25 807V75Z"
+                                    fill="#2c3a44" stroke="#2c3a44" stroke-width="0.5" mask="url(#screenPunch-0)" />
+                                <path
+                                    d="M154 48.5C154 38.2827 162.283 30 172.5 30H259.5C269.717 30 278 38.2827 278 48.5C278 58.7173 269.717 67 259.5 67H172.5C162.283 67 154 58.7173 154 48.5Z"
+                                    fill="#141b21" />
+                                <path
+                                    d="M249 48.5C249 42.701 253.701 38 259.5 38C265.299 38 270 42.701 270 48.5C270 54.299 265.299 59 259.5 59C253.701 59 249 54.299 249 48.5Z"
+                                    fill="#141b21" />
+                                <path
+                                    d="M254 48.5C254 45.4624 256.462 43 259.5 43C262.538 43 265 45.4624 265 48.5C265 51.5376 262.538 54 259.5 54C256.462 54 254 51.5376 254 48.5Z"
+                                    fill="#5de0e6" />
+                                <defs>
+                                    <mask id="screenPunch-0" maskUnits="userSpaceOnUse">
+                                        <rect x="0" y="0" width="433" height="882" fill="white" />
+                                        <rect x="21.25" y="19.25" width="389.5" height="843.5" rx="55.75" ry="55.75"
+                                            fill="black" />
+                                    </mask>
+                                </defs>
+                            </svg>
+                        </div>
+                        <div class="text-center mt-4">
+                            <a href="https://www.instagram.com/fixuparena" target="_blank" rel="noopener"
+                                class="text-xs uppercase tracking-widest text-zinc-500 hover:text-[#5de0e6] transition-colors">View
+                                on Instagram</a>
+                        </div>
+                    </div>
+                    <div class="socials-slide social-reveal" data-index="1">
+                        <div class="iphone-frame">
+                            <div class="iphone-screen">
+                                <video src="videos/reel-2.mp4" poster="videos/reel-2.jpg" muted loop playsinline
+                                    preload="metadata" aria-label="FixUp Arena tournament reel"></video>
+                            </div>
+                            <svg class="iphone-svg" viewBox="0 0 433 882" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <g mask="url(#screenPunch-1)">
+                                    <path
+                                        d="M2 73C2 32.6832 34.6832 0 75 0H357C397.317 0 430 32.6832 430 73V809C430 849.317 397.317 882 357 882H75C34.6832 882 2 849.317 2 809V73Z"
+                                        fill="#2c3a44" />
+                                    <path
+                                        d="M0 171C0 170.448 0.447715 170 1 170H3V204H1C0.447715 204 0 203.552 0 203V171Z"
+                                        fill="#2c3a44" />
+                                    <path
+                                        d="M1 234C1 233.448 1.44772 233 2 233H3.5V300H2C1.44772 300 1 299.552 1 299V234Z"
+                                        fill="#2c3a44" />
+                                    <path
+                                        d="M1 319C1 318.448 1.44772 318 2 318H3.5V385H2C1.44772 385 1 384.552 1 384V319Z"
+                                        fill="#2c3a44" />
+                                    <path
+                                        d="M430 279H432C432.552 279 433 279.448 433 280V384C433 384.552 432.552 385 432 385H430V279Z"
+                                        fill="#2c3a44" />
+                                    <path
+                                        d="M6 74C6 35.3401 37.3401 4 76 4H356C394.66 4 426 35.3401 426 74V808C426 846.66 394.66 878 356 878H76C37.3401 878 6 846.66 6 808V74Z"
+                                        fill="#141b21" />
+                                </g>
+                                <path opacity="0.7"
+                                    d="M174 5H258V5.5C258 6.60457 257.105 7.5 256 7.5H176C174.895 7.5 174 6.60457 174 5.5V5Z"
+                                    fill="#5de0e6" />
+                                <path
+                                    d="M21.25 75C21.25 44.2101 46.2101 19.25 77 19.25H355C385.79 19.25 410.75 44.2101 410.75 75V807C410.75 837.79 385.79 862.75 355 862.75H77C46.2101 862.75 21.25 837.79 21.25 807V75Z"
+                                    fill="#2c3a44" stroke="#2c3a44" stroke-width="0.5" mask="url(#screenPunch-1)" />
+                                <path
+                                    d="M154 48.5C154 38.2827 162.283 30 172.5 30H259.5C269.717 30 278 38.2827 278 48.5C278 58.7173 269.717 67 259.5 67H172.5C162.283 67 154 58.7173 154 48.5Z"
+                                    fill="#141b21" />
+                                <path
+                                    d="M249 48.5C249 42.701 253.701 38 259.5 38C265.299 38 270 42.701 270 48.5C270 54.299 265.299 59 259.5 59C253.701 59 249 54.299 249 48.5Z"
+                                    fill="#141b21" />
+                                <path
+                                    d="M254 48.5C254 45.4624 256.462 43 259.5 43C262.538 43 265 45.4624 265 48.5C265 51.5376 262.538 54 259.5 54C256.462 54 254 51.5376 254 48.5Z"
+                                    fill="#5de0e6" />
+                                <defs>
+                                    <mask id="screenPunch-1" maskUnits="userSpaceOnUse">
+                                        <rect x="0" y="0" width="433" height="882" fill="white" />
+                                        <rect x="21.25" y="19.25" width="389.5" height="843.5" rx="55.75" ry="55.75"
+                                            fill="black" />
+                                    </mask>
+                                </defs>
+                            </svg>
+                        </div>
+                        <div class="text-center mt-4">
+                            <a href="https://www.instagram.com/fixuparena" target="_blank" rel="noopener"
+                                class="text-xs uppercase tracking-widest text-zinc-500 hover:text-[#5de0e6] transition-colors">View
+                                on Instagram</a>
+                        </div>
+                    </div>
+                    <div class="socials-slide social-reveal" data-index="2">
+                        <div class="iphone-frame">
+                            <div class="iphone-screen">
+                                <video src="videos/reel-3.mp4" poster="videos/reel-3.jpg" muted loop playsinline
+                                    preload="metadata" aria-label="FixUp Arena tournament reel"></video>
+                            </div>
+                            <svg class="iphone-svg" viewBox="0 0 433 882" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <g mask="url(#screenPunch-2)">
+                                    <path
+                                        d="M2 73C2 32.6832 34.6832 0 75 0H357C397.317 0 430 32.6832 430 73V809C430 849.317 397.317 882 357 882H75C34.6832 882 2 849.317 2 809V73Z"
+                                        fill="#2c3a44" />
+                                    <path
+                                        d="M0 171C0 170.448 0.447715 170 1 170H3V204H1C0.447715 204 0 203.552 0 203V171Z"
+                                        fill="#2c3a44" />
+                                    <path
+                                        d="M1 234C1 233.448 1.44772 233 2 233H3.5V300H2C1.44772 300 1 299.552 1 299V234Z"
+                                        fill="#2c3a44" />
+                                    <path
+                                        d="M1 319C1 318.448 1.44772 318 2 318H3.5V385H2C1.44772 385 1 384.552 1 384V319Z"
+                                        fill="#2c3a44" />
+                                    <path
+                                        d="M430 279H432C432.552 279 433 279.448 433 280V384C433 384.552 432.552 385 432 385H430V279Z"
+                                        fill="#2c3a44" />
+                                    <path
+                                        d="M6 74C6 35.3401 37.3401 4 76 4H356C394.66 4 426 35.3401 426 74V808C426 846.66 394.66 878 356 878H76C37.3401 878 6 846.66 6 808V74Z"
+                                        fill="#141b21" />
+                                </g>
+                                <path opacity="0.7"
+                                    d="M174 5H258V5.5C258 6.60457 257.105 7.5 256 7.5H176C174.895 7.5 174 6.60457 174 5.5V5Z"
+                                    fill="#5de0e6" />
+                                <path
+                                    d="M21.25 75C21.25 44.2101 46.2101 19.25 77 19.25H355C385.79 19.25 410.75 44.2101 410.75 75V807C410.75 837.79 385.79 862.75 355 862.75H77C46.2101 862.75 21.25 837.79 21.25 807V75Z"
+                                    fill="#2c3a44" stroke="#2c3a44" stroke-width="0.5" mask="url(#screenPunch-2)" />
+                                <path
+                                    d="M154 48.5C154 38.2827 162.283 30 172.5 30H259.5C269.717 30 278 38.2827 278 48.5C278 58.7173 269.717 67 259.5 67H172.5C162.283 67 154 58.7173 154 48.5Z"
+                                    fill="#141b21" />
+                                <path
+                                    d="M249 48.5C249 42.701 253.701 38 259.5 38C265.299 38 270 42.701 270 48.5C270 54.299 265.299 59 259.5 59C253.701 59 249 54.299 249 48.5Z"
+                                    fill="#141b21" />
+                                <path
+                                    d="M254 48.5C254 45.4624 256.462 43 259.5 43C262.538 43 265 45.4624 265 48.5C265 51.5376 262.538 54 259.5 54C256.462 54 254 51.5376 254 48.5Z"
+                                    fill="#5de0e6" />
+                                <defs>
+                                    <mask id="screenPunch-2" maskUnits="userSpaceOnUse">
+                                        <rect x="0" y="0" width="433" height="882" fill="white" />
+                                        <rect x="21.25" y="19.25" width="389.5" height="843.5" rx="55.75" ry="55.75"
+                                            fill="black" />
+                                    </mask>
+                                </defs>
+                            </svg>
+                        </div>
+                        <div class="text-center mt-4">
+                            <a href="https://www.instagram.com/fixuparena" target="_blank" rel="noopener"
+                                class="text-xs uppercase tracking-widest text-zinc-500 hover:text-[#5de0e6] transition-colors">View
+                                on Instagram</a>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+
+                <div class="flex md:hidden items-center justify-center gap-6 mt-6">
+                    <button id="socials-prev" aria-label="Previous reel"
+                        class="p-3 rounded-full border border-white/10 text-white hover:text-[#5de0e6] hover:border-[#5de0e6]/50 transition-colors">
+                        <iconify-icon icon="solar:arrow-left-linear"></iconify-icon>
+                    </button>
+                    <span id="socials-dots" class="flex items-center gap-2"></span>
+                    <button id="socials-next" aria-label="Next reel"
+                        class="p-3 rounded-full border border-white/10 text-white hover:text-[#5de0e6] hover:border-[#5de0e6]/50 transition-colors">
+                        <iconify-icon icon="solar:arrow-right-linear"></iconify-icon>
+                    </button>
+                </div>
+
+                <!-- TESTIMONIALS
+                     TO HIDE THIS SECTION: add a `hidden` attribute to the div below
+                     (i.e. `<div id="testimonials" hidden class="...">`). That takes it out of the
+                     layout and the accessibility tree without touching anything else — the .tilt-card
+                     CSS, the pointer-tilt JS and the .social-reveal scroll animation all keep
+                     targeting these nodes, so removing `hidden` again brings it straight back. -->
+                <div id="testimonials" class="mt-20 md:mt-28 relative">
+                    <div class="absolute top-1/3 -left-16 w-64 h-64 bg-[#5de0e6]/10 rounded-full blur-[110px] pointer-events-none">
+                    </div>
+                    <div class="absolute bottom-4 -right-16 w-64 h-64 bg-[#004aad]/15 rounded-full blur-[110px] pointer-events-none">
+                    </div>
+                    <div class="text-center mb-10 md:mb-14 relative">
+                        <h3 class="social-reveal text-xs md:text-sm uppercase tracking-[0.2em] text-[#5de0e6] font-medium mb-3">
+                            From the first tournament</h3>
+                        <p class="social-reveal text-2xl md:text-4xl font-semibold text-white tracking-tight">
+                            Twelve teams turned up. Here&rsquo;s what they made of it.</p>
+                    </div>
+                    <!-- TODO: swap the placeholder quotes, names and tags below for real player testimonials once collected. Keep the border-l accent colours (cyan / white / blue) to match the site. -->
+                    <div class="tilt-grid grid grid-cols-1 md:grid-cols-3 gap-6 relative">
+                        <div class="social-reveal tilt-wrap">
+                            <figure class="tilt-card glass-panel p-6 md:p-8 border-l-4 border-[#5de0e6] flex flex-col h-full">
+                                <span class="text-6xl leading-[0.5] text-[#5de0e6]/40 tilt-quote font-serif mb-3" aria-hidden="true">&ldquo;</span>
+                                <blockquote class="text-zinc-200 font-light leading-relaxed text-base md:text-lg flex-1">
+                                    We had the &pound;500 before we&rsquo;d even left the car park.</blockquote>
+                                <figcaption class="mt-6 pt-4 border-t border-white/5">
+                                    <span class="block text-white font-semibold text-sm">Marcus T.</span>
+                                    <span class="block text-zinc-500 text-xs uppercase tracking-wider mt-0.5">Winner
+                                        &middot; Brixton FC</span>
+                                </figcaption>
+                            </figure>
+                        </div>
+                        <div class="social-reveal tilt-wrap">
+                            <figure class="tilt-card glass-panel p-6 md:p-8 border-l-4 border-white flex flex-col h-full">
+                                <span class="text-6xl leading-[0.5] text-white/30 tilt-quote font-serif mb-3" aria-hidden="true">&ldquo;</span>
+                                <blockquote class="text-zinc-200 font-light leading-relaxed text-base md:text-lg flex-1">
+                                    One bad result and you&rsquo;re out, so every game had a proper edge to it.
+                                    Genuinely can&rsquo;t remember the last time a Sunday kickabout mattered that
+                                    much.</blockquote>
+                                <figcaption class="mt-6 pt-4 border-t border-white/5">
+                                    <span class="block text-white font-semibold text-sm">Dan R.</span>
+                                    <span class="block text-zinc-500 text-xs uppercase tracking-wider mt-0.5">Player
+                                        &middot; Peckham Town</span>
+                                </figcaption>
+                            </figure>
+                        </div>
+                        <div class="social-reveal tilt-wrap">
+                            <figure class="tilt-card glass-panel p-6 md:p-8 border-l-4 border-[#004aad] flex flex-col h-full">
+                                <span class="text-6xl leading-[0.5] text-[#004aad]/60 tilt-quote font-serif mb-3" aria-hidden="true">&ldquo;</span>
+                                <blockquote class="text-zinc-200 font-light leading-relaxed text-base md:text-lg flex-1">
+                                    Kick-off times actually held. Sounds like nothing until you&rsquo;ve spent a Sunday
+                                    waiting on a pitch that never frees up.</blockquote>
+                                <figcaption class="mt-6 pt-4 border-t border-white/5">
+                                    <span class="block text-white font-semibold text-sm">Josh M.</span>
+                                    <span class="block text-zinc-500 text-xs uppercase tracking-wider mt-0.5">Captain
+                                        &middot; Camberwell United</span>
+                                </figcaption>
+                            </figure>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
         <!-- PROBLEM SECTION -->
         <section id="problem"
@@ -779,12 +1495,12 @@
                                 class="p-5 rounded-2xl bg-white/5 border border-white/10 hover:border-[#5de0e6]/50 transition-colors group">
                                 <div class="flex items-center gap-3 mb-3">
                                     <div
-                                        class="w-8 h-8 rounded-full bg-[#5de0e6]/10 flex items-center justify-center text-[#5de0e6] text-sm">
+                                        class="w-8 h-8 rounded-full bg-[#5de0e6]/10 flex items-center justify-center text-[#5de0e6] text-sm shrink-0">
                                         <iconify-icon icon="solar:user-bold"></iconify-icon></div>
                                     <div>
                                         <p class="text-[10px] text-[#5de0e6] font-semibold uppercase tracking-widest">
-                                            Customer Service Lead</p>
-                                        <p class="text-white font-medium leading-none">Jason O</p>
+                                            CTO / Customer Service Lead</p>
+                                        <p class="text-white font-medium leading-none mt-1.5">Jason O</p>
                                     </div>
                                 </div>
                                 <div class="space-y-2 pl-11">
@@ -800,21 +1516,103 @@
                             </div>
                         </div>
                     </div>
-                    <form class="space-y-4 flex flex-col justify-end"
-                        onsubmit="event.preventDefault(); alert('Message Sent!');">
+                    <form id="contact-form" class="space-y-4 flex flex-col justify-end" novalidate>
                         <h3 class="text-sm font-semibold text-white uppercase tracking-widest mb-2">Quick Message</h3>
-                        <div><input type="text"
+                        <div>
+                            <input id="contact-name" type="text" required minlength="2"
+                                aria-describedby="contact-name-error"
                                 class="w-full bg-black/40 border border-white/10 rounded-lg px-4 py-3 text-white text-sm focus:outline-none focus:border-[#5de0e6] transition-colors"
-                                placeholder="Name"></div>
-                        <div><input type="email"
+                                placeholder="Name">
+                            <p id="contact-name-error" class="contact-error hidden mt-1.5 text-xs text-red-400"></p>
+                        </div>
+                        <div>
+                            <input id="contact-email" type="email" required
+                                aria-describedby="contact-email-error"
                                 class="w-full bg-black/40 border border-white/10 rounded-lg px-4 py-3 text-white text-sm focus:outline-none focus:border-[#5de0e6] transition-colors"
-                                placeholder="Email"></div>
-                        <div><textarea rows="4"
+                                placeholder="Email">
+                            <p id="contact-email-error" class="contact-error hidden mt-1.5 text-xs text-red-400"></p>
+                        </div>
+                        <div>
+                            <textarea id="contact-message" rows="4" required minlength="5"
+                                aria-describedby="contact-message-error"
                                 class="w-full bg-black/40 border border-white/10 rounded-lg px-4 py-3 text-white text-sm focus:outline-none focus:border-[#5de0e6] transition-colors"
-                                placeholder="Message"></textarea></div>
+                                placeholder="Message"></textarea>
+                            <p id="contact-message-error" class="contact-error hidden mt-1.5 text-xs text-red-400"></p>
+                        </div>
                         <button type="submit"
                             class="w-full bg-[#5de0e6] text-black font-semibold uppercase tracking-widest text-xs py-4 rounded-lg hover:bg-[#4bcace] transition-colors hover-trigger">Send</button>
+                        <p id="contact-success" class="hidden text-center text-xs font-semibold uppercase tracking-widest text-[#5de0e6]">
+                            Message sent — we'll be in touch soon.</p>
                     </form>
+                    <script>
+                    (function () {
+                        const form = document.getElementById('contact-form');
+                        if (!form) return;
+                        const success = document.getElementById('contact-success');
+                        const fields = [
+                            {
+                                el: document.getElementById('contact-name'),
+                                errorEl: document.getElementById('contact-name-error'),
+                                validate: (v) => v.trim().length >= 2,
+                                message: 'Please enter your name (2+ characters).'
+                            },
+                            {
+                                el: document.getElementById('contact-email'),
+                                errorEl: document.getElementById('contact-email-error'),
+                                validate: (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()),
+                                message: 'Please enter a valid email address.'
+                            },
+                            {
+                                el: document.getElementById('contact-message'),
+                                errorEl: document.getElementById('contact-message-error'),
+                                validate: (v) => v.trim().length >= 5,
+                                message: 'Please enter a short message (5+ characters).'
+                            }
+                        ];
+
+                        function setFieldError(field) {
+                            field.el.classList.add('border-red-400');
+                            field.el.classList.remove('border-white/10');
+                            field.el.setAttribute('aria-invalid', 'true');
+                            field.errorEl.textContent = field.message;
+                            field.errorEl.classList.remove('hidden');
+                        }
+
+                        function clearFieldError(field) {
+                            field.el.classList.remove('border-red-400');
+                            field.el.classList.add('border-white/10');
+                            field.el.removeAttribute('aria-invalid');
+                            field.errorEl.classList.add('hidden');
+                            field.errorEl.textContent = '';
+                        }
+
+                        fields.forEach((field) => {
+                            field.el.addEventListener('input', () => {
+                                if (field.validate(field.el.value)) clearFieldError(field);
+                            });
+                        });
+
+                        form.addEventListener('submit', (event) => {
+                            event.preventDefault();
+                            success.classList.add('hidden');
+                            let firstInvalid = null;
+                            fields.forEach((field) => {
+                                if (field.validate(field.el.value)) {
+                                    clearFieldError(field);
+                                } else {
+                                    setFieldError(field);
+                                    if (!firstInvalid) firstInvalid = field.el;
+                                }
+                            });
+                            if (firstInvalid) {
+                                firstInvalid.focus();
+                                return;
+                            }
+                            success.classList.remove('hidden');
+                            form.reset();
+                        });
+                    })();
+                    </script>
                 </div>
             </div>
         </section>
@@ -1072,10 +1870,10 @@
                         <h4 class="text-white text-[10px] font-semibold uppercase tracking-widest mb-4">Company</h4>
                         <ul class="space-y-2 text-xs text-zinc-500">
                             <li><a href="javascript:void(0)"
-                                    onclick="navigateTo('home'); setTimeout(() => document.getElementById('problem').scrollIntoView({behavior:'smooth'}), 100)"
+                                    onclick="navigateTo('home', 'problem')"
                                     class="hover:text-[#5de0e6] transition-colors">Concept</a></li>
                             <li><a href="javascript:void(0)"
-                                    onclick="navigateTo('home'); setTimeout(() => document.getElementById('contact').scrollIntoView({behavior:'smooth'}), 100)"
+                                    onclick="navigateTo('home', 'contact')"
                                     class="hover:text-[#5de0e6] transition-colors">Contact</a></li>
                         </ul>
                     </div>
@@ -1108,7 +1906,7 @@
 
     <script>
         // --- NAVIGATION ROUTING (SPA) ---
-        function navigateTo(pageId) {
+        function navigateTo(pageId, scrollTargetId) {
             const views = ['home', 'privacy', 'tos', 'support'];
 
             // 1. Hide all views
@@ -1127,8 +1925,14 @@
                 selectedView.classList.add('page-visible');
             }
 
-            // 3. Scroll to top
-            window.scrollTo({ top: 0, behavior: 'instant' }); // Use instant for crisp page change
+            // 3. Scroll to top, unless we're about to smooth-scroll to a specific section
+            if (scrollTargetId) {
+                requestAnimationFrame(() => {
+                    document.getElementById(scrollTargetId)?.scrollIntoView({ behavior: 'smooth' });
+                });
+            } else {
+                window.scrollTo({ top: 0, behavior: 'instant' }); // Use instant for crisp page change
+            }
 
             // 4. Background Management (ThreeJS)
             const webglCanvas = document.getElementById('webgl');
@@ -1205,7 +2009,6 @@
         const helixGroup = new THREE.Group();
         scene.add(stadiumGroup);
         scene.add(helixGroup);
-        helixGroup.visible = false;
 
         // --- PARTICLE GENERATION ---
         const stadiumGeo = new THREE.BufferGeometry();
@@ -1270,6 +2073,7 @@
         helixGeo.setAttribute('color', new THREE.Float32BufferAttribute(hCol, 3));
         helixGeo.setAttribute('size', new THREE.Float32BufferAttribute(hSizes, 1));
         const helixPoints = new THREE.Points(helixGeo, material.clone());
+        helixPoints.material.opacity = 0;
         helixGroup.add(helixPoints);
 
         // --- ANIMATION LOOP ---
@@ -1304,16 +2108,20 @@
                     carouselCards.forEach((card, i) => {
                         gsap.set(card, { y: i * 500, rotationY: i * 50, z: 0, transformOrigin: "center center -600px", opacity: 0, scale: 0.8, filter: "blur(8px)" });
                     });
-                    const carouselTl = gsap.timeline({ scrollTrigger: { trigger: ".carousel-container", start: "top top", end: "+=4000", scrub: 1, pin: true } });
+                    const fadeStadium = (v) => stadiumGroup.children.forEach(child => gsap.to(child.material, { opacity: v, duration: 0.9, ease: "power2.inOut" }));
+                    const fadeHelix = (v) => gsap.to(helixPoints.material, { opacity: v, duration: 0.9, ease: "power2.inOut" });
+                    const showHelix = () => { fadeHelix(0.9); fadeStadium(0); };
+                    const showStadium = () => { fadeHelix(0); fadeStadium(0.9); };
+
+                    const carouselTl = gsap.timeline({
+                        scrollTrigger: {
+                            trigger: ".carousel-container", start: "top top", end: "+=4000", scrub: 1, pin: true,
+                            onEnter: showHelix, onEnterBack: showHelix,
+                            onLeave: showStadium, onLeaveBack: showStadium
+                        }
+                    });
                     carouselTl.to('#carouselWorld', { y: - (carouselCards.length * 500) + 200, rotationY: - (carouselCards.length * 50), ease: "none", duration: 10 }, 0)
                         .to(helixGroup.rotation, { y: Math.PI * 2, ease: "none", duration: 10 }, 0);
-
-                    ScrollTrigger.create({
-                        trigger: "#roadmap-desktop", start: "top center", end: "bottom center",
-                        onEnter: () => { helixGroup.visible = true; stadiumGroup.visible = false; },
-                        onLeaveBack: () => { helixGroup.visible = false; stadiumGroup.visible = true; },
-                        onLeave: () => { helixGroup.visible = false; stadiumGroup.visible = true; }
-                    });
 
                     const fragment = 10 / carouselCards.length;
                     carouselCards.forEach((card, i) => {
@@ -1331,6 +2139,97 @@
                 });
             }
         });
+
+        const tournamentRevealItems = document.querySelectorAll('.tournament-reveal');
+        if (tournamentRevealItems.length > 0) {
+            gsap.from(tournamentRevealItems, {
+                y: 30, opacity: 0, scale: 0.96, stagger: 0.08, duration: 0.7, ease: "power2.out",
+                scrollTrigger: { trigger: "#first-tournament", start: "top 75%" }
+            });
+        }
+
+        const socialRevealItems = document.querySelectorAll('.social-reveal');
+        if (socialRevealItems.length > 0) {
+            gsap.from(socialRevealItems, {
+                y: 30, opacity: 0, scale: 0.96, stagger: 0.08, duration: 0.7, ease: "power2.out",
+                scrollTrigger: { trigger: "#socials", start: "top 75%" }
+            });
+        }
+
+        // Physics-style tilt on testimonial cards — fine-pointer devices only.
+        // rotateY tracks cursor X (left/right axis), rotateX tracks cursor Y (top/bottom axis),
+        // so hovering a corner rotates the card diagonally toward it. A glare highlight follows.
+        if (window.matchMedia('(hover: hover) and (pointer: fine)').matches &&
+            !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            const MAX_TILT = 9; // degrees
+            document.querySelectorAll('.tilt-card').forEach(card => {
+                let frame = null;
+                card.addEventListener('pointermove', e => {
+                    const rect = card.getBoundingClientRect();
+                    const px = (e.clientX - rect.left) / rect.width;  // 0 (left) → 1 (right)
+                    const py = (e.clientY - rect.top) / rect.height;  // 0 (top)  → 1 (bottom)
+                    if (frame) cancelAnimationFrame(frame);
+                    frame = requestAnimationFrame(() => {
+                        const rotY = (px - 0.5) * 2 * MAX_TILT;
+                        const rotX = (0.5 - py) * 2 * MAX_TILT;
+                        card.style.transform =
+                            `rotateX(${rotX.toFixed(2)}deg) rotateY(${rotY.toFixed(2)}deg) translateZ(8px)`;
+                        card.style.setProperty('--glare-x', (px * 100).toFixed(1) + '%');
+                        card.style.setProperty('--glare-y', (py * 100).toFixed(1) + '%');
+                    });
+                });
+                card.addEventListener('pointerleave', () => {
+                    if (frame) cancelAnimationFrame(frame);
+                    card.style.transform = '';
+                });
+            });
+        }
+
+        (function () {
+            const videos = document.querySelectorAll('#socials video');
+            if (videos.length === 0) return;
+            const observer = new IntersectionObserver(entries => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.play().catch(() => {});
+                    } else {
+                        entry.target.pause();
+                    }
+                });
+            }, { threshold: 0.5 });
+            videos.forEach(video => observer.observe(video));
+        })();
+
+        (function () {
+            const slides = Array.from(document.querySelectorAll('#socials .socials-slide'));
+            if (slides.length === 0) return;
+            const dotsWrap = document.getElementById('socials-dots');
+            const prevBtn = document.getElementById('socials-prev');
+            const nextBtn = document.getElementById('socials-next');
+            let current = 0;
+
+            slides.forEach((_, i) => {
+                const dot = document.createElement('span');
+                dot.className = 'w-1.5 h-1.5 rounded-full transition-colors ' + (i === 0 ? 'bg-[#5de0e6]' : 'bg-white/20');
+                dotsWrap.appendChild(dot);
+            });
+            const dots = Array.from(dotsWrap.children);
+
+            function goTo(index) {
+                current = (index + slides.length) % slides.length;
+                slides.forEach((slide, i) => {
+                    slide.classList.toggle('active', i === current);
+                    const video = slide.querySelector('video');
+                    if (!video) return;
+                    if (i === current) video.play().catch(() => {});
+                    else video.pause();
+                });
+                dots.forEach((dot, i) => dot.className = 'w-1.5 h-1.5 rounded-full transition-colors ' + (i === current ? 'bg-[#5de0e6]' : 'bg-white/20'));
+            }
+
+            prevBtn.addEventListener('click', () => goTo(current - 1));
+            nextBtn.addEventListener('click', () => goTo(current + 1));
+        })();
 
         tick();
 
